@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+    depends_on:
+      - firestore
+
+  firestore:
+    build:
+      context: .
+      dockerfile: ./docker/firestore/Dockerfile
+    ports:
+      - 8080:8080 # Cloud Firestore
+      - 4000:4000 # Emulator Suite UI
+    volumes:
+      - ./docker/firestore/.firebaserc:/firestore/.firebaserc
+      - ./docker/firestore/firebase.json:/firestore/firebase.json
+      - ./docker/firestore/bin/:/root/.cache:cached
+      - ./docker/firestore/config/:/root/.config:cached
+    tty: true
+    working_dir: /firestore
+    command: firebase emulators:start

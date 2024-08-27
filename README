@@ -1,0 +1,17 @@
+# Go project template
+- Gin
+- Graphql
+- Firestore
+
+# Scripts
+
+```
+make dev
+make graphql-gen
+
+// Login firebase
+docker compose run --rm firestore firebase login --no-localhost
+
+// Start
+dc up
+```
