@@ -22,8 +22,9 @@ services:
     volumes:
       - ./docker/firestore/.firebaserc:/firestore/.firebaserc
       - ./docker/firestore/firebase.json:/firestore/firebase.json
+      - ./docker/firestore/backup:/firestore/backup
       - ./docker/firestore/bin/:/root/.cache:cached
       - ./docker/firestore/config/:/root/.config:cached
     tty: true
     working_dir: /firestore
-    command: firebase emulators:start
+    command: firebase emulators:start --import=backup/data --export-on-exit
