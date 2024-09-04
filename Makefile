@@ -1,5 +1,5 @@
 dev:
-	docker compose up -d
+	docker compose up
 
 graphql-gen:
 	go get github.com/99designs/gqlgen/codegen/config@v0.17.49

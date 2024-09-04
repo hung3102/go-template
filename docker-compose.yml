@@ -1,10 +1,12 @@
 services:
   app:
+    container_name: gcim-app
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
     ports:
       - 3000:3000
+      - 2345:2345
     volumes:
       - ./:/app
     depends_on:
