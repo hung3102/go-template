@@ -4,8 +4,8 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  # bin = ";APP_ENV=development ./tmp/main"
-  full_bin = "APP_ENV=development dlv exec ./tmp/main --headless=true --listen=:2345 --api-version=2 --accept-multiclient"
+  bin = ";APP_ENV=development ./tmp/main"
+  # full_bin = "APP_ENV=development dlv exec ./tmp/main --headless=true --listen=:2345 --api-version=2 --accept-multiclient"
   cmd = "go build -o ./tmp/main ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
