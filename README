@@ -1,6 +1,4 @@
 # Go project template
-## Prerequisites
-- gcloud cli
 
 ## Techniques
 - Gin
@@ -13,22 +11,8 @@
 cp .env.local .env
 ```
 
-- Login to google cloud
-```
-// Login google cloud
-gcloud init
-// Login firebase
-docker compose run --rm firestore firebase login --no-localhost
-```
 
 - Start
 ```
 make dev
-```
-
-## Scripts
-
-```
-// generate graphql from schemas
-make graphql-gen
 ```

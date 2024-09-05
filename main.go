@@ -2,31 +2,20 @@ package main
 
 import (
 	"gcim/example/config"
-	gqlrouter "gcim/example/pkg/adapter/api/graphql/router"
-	restapi "gcim/example/pkg/adapter/api/rest"
-	"gcim/example/pkg/adapter/middleware"
-	"os"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 )
-
-const defaultPort = "3000"
 
 func main() {
 	// Load .env file
 	config.LoadEnv()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
+	e := echo.New()
 
-	// Config router
-	router := gin.Default()
-	router.Use(middleware.ErrorHandler)
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello, World!")
+	})
 
-	gqlrouter.Route(router)
-	restapi.Route(router)
-
-	router.Run(":" + port)
+	e.Logger.Fatal(e.Start(":1313"))
 }

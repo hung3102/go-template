@@ -6,7 +6,7 @@ services:
       dockerfile: ./docker/app/Dockerfile
     ports:
       - 3000:3000
-      - 2345:2345
+      - 1313:1313
     volumes:
       - ./:/app
     depends_on:
