@@ -18,10 +18,12 @@ services:
       dockerfile: ./docker/firestore/Dockerfile
     ports:
       - 8080:8080 # Cloud Firestore
+      - 9199:9199 # Cloud Storage
       - 4000:4000 # Emulator Suite UI
     volumes:
       - ./docker/firestore/.firebaserc:/firestore/.firebaserc
       - ./docker/firestore/firebase.json:/firestore/firebase.json
+      - ./docker/firestore/storage.rules:/firestore/storage.rules
       - ./docker/firestore/backup:/firestore/backup
       - ./docker/firestore/bin/:/root/.cache:cached
       - ./docker/firestore/config/:/root/.config:cached
