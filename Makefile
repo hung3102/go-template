@@ -1,5 +1,20 @@
+VOLCAGO_VERSION := 1.11.1
+
+OS_NAME := `echo $(shell uname -s) | tr A-Z a-z`
+MACHINE_TYPE := $(shell uname -m)
+
 dev:
 	docker compose up
+
+.PHONY: bootstrap_volcago
+bootstrap_volcago:
+	mkdir -p ./bin
+	GOBIN=$(PWD)/bin go install github.com/go-generalize/volcago/cmd/volcago@v$(VOLCAGO_VERSION)
+
+.PHONY: gomock
+gomock:
+	mkdir -p ./bin
+	GOBIN=$(PWD)/bin go install go.uber.org/mock/mockgen@latest
 
 graphql-gen:
 	go get github.com/99designs/gqlgen/codegen/config@v0.17.49
