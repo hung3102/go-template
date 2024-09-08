@@ -9,7 +9,7 @@ type Meta struct {
 	updatedAt time.Time  // 更新日時
 	updatedBy string     // 更新者
 	deletedAt *time.Time // 削除日時
-	deletedBy *string    // 削除者
+	deletedBy string     // 削除者
 }
 
 // NewMetaParam - NewMeta のパラメータ
@@ -19,7 +19,7 @@ type NewMetaParam struct {
 	UpdatedAt time.Time  // 更新日時
 	UpdatedBy string     // 更新者
 	DeletedAt *time.Time // 削除日時
-	DeletedBy *string    // 削除者
+	DeletedBy string     // 削除者
 }
 
 // Update - 更新
@@ -35,7 +35,7 @@ func (m Meta) Update(now time.Time, userID string) *Meta {
 }
 
 // NewMeta - Meta のコンストラクタ
-func NewMeta(param NewMetaParam) *Meta {
+func NewMeta(param *NewMetaParam) *Meta {
 	return &Meta{
 		createdAt: param.CreatedAt,
 		createdBy: param.CreatedBy,
