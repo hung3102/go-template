@@ -3,10 +3,10 @@
 package repositories
 
 const (
-	EventIndexLabelBillingMonthEqual  = "b4" // perfect-match of BillingMonth
-	EventIndexLabelBillingMonthLike   = "b3" // like-match of BillingMonth
 	EventIndexLabelBillingMonthPrefix = "b1" // prefix-match of BillingMonth
 	EventIndexLabelBillingMonthSuffix = "b2" // suffix-match of BillingMonth
+	EventIndexLabelBillingMonthLike   = "b3" // like-match of BillingMonth
+	EventIndexLabelBillingMonthEqual  = "b4" // perfect-match of BillingMonth
 	EventIndexLabelStatusEqual        = "s4" // perfect-match of Status
 	EventIndexLabelStatusLike         = "s3" // like-match of Status
 	EventIndexLabelStatusPrefix       = "s1" // prefix-match of Status
