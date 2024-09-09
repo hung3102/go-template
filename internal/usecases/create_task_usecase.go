@@ -8,23 +8,23 @@ import (
 	"gcim/example/internal/usecases/dto/output"
 )
 
-type ICreateTaskInteractor interface {
+type ICreateTaskUsecase interface {
 	Execute(ctx context.Context, r *input.CreateTaskInput) (*output.CreateTaskOutput, error)
 }
 
-type CreateTaskInteractor struct {
+type CreateTaskUsecase struct {
 	taskRepository repositories.TaskRepository
 }
 
-func NewCreateTaskInteractor(
+func NewCreateTaskUsecase(
 	taskRepository repositories.TaskRepository,
-) ICreateTaskInteractor {
-	return &CreateTaskInteractor{
+) ICreateTaskUsecase {
+	return &CreateTaskUsecase{
 		taskRepository: taskRepository,
 	}
 }
 
-func (u *CreateTaskInteractor) Execute(ctx context.Context, input *input.CreateTaskInput,
+func (u *CreateTaskUsecase) Execute(ctx context.Context, input *input.CreateTaskInput,
 ) (*output.CreateTaskOutput, error) {
 	_, err := u.taskRepository.Insert(ctx, &model.Task{
 		ID:   input.ID,

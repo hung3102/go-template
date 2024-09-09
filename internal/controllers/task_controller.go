@@ -10,20 +10,20 @@ import (
 )
 
 type TaskController struct {
-	updateTaskNameInteractor usecases.ICreateTaskInteractor
-	taskPresenter            presenters.ITaskPresenter
-	errorPresenter           presenters.IErrorPresenter
+	updateTaskNameUsecase usecases.ICreateTaskUsecase
+	taskPresenter         presenters.ITaskPresenter
+	errorPresenter        presenters.IErrorPresenter
 }
 
 func NewTaskController(
-	updateTaskNameInteractor usecases.ICreateTaskInteractor,
+	updateTaskNameUsecase usecases.ICreateTaskUsecase,
 	taskPresenter presenters.ITaskPresenter,
 	errorPresenter presenters.IErrorPresenter,
 ) *TaskController {
 	return &TaskController{
-		updateTaskNameInteractor: updateTaskNameInteractor,
-		taskPresenter:            taskPresenter,
-		errorPresenter:           errorPresenter,
+		updateTaskNameUsecase: updateTaskNameUsecase,
+		taskPresenter:         taskPresenter,
+		errorPresenter:        errorPresenter,
 	}
 }
 
@@ -39,7 +39,7 @@ func (c *TaskController) CreateTask(e echo.Context) error {
 	}
 	ctx := e.Request().Context()
 
-	output, err := c.updateTaskNameInteractor.Execute(ctx, input)
+	output, err := c.updateTaskNameUsecase.Execute(ctx, input)
 	if err != nil {
 		return c.errorPresenter.PresentInternalServerError(e, err)
 	}

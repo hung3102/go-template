@@ -2,7 +2,9 @@ package infrastructure
 
 import (
 	"gcim/example/internal/controllers"
-	"gcim/example/internal/infrastructures/repositories"
+	"gcim/example/internal/domain/repositories"
+
+	// "gcim/example/internal/infrastructures/repositories"
 	"gcim/example/internal/presenters"
 	"gcim/example/internal/usecases"
 
@@ -23,7 +25,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(presenters.NewErrorPresenter)
 
 	// usecases
-	container.Provide(usecases.NewCreateTaskInteractor)
+	container.Provide(usecases.NewCreateTaskUsecase)
 
 	// repositories
 	container.Provide(repositories.NewTaskRepository)
