@@ -43,17 +43,7 @@ func (e *Event) Status() string {
 	return e.status
 }
 
-// CreatedAt - getter of CreatedAt
-func (e *Event) CreatedAt() time.Time {
-	return e.meta.createdAt
-}
-
-// UpdatedAt - getter of UpdatedAt
-func (e *Event) UpdatedAt() time.Time {
-	return e.meta.updatedAt
-}
-
-// DeletedAt - getter of DeletedAt
-func (e *Event) DeletedAt() *time.Time {
-	return e.meta.deletedAt
+// Meta - meta のゲッター
+func (e *Event) Meta() *Meta {
+	return e.meta
 }
