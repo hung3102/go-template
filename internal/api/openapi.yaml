@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+paths:
+  /tasks:
+    post:
+      summary: タスクを作成する
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTaskResponse'
+  /upload-sample/{eventId}/{orgCspDocId}:
+    get:
+      summary: ファイルをアップロードする
+      operationId: UploadExample
+      parameters:
+        - name: eventId
+          in: path
+          description: イベントID
+          required: true
+          schema:
+            type: string
+            example: 123
+        - name: orgCspDocId
+          in: path
+          description: CSPドキュメントID
+          required: true
+          schema:
+            type: string
+            example: 123
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadExampleRequest'
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadExampleResponse'
+components:
+  schemas:
+    CreateTaskRequest:
+      type: object
+      x-go-name: CreateTaskRequest
+      properties:
+        id:
+          type: string
+          example: example-id
+        desc:
+          type: string
+          description: 更新後の名前
+          example: "example-desc"
+    CreateTaskResponse:
+      type: object
+      x-go-name: CreateTaskResponse
+      properties:
+        id:
+          type: string
+          description: ユーザID
+          example: example-company
+          x-go-name: ID
+        desc:
+          type: string
+          description: 更新後の名前
+          example: "example-desc"
+      required:
+        - id
+        - desc
+    UploadExampleRequest:
+      type: object
+      x-go-name: UploadExampleRequest
+      properties:
+        eventId:
+          type: string
+          example: 123
+        orgCspDocId:
+          type: string
+          example: 123
+    UploadExampleResponse:
+      type: object
+      x-go-name: UploadExampleResponse
