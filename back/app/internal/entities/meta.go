@@ -45,3 +45,33 @@ func NewMeta(param *NewMetaParam) *Meta {
 		deletedBy: param.DeletedBy,
 	}
 }
+
+// CreatedAt - CreatedAt のゲッター
+func (m *Meta) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+// CreatedBy - CreatedBy のゲッター
+func (m *Meta) CreatedBy() string {
+	return m.createdBy
+}
+
+// UpdatedAt - UpdatedAt のゲッター
+func (m *Meta) UpdatedAt() time.Time {
+	return m.updatedAt
+}
+
+// UpdatedBy - UpdatedBy のゲッター
+func (m *Meta) UpdatedBy() string {
+	return m.updatedBy
+}
+
+// DeletedAt - DeletedAt のゲッター
+func (m *Meta) DeletedAt() *time.Time {
+	return m.deletedAt
+}
+
+// DeletedBy - DeletedBy のゲッター
+func (m *Meta) DeletedBy() string {
+	return m.deletedBy
+}
