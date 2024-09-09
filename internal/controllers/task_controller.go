@@ -10,18 +10,21 @@ import (
 )
 
 type TaskController struct {
-	updateTaskNameUsecase usecases.ICreateTaskUsecase
+	createTaskNameUsecase usecases.ICreateTaskUsecase
+	getTaskNameUsecase    usecases.IGetTaskUsecase
 	taskPresenter         presenters.ITaskPresenter
 	errorPresenter        presenters.IErrorPresenter
 }
 
 func NewTaskController(
-	updateTaskNameUsecase usecases.ICreateTaskUsecase,
+	createTaskNameUsecase usecases.ICreateTaskUsecase,
+	getTaskNameUsecase usecases.IGetTaskUsecase,
 	taskPresenter presenters.ITaskPresenter,
 	errorPresenter presenters.IErrorPresenter,
 ) *TaskController {
 	return &TaskController{
-		updateTaskNameUsecase: updateTaskNameUsecase,
+		createTaskNameUsecase: createTaskNameUsecase,
+		getTaskNameUsecase:    getTaskNameUsecase,
 		taskPresenter:         taskPresenter,
 		errorPresenter:        errorPresenter,
 	}
@@ -39,10 +42,29 @@ func (c *TaskController) CreateTask(e echo.Context) error {
 	}
 	ctx := e.Request().Context()
 
-	output, err := c.updateTaskNameUsecase.Execute(ctx, input)
+	output, err := c.createTaskNameUsecase.Execute(ctx, input)
 	if err != nil {
 		return c.errorPresenter.PresentInternalServerError(e, err)
 	}
 
 	return c.taskPresenter.PresentCreateTask(e, output)
+}
+
+func (c *TaskController) GetTask(e echo.Context, taskId string) error {
+	req := api.GetTaskRequest{}
+	if err := e.Bind(&req); err != nil {
+		return c.errorPresenter.PresentBadRequest(e, "invalid request")
+	}
+
+	input := &input.GetTaskInput{
+		ID: taskId,
+	}
+	ctx := e.Request().Context()
+
+	output, err := c.getTaskNameUsecase.Execute(ctx, input)
+	if err != nil {
+		return c.errorPresenter.PresentInternalServerError(e, err)
+	}
+
+	return c.taskPresenter.PresentGetTask(e, output)
 }
