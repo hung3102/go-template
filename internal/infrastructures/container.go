@@ -3,6 +3,8 @@ package infrastructure
 import (
 	"gcim/example/internal/controllers"
 	"gcim/example/internal/domain/repositories"
+	"gcim/example/pkg/getdownloadurlexample"
+	uploadexample "gcim/example/pkg/uploadExample"
 
 	// "gcim/example/internal/infrastructures/repositories"
 	"gcim/example/internal/presenters"
@@ -29,6 +31,10 @@ func BuildContainer() *dig.Container {
 
 	// repositories
 	container.Provide(repositories.NewTaskRepository)
+
+	// sample
+	container.Provide(getdownloadurlexample.NewGetDownloadURLExample)
+	container.Provide(uploadexample.NewUploadExample)
 
 	return container
 }

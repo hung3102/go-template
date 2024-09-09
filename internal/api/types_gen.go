@@ -19,6 +19,11 @@ type CreateTaskResponse struct {
 	ID string `json:"id"`
 }
 
+// GetDownloadUrlExampleResponse defines model for GetDownloadUrlExampleResponse.
+type GetDownloadUrlExampleResponse struct {
+	Url *string `json:"url,omitempty"`
+}
+
 // UploadExampleRequest defines model for UploadExampleRequest.
 type UploadExampleRequest struct {
 	EventId     *string `json:"eventId,omitempty"`
@@ -27,6 +32,12 @@ type UploadExampleRequest struct {
 
 // UploadExampleResponse defines model for UploadExampleResponse.
 type UploadExampleResponse = map[string]interface{}
+
+// GetDownloadUrlExampleParams defines parameters for GetDownloadUrlExample.
+type GetDownloadUrlExampleParams struct {
+	// Path ファイルパス
+	Path string `form:"path" json:"path"`
+}
 
 // CreateTaskJSONRequestBody defines body for CreateTask for application/json ContentType.
 type CreateTaskJSONRequestBody = CreateTaskRequest

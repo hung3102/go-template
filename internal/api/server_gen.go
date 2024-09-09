@@ -13,6 +13,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// 署名付きURLを取得する
+	// (GET /get-download-url)
+	GetDownloadUrlExample(ctx echo.Context, params GetDownloadUrlExampleParams) error
 	// タスクを作成する
 	// (POST /tasks)
 	CreateTask(ctx echo.Context) error
@@ -24,6 +27,24 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetDownloadUrlExample converts echo context to params.
+func (w *ServerInterfaceWrapper) GetDownloadUrlExample(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetDownloadUrlExampleParams
+	// ------------- Required query parameter "path" -------------
+
+	err = runtime.BindQueryParameter("form", true, true, "path", ctx.QueryParams(), &params.Path)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter path: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetDownloadUrlExample(ctx, params)
+	return err
 }
 
 // CreateTask converts echo context to params.
@@ -87,6 +108,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/get-download-url", wrapper.GetDownloadUrlExample)
 	router.POST(baseURL+"/tasks", wrapper.CreateTask)
 	router.GET(baseURL+"/upload-sample/:eventId/:orgCspDocId", wrapper.UploadExample)
 

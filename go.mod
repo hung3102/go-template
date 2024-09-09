@@ -4,7 +4,7 @@ go 1.22.3
 
 require (
 	cloud.google.com/go/firestore v1.16.0
-	cloud.google.com/go/storage v1.41.0
+	cloud.google.com/go/storage v1.43.0
 	firebase.google.com/go/v4 v4.14.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-sql-driver/mysql v1.8.1

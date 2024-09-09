@@ -52,6 +52,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UploadExampleResponse'
+  /get-download-url:
+    get:
+      summary: 署名付きURLを取得する
+      operationId: GetDownloadUrlExample
+      parameters:
+        - name: path
+          in: query
+          description: ファイルパス
+          required: true
+          schema:
+            type: string
+            example: /path/file.pdf
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDownloadUrlExampleResponse'
 components:
   schemas:
     CreateTaskRequest:
@@ -94,3 +113,10 @@ components:
     UploadExampleResponse:
       type: object
       x-go-name: UploadExampleResponse
+    GetDownloadUrlExampleResponse:
+      type: object
+      x-go-name: GetDownloadUrlExampleResponse      
+      properties:
+        url:
+          type: string
+          example: http://localhost:9199/test-project/path/file.pdf

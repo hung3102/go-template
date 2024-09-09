@@ -9,20 +9,26 @@ import (
 
 	"cloud.google.com/go/storage"
 	firebase "firebase.google.com/go/v4"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-func UploadExample(c echo.Context) error {
+type UploadExample struct{}
+
+// PDFファイルアップロード調査用のコード
+// /upload-sample/{eventId}/{orgCspDocId}
+func NewUploadExample() *UploadExample {
+	return &UploadExample{}
+}
+
+func (ue *UploadExample) Run(c echo.Context, eventId string, orgCspDocId string) error {
 	ctx := c.Request().Context()
-	eventId := c.Param("eventId")
-	orgCspDocId := c.Param("orgCspDocId")
-	if err := uploadExampleMain(ctx, eventId, orgCspDocId); err != nil {
+	if err := ue.run(ctx, eventId, orgCspDocId); err != nil {
 		return c.String(http.StatusInternalServerError, "upload error")
 	}
 	return c.String(http.StatusOK, "upload success")
 }
 
-func uploadExampleMain(ctx context.Context, eventId string, orgCspDecId string) error {
+func (ue *UploadExample) run(ctx context.Context, eventId string, orgCspDecId string) error {
 	config := &firebase.Config{
 		StorageBucket: os.Getenv("PROJECT_ID") + ".appspot.com",
 	}

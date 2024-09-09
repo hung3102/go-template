@@ -3,35 +3,38 @@ package getdownloadurlexample
 import (
 	"context"
 	"fmt"
+	"gcim/example/internal/api"
 	"net/http"
 	"os"
 	"time"
 
 	firebase "firebase.google.com/go/v4"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 
 	cs "cloud.google.com/go/storage"
 )
 
 // PDFファイルダウンロード調査用のコード
 // /get-download-url?path=aaaaaa/bbbbbb/PDFファイル2.pdf
-func GetDownloadURLExample(c echo.Context) error {
+type GetDownloadURLExample struct{}
+
+func NewGetDownloadURLExample() *GetDownloadURLExample {
+	return &GetDownloadURLExample{}
+}
+
+func (ge *GetDownloadURLExample) Run(c echo.Context, params api.GetDownloadUrlExampleParams) error {
 	ctx := c.Request().Context()
-	object := c.QueryParam("path")
-	url, err := getDownloadURLExampleMain(ctx, object)
+	object := params.Path
+	url, err := ge.run(ctx, object)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("get download url error. %s", err))
 	}
-	return c.JSON(http.StatusOK, &GetDownloadURLResponse{
-		Url: url,
+	return c.JSON(http.StatusOK, &api.GetDownloadUrlExampleResponse{
+		Url: &url,
 	})
 }
 
-type GetDownloadURLResponse struct {
-	Url string `json:"url"`
-}
-
-func getDownloadURLExampleMain(ctx context.Context, object string) (string, error) {
+func (ge *GetDownloadURLExample) run(ctx context.Context, object string) (string, error) {
 	bucketName := os.Getenv("PROJECT_ID") + ".appspot.com"
 
 	appEnv := os.Getenv("APP_ENV")
