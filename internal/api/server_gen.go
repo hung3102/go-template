@@ -13,6 +13,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (GET /task/{taskId})
+	GetTask(ctx echo.Context, taskId string) error
 	// タスクを作成する
 	// (POST /tasks)
 	CreateTask(ctx echo.Context) error
@@ -24,6 +27,22 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetTask converts echo context to params.
+func (w *ServerInterfaceWrapper) GetTask(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "taskId" -------------
+	var taskId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "taskId", ctx.Param("taskId"), &taskId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter taskId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetTask(ctx, taskId)
+	return err
 }
 
 // CreateTask converts echo context to params.
@@ -87,6 +106,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/task/:taskId", wrapper.GetTask)
 	router.POST(baseURL+"/tasks", wrapper.CreateTask)
 	router.GET(baseURL+"/upload-sample/:eventId/:orgCspDocId", wrapper.UploadExample)
 
