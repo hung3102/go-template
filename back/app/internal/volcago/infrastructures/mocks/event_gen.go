@@ -6,16 +6,16 @@
 //	mockgen -source event_gen.go -destination mocks/event_gen.go
 //
 
-// Package mock_repositories is a generated GoMock package.
-package mock_repositories
+// Package mock_infrastructures is a generated GoMock package.
+package mock_infrastructures
 
 import (
 	context "context"
 	reflect "reflect"
 
 	firestore "cloud.google.com/go/firestore"
-	models "github.com/topgate/gcim-temporary/back/app/internal/volcago/models"
-	repositories "github.com/topgate/gcim-temporary/back/app/internal/volcago/repositories"
+	volcago "github.com/topgate/gcim-temporary/back/app/internal/volcago"
+	infrastructures "github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -43,7 +43,7 @@ func (m *MockEventRepository) EXPECT() *MockEventRepositoryMockRecorder {
 }
 
 // Delete mocks base method.
-func (m *MockEventRepository) Delete(ctx context.Context, subject *models.Event, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) Delete(ctx context.Context, subject *volcago.Event, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, subject}
 	for _, a := range opts {
@@ -62,7 +62,7 @@ func (mr *MockEventRepositoryMockRecorder) Delete(ctx, subject any, opts ...any)
 }
 
 // DeleteByID mocks base method.
-func (m *MockEventRepository) DeleteByID(ctx context.Context, id string, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteByID(ctx context.Context, id string, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, id}
 	for _, a := range opts {
@@ -81,7 +81,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteByID(ctx, id any, opts ...any) 
 }
 
 // DeleteByIDWithTx mocks base method.
-func (m *MockEventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, tx, id}
 	for _, a := range opts {
@@ -100,7 +100,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteByIDWithTx(ctx, tx, id any, opt
 }
 
 // DeleteMulti mocks base method.
-func (m *MockEventRepository) DeleteMulti(ctx context.Context, subjects []*models.Event, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteMulti(ctx context.Context, subjects []*volcago.Event, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, subjects}
 	for _, a := range opts {
@@ -119,7 +119,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteMulti(ctx, subjects any, opts .
 }
 
 // DeleteMultiByIDs mocks base method.
-func (m *MockEventRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, ids}
 	for _, a := range opts {
@@ -138,7 +138,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteMultiByIDs(ctx, ids any, opts .
 }
 
 // DeleteMultiByIDsWithTx mocks base method.
-func (m *MockEventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, tx, ids}
 	for _, a := range opts {
@@ -157,7 +157,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteMultiByIDsWithTx(ctx, tx, ids a
 }
 
 // DeleteMultiWithTx mocks base method.
-func (m *MockEventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*models.Event, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*volcago.Event, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, tx, subjects}
 	for _, a := range opts {
@@ -176,7 +176,7 @@ func (mr *MockEventRepositoryMockRecorder) DeleteMultiWithTx(ctx, tx, subjects a
 }
 
 // DeleteWithTx mocks base method.
-func (m *MockEventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *models.Event, opts ...repositories.DeleteOption) error {
+func (m *MockEventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *volcago.Event, opts ...infrastructures.DeleteOption) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, tx, subject}
 	for _, a := range opts {
@@ -195,14 +195,14 @@ func (mr *MockEventRepositoryMockRecorder) DeleteWithTx(ctx, tx, subject any, op
 }
 
 // Get mocks base method.
-func (m *MockEventRepository) Get(ctx context.Context, id string, opts ...repositories.GetOption) (*models.Event, error) {
+func (m *MockEventRepository) Get(ctx context.Context, id string, opts ...infrastructures.GetOption) (*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, id}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "Get", varargs...)
-	ret0, _ := ret[0].(*models.Event)
+	ret0, _ := ret[0].(*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -257,14 +257,14 @@ func (mr *MockEventRepositoryMockRecorder) GetDocRef(id any) *gomock.Call {
 }
 
 // GetMulti mocks base method.
-func (m *MockEventRepository) GetMulti(ctx context.Context, ids []string, opts ...repositories.GetOption) ([]*models.Event, error) {
+func (m *MockEventRepository) GetMulti(ctx context.Context, ids []string, opts ...infrastructures.GetOption) ([]*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, ids}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetMulti", varargs...)
-	ret0, _ := ret[0].([]*models.Event)
+	ret0, _ := ret[0].([]*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -277,14 +277,14 @@ func (mr *MockEventRepositoryMockRecorder) GetMulti(ctx, ids any, opts ...any) *
 }
 
 // GetMultiWithTx mocks base method.
-func (m *MockEventRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...repositories.GetOption) ([]*models.Event, error) {
+func (m *MockEventRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...infrastructures.GetOption) ([]*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{tx, ids}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetMultiWithTx", varargs...)
-	ret0, _ := ret[0].([]*models.Event)
+	ret0, _ := ret[0].([]*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -297,14 +297,14 @@ func (mr *MockEventRepositoryMockRecorder) GetMultiWithTx(tx, ids any, opts ...a
 }
 
 // GetWithDoc mocks base method.
-func (m *MockEventRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...repositories.GetOption) (*models.Event, error) {
+func (m *MockEventRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...infrastructures.GetOption) (*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, doc}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetWithDoc", varargs...)
-	ret0, _ := ret[0].(*models.Event)
+	ret0, _ := ret[0].(*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -317,14 +317,14 @@ func (mr *MockEventRepositoryMockRecorder) GetWithDoc(ctx, doc any, opts ...any)
 }
 
 // GetWithDocWithTx mocks base method.
-func (m *MockEventRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...repositories.GetOption) (*models.Event, error) {
+func (m *MockEventRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...infrastructures.GetOption) (*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{tx, doc}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetWithDocWithTx", varargs...)
-	ret0, _ := ret[0].(*models.Event)
+	ret0, _ := ret[0].(*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -337,14 +337,14 @@ func (mr *MockEventRepositoryMockRecorder) GetWithDocWithTx(tx, doc any, opts ..
 }
 
 // GetWithTx mocks base method.
-func (m *MockEventRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...repositories.GetOption) (*models.Event, error) {
+func (m *MockEventRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...infrastructures.GetOption) (*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{tx, id}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetWithTx", varargs...)
-	ret0, _ := ret[0].(*models.Event)
+	ret0, _ := ret[0].(*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -357,7 +357,7 @@ func (mr *MockEventRepositoryMockRecorder) GetWithTx(tx, id any, opts ...any) *g
 }
 
 // Insert mocks base method.
-func (m *MockEventRepository) Insert(ctx context.Context, subject *models.Event) (string, error) {
+func (m *MockEventRepository) Insert(ctx context.Context, subject *volcago.Event) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Insert", ctx, subject)
 	ret0, _ := ret[0].(string)
@@ -372,7 +372,7 @@ func (mr *MockEventRepositoryMockRecorder) Insert(ctx, subject any) *gomock.Call
 }
 
 // InsertMulti mocks base method.
-func (m *MockEventRepository) InsertMulti(ctx context.Context, subjects []*models.Event) ([]string, error) {
+func (m *MockEventRepository) InsertMulti(ctx context.Context, subjects []*volcago.Event) ([]string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "InsertMulti", ctx, subjects)
 	ret0, _ := ret[0].([]string)
@@ -387,7 +387,7 @@ func (mr *MockEventRepositoryMockRecorder) InsertMulti(ctx, subjects any) *gomoc
 }
 
 // InsertMultiWithTx mocks base method.
-func (m *MockEventRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*models.Event) ([]string, error) {
+func (m *MockEventRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*volcago.Event) ([]string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "InsertMultiWithTx", ctx, tx, subjects)
 	ret0, _ := ret[0].([]string)
@@ -402,7 +402,7 @@ func (mr *MockEventRepositoryMockRecorder) InsertMultiWithTx(ctx, tx, subjects a
 }
 
 // InsertWithTx mocks base method.
-func (m *MockEventRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *models.Event) (string, error) {
+func (m *MockEventRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *volcago.Event) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "InsertWithTx", ctx, tx, subject)
 	ret0, _ := ret[0].(string)
@@ -431,10 +431,10 @@ func (mr *MockEventRepositoryMockRecorder) RunInTransaction() *gomock.Call {
 }
 
 // Search mocks base method.
-func (m *MockEventRepository) Search(ctx context.Context, param *repositories.EventSearchParam, q *firestore.Query) ([]*models.Event, error) {
+func (m *MockEventRepository) Search(ctx context.Context, param *infrastructures.EventSearchParam, q *firestore.Query) ([]*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", ctx, param, q)
-	ret0, _ := ret[0].([]*models.Event)
+	ret0, _ := ret[0].([]*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -446,11 +446,11 @@ func (mr *MockEventRepositoryMockRecorder) Search(ctx, param, q any) *gomock.Cal
 }
 
 // SearchByParam mocks base method.
-func (m *MockEventRepository) SearchByParam(ctx context.Context, param *repositories.EventSearchParam) ([]*models.Event, *repositories.PagingResult, error) {
+func (m *MockEventRepository) SearchByParam(ctx context.Context, param *infrastructures.EventSearchParam) ([]*volcago.Event, *infrastructures.PagingResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchByParam", ctx, param)
-	ret0, _ := ret[0].([]*models.Event)
-	ret1, _ := ret[1].(*repositories.PagingResult)
+	ret0, _ := ret[0].([]*volcago.Event)
+	ret1, _ := ret[1].(*infrastructures.PagingResult)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
@@ -462,11 +462,11 @@ func (mr *MockEventRepositoryMockRecorder) SearchByParam(ctx, param any) *gomock
 }
 
 // SearchByParamWithTx mocks base method.
-func (m *MockEventRepository) SearchByParamWithTx(tx *firestore.Transaction, param *repositories.EventSearchParam) ([]*models.Event, *repositories.PagingResult, error) {
+func (m *MockEventRepository) SearchByParamWithTx(tx *firestore.Transaction, param *infrastructures.EventSearchParam) ([]*volcago.Event, *infrastructures.PagingResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchByParamWithTx", tx, param)
-	ret0, _ := ret[0].([]*models.Event)
-	ret1, _ := ret[1].(*repositories.PagingResult)
+	ret0, _ := ret[0].([]*volcago.Event)
+	ret1, _ := ret[1].(*infrastructures.PagingResult)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
@@ -478,10 +478,10 @@ func (mr *MockEventRepositoryMockRecorder) SearchByParamWithTx(tx, param any) *g
 }
 
 // SearchWithTx mocks base method.
-func (m *MockEventRepository) SearchWithTx(tx *firestore.Transaction, param *repositories.EventSearchParam, q *firestore.Query) ([]*models.Event, error) {
+func (m *MockEventRepository) SearchWithTx(tx *firestore.Transaction, param *infrastructures.EventSearchParam, q *firestore.Query) ([]*volcago.Event, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchWithTx", tx, param, q)
-	ret0, _ := ret[0].([]*models.Event)
+	ret0, _ := ret[0].([]*volcago.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -493,7 +493,7 @@ func (mr *MockEventRepositoryMockRecorder) SearchWithTx(tx, param, q any) *gomoc
 }
 
 // StrictUpdate mocks base method.
-func (m *MockEventRepository) StrictUpdate(ctx context.Context, id string, param *repositories.EventUpdateParam, opts ...firestore.Precondition) error {
+func (m *MockEventRepository) StrictUpdate(ctx context.Context, id string, param *infrastructures.EventUpdateParam, opts ...firestore.Precondition) error {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, id, param}
 	for _, a := range opts {
@@ -512,7 +512,7 @@ func (mr *MockEventRepositoryMockRecorder) StrictUpdate(ctx, id, param any, opts
 }
 
 // StrictUpdateWithTx mocks base method.
-func (m *MockEventRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *repositories.EventUpdateParam, opts ...firestore.Precondition) error {
+func (m *MockEventRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *infrastructures.EventUpdateParam, opts ...firestore.Precondition) error {
 	m.ctrl.T.Helper()
 	varargs := []any{tx, id, param}
 	for _, a := range opts {
@@ -531,7 +531,7 @@ func (mr *MockEventRepositoryMockRecorder) StrictUpdateWithTx(tx, id, param any,
 }
 
 // Update mocks base method.
-func (m *MockEventRepository) Update(ctx context.Context, subject *models.Event) error {
+func (m *MockEventRepository) Update(ctx context.Context, subject *volcago.Event) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, subject)
 	ret0, _ := ret[0].(error)
@@ -545,7 +545,7 @@ func (mr *MockEventRepositoryMockRecorder) Update(ctx, subject any) *gomock.Call
 }
 
 // UpdateMulti mocks base method.
-func (m *MockEventRepository) UpdateMulti(ctx context.Context, subjects []*models.Event) error {
+func (m *MockEventRepository) UpdateMulti(ctx context.Context, subjects []*volcago.Event) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateMulti", ctx, subjects)
 	ret0, _ := ret[0].(error)
@@ -559,7 +559,7 @@ func (mr *MockEventRepositoryMockRecorder) UpdateMulti(ctx, subjects any) *gomoc
 }
 
 // UpdateMultiWithTx mocks base method.
-func (m *MockEventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*models.Event) error {
+func (m *MockEventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*volcago.Event) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateMultiWithTx", ctx, tx, subjects)
 	ret0, _ := ret[0].(error)
@@ -573,7 +573,7 @@ func (mr *MockEventRepositoryMockRecorder) UpdateMultiWithTx(ctx, tx, subjects a
 }
 
 // UpdateWithTx mocks base method.
-func (m *MockEventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *models.Event) error {
+func (m *MockEventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *volcago.Event) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateWithTx", ctx, tx, subject)
 	ret0, _ := ret[0].(error)
@@ -610,7 +610,7 @@ func (m *MockEventRepositoryMiddleware) EXPECT() *MockEventRepositoryMiddlewareM
 }
 
 // BeforeDelete mocks base method.
-func (m *MockEventRepositoryMiddleware) BeforeDelete(ctx context.Context, subject *models.Event, opts ...repositories.DeleteOption) (bool, error) {
+func (m *MockEventRepositoryMiddleware) BeforeDelete(ctx context.Context, subject *volcago.Event, opts ...infrastructures.DeleteOption) (bool, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, subject}
 	for _, a := range opts {
@@ -630,7 +630,7 @@ func (mr *MockEventRepositoryMiddlewareMockRecorder) BeforeDelete(ctx, subject a
 }
 
 // BeforeDeleteByID mocks base method.
-func (m *MockEventRepositoryMiddleware) BeforeDeleteByID(ctx context.Context, ids []string, opts ...repositories.DeleteOption) (bool, error) {
+func (m *MockEventRepositoryMiddleware) BeforeDeleteByID(ctx context.Context, ids []string, opts ...infrastructures.DeleteOption) (bool, error) {
 	m.ctrl.T.Helper()
 	varargs := []any{ctx, ids}
 	for _, a := range opts {
@@ -650,7 +650,7 @@ func (mr *MockEventRepositoryMiddlewareMockRecorder) BeforeDeleteByID(ctx, ids a
 }
 
 // BeforeInsert mocks base method.
-func (m *MockEventRepositoryMiddleware) BeforeInsert(ctx context.Context, subject *models.Event) (bool, error) {
+func (m *MockEventRepositoryMiddleware) BeforeInsert(ctx context.Context, subject *volcago.Event) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeforeInsert", ctx, subject)
 	ret0, _ := ret[0].(bool)
@@ -665,7 +665,7 @@ func (mr *MockEventRepositoryMiddlewareMockRecorder) BeforeInsert(ctx, subject a
 }
 
 // BeforeUpdate mocks base method.
-func (m *MockEventRepositoryMiddleware) BeforeUpdate(ctx context.Context, old, subject *models.Event) (bool, error) {
+func (m *MockEventRepositoryMiddleware) BeforeUpdate(ctx context.Context, old, subject *volcago.Event) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeforeUpdate", ctx, old, subject)
 	ret0, _ := ret[0].(bool)
