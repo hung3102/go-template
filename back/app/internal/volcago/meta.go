@@ -1,4 +1,4 @@
-package models
+package volcago
 
 import "time"
 
