@@ -2,6 +2,7 @@ package main
 
 import (
 	"gcim/example/config"
+	"gcim/example/pkg/getdownloadurlexample"
 	uploadexample "gcim/example/pkg/uploadExample"
 	"net/http"
 
@@ -18,5 +19,7 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.GET("/upload-sample/:eventId/:orgCspDocId", uploadexample.UploadExample)
+	e.GET("/get-download-url", getdownloadurlexample.GetDownloadURLExample)
+	e.Static("/static", "static")
 	e.Logger.Fatal(e.Start(":1313"))
 }
