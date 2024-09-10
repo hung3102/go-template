@@ -14,6 +14,7 @@ dev:
 .PHONY: init
 init: bootstrap
 	test -f .env || cp .env.template .env
+	cd back && make gowork
 
 .PHONY: bootstrap
 bootstrap: bootstrap_golangci_lint bootstrap_mockgen bootstrap_oapi bootstrap_revive bootstrap_swagger-cli
