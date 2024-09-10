@@ -1,4 +1,5 @@
 VOLCAGO_VERSION := 1.11.1
+OAPI_CODEGEN_VERSION := 2.2.0
 
 OS_NAME := `echo $(shell uname -s) | tr A-Z a-z`
 MACHINE_TYPE := $(shell uname -m)
@@ -10,6 +11,11 @@ dev:
 bootstrap_volcago:
 	mkdir -p ./bin
 	GOBIN=$(PWD)/bin go install github.com/go-generalize/volcago/cmd/volcago@v$(VOLCAGO_VERSION)
+
+.PHONY: bootstrap_oapi
+bootstrap_oapi:
+	mkdir -p ./bin
+	GOBIN=${PWD}/bin/ go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@v$(OAPI_CODEGEN_VERSION)
 
 .PHONY: gomock
 gomock:
