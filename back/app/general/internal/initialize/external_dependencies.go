@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/storage"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -19,6 +20,7 @@ import (
 // ExternalDependencies - external dependencies
 type ExternalDependencies struct {
 	firestoreClient *firestore.Client
+	storageClient   *storage.Client
 	openapi         *openapi3.T
 	sesService      *ses.SES
 }
@@ -74,6 +76,16 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 		ed.firestoreClient, err = firestore.NewClient(ctx, projectID, options...)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize firestore client: %w", err)
+		}
+
+		options = make([]option.ClientOption, 0)
+		if environ.IsLocal() {
+			options = append(options, option.WithoutAuthentication())
+			options = append(options, option.WithEndpoint("http://localhost:9199"))
+		}
+		ed.storageClient, err = storage.NewClient(ctx, options...)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to initialize storage client: %w", err)
 		}
 	}
 
