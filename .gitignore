@@ -10,10 +10,10 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
-docker/firestore/*
-!docker/firestore/.firebaserc
-!docker/firestore/firebase.json
-!docker/firestore/Dockerfile
+docker/firebase/*
+!docker/firebase/.firebaserc
+!docker/firebase/firebase.json
+!docker/firebase/Dockerfile
 
 # Firebase config
 

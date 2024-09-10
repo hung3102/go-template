@@ -18,7 +18,7 @@ services:
     networks:
       - database
     depends_on:
-      - firestore
+      - firebase
 
   app:
     container_name: gcim-app
@@ -31,7 +31,7 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - firestore
+      - firebase
 
   cloud-sdk:
     image: google/cloud-sdk:491.0.0-alpine
@@ -42,23 +42,23 @@ services:
     profiles:
       - cloud-sdk
 
-  firestore:
+  firebase:
     build:
       context: .
-      dockerfile: ./docker/firestore/Dockerfile
+      dockerfile: ./docker/firebase/Dockerfile
     ports:
       - 8080:8080 # Cloud Firestore
       - 9199:9199 # Cloud Storage
       - 4000:4000 # Emulator Suite UI
     volumes:
-      - ./docker/firestore/.firebaserc:/firestore/.firebaserc
-      - ./docker/firestore/firebase.json:/firestore/firebase.json
-      - ./docker/firestore/storage.rules:/firestore/storage.rules
-      - ./docker/firestore/backup:/firestore/backup
-      - ./docker/firestore/bin/:/root/.cache:cached
-      - ./docker/firestore/config/:/root/.config:cached
+      - ./docker/firebase/.firebaserc:/firebase/.firebaserc
+      - ./docker/firebase/firebase.json:/firebase/firebase.json
+      - ./docker/firebase/storage.rules:/firebase/storage.rules
+      - ./docker/firebase/backup:/firebase/backup
+      - ./docker/firebase/bin/:/root/.cache:cached
+      - ./docker/firebase/config/:/root/.config:cached
     tty: true
-    working_dir: /firestore
+    working_dir: /firebase
     command: firebase emulators:start --import=backup/data --export-on-exit
     networks:
       - database
