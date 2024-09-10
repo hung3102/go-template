@@ -17,7 +17,7 @@ type Config struct {
 }
 
 var defaultConfig = Config{
-	FirestoreProjectOnEmulator: "emulator-projects",
+	FirestoreProjectOnEmulator: "test-project",
 }
 
 // ReadConfig - read config from environment variables
