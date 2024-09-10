@@ -204,9 +204,9 @@
       "url": "{protocol}://localhost:{port}/api",
       "variables": {
         "port": {
-          "default": "26001",
+          "default": "27001",
           "enum": [
-            "26001"
+            "27001"
           ]
         },
         "protocol": {
@@ -231,7 +231,7 @@
       }
     },
     {
-      "url": "{protocol}://qa or stg環境のURLが確定したら入れる/api",
+      "url": "{protocol}://QAorSTG環境のURLが確定したら入れる/api",
       "variables": {
         "protocol": {
           "default": "https",
