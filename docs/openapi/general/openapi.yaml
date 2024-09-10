@@ -13,8 +13,8 @@ servers:
         default: http
       port:
         enum:
-          - '26001'
-        default: '26001'
+          - '27001'
+        default: '27001'
   - url: '{protocol}://dev環境のURLが確定したら入れる/api'
     variables:
       protocol:
