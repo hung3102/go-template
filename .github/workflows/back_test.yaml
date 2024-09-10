@@ -1,0 +1,49 @@
+name: test
+
+on:
+  pull_request:
+    paths:
+      - back/**
+      - .github/workflows/back_test.yml
+
+  push:
+    branches:
+      - main
+      - stg
+      - develop
+    paths:
+      - back/**
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    name: runner / go
+    timeout-minutes: 10
+
+    steps:
+      - name: Set up Go ^1.23
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.23'
+        id: go
+
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Run go work init
+        run: go work init app pkg
+        working-directory: back
+
+      - name: Run pkg tests
+        run: go test -v ./...
+        working-directory: back/pkg
+
+      - name: Run app tests
+        run: go test -v ./...
+        working-directory: back/app
