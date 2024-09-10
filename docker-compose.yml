@@ -1,4 +1,25 @@
+x-api-base: &api-base
+  volumes:
+    - ./:/app
+  env_file:
+    - .env
+
 services:
+  general-api:
+    <<: *api-base
+    build:
+      context: .
+      dockerfile: docker/backend/general/dev/Dockerfile
+    ports:
+      - target: 1234
+        published: 27001
+    profiles:
+      - general
+    networks:
+      - database
+    depends_on:
+      - firestore
+
   app:
     container_name: gcim-app
     build:
@@ -37,3 +58,8 @@ services:
     tty: true
     working_dir: /firestore
     command: firebase emulators:start --import=backup/data --export-on-exit
+    networks:
+      - database
+
+networks:
+  database:
