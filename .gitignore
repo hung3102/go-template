@@ -10,10 +10,10 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
-docker/firestore/*
-!docker/firestore/.firebaserc
-!docker/firestore/firebase.json
-!docker/firestore/Dockerfile
+docker/firebase/*
+!docker/firebase/.firebaserc
+!docker/firebase/firebase.json
+!docker/firebase/Dockerfile
 
 # Firebase config
 
@@ -75,3 +75,12 @@ node_modules/
 
 # tmp
 tmp
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# Other
+bin/

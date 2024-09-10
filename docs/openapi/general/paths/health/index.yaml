@@ -1,0 +1,15 @@
+get:
+  summary: 生存確認API
+  description: サーバーの生存確認を行う
+  operationId: getHealth
+
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/health/get_health.yaml
+          examples:
+            GetHealth:
+              $ref: ../../examples/health/index.yaml

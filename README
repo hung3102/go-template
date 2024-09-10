@@ -1,18 +1,21 @@
-# Go project template
+# gcim-temporary
 
-## Techniques
-- Gin
-- Graphql
-- Firestore
+## Backend setup(by Docker)
 
-## Start
-- Create `.env` file
-```
-cp .env.local .env
+1. Tool install & setup (first-time only)
+
+```bash
+make init
 ```
 
+2. Login with Cloud SDK (first-time only)
 
-- Start
+```bash
+docker compose run --rm cloud-sdk gcloud auth application-default login
 ```
-make dev
+
+3. Start up
+
+```bash
+docker compose up general-api
 ```
