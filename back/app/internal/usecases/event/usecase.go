@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/go-utils/structs"
+	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 )
 
@@ -14,7 +15,7 @@ type Usecase struct {
 
 // Dependencies - Usecase が依存するもの
 type Dependencies struct {
-	EventsRepository repositories.EventsRepository
+	EventsRepository repositories.BaseRepository[entities.Event]
 }
 
 // NewUsecase - Usecase のコンストラクタ

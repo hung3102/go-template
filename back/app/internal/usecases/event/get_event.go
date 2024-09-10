@@ -14,6 +14,6 @@ func (u *Usecase) GetEventByID(ctx context.Context, id string) (*Event, error) {
 		ID:           event.ID(),
 		BillingMonth: event.BillingMonth(),
 		Status:       event.Status(),
-		CreatedAt:    event.CreatedAt(),
+		CreatedAt:    event.Meta().CreatedAt(),
 	}, nil
 }
