@@ -10,6 +10,7 @@ import (
 
 type ITaskPresenter interface {
 	PresentCreateTask(c echo.Context, output *output.CreateTaskOutput) error
+	PresentGetTask(c echo.Context, output *output.GetTaskOutput) error
 }
 
 type TaskPresenter struct{}
@@ -22,6 +23,16 @@ func (p *TaskPresenter) PresentCreateTask(c echo.Context, output *output.CreateT
 	response := api.CreateTaskResponse{
 		ID:   output.Task.ID,
 		Desc: output.Task.Desc,
+	}
+
+	return c.JSON(http.StatusOK, response)
+}
+
+func (p *TaskPresenter) PresentGetTask(c echo.Context, output *output.GetTaskOutput) error {
+
+	response := api.GetTaskResponse{
+		TaskId: &output.Task.ID,
+		Desc:   &output.Task.Desc,
 	}
 
 	return c.JSON(http.StatusOK, response)

@@ -25,6 +25,10 @@ func (s *Server) CreateTask(ctx echo.Context) error {
 	return s.userController.CreateTask(ctx)
 }
 
+func (s *Server) GetTask(ctx echo.Context, taskId string) error {
+	return s.userController.GetTask(ctx, taskId)
+}
+
 func (s *Server) UploadExample(ctx echo.Context, eventId string, orgCspDocId string) error {
 	return nil
 }
