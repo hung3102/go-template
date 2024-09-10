@@ -22,7 +22,7 @@ servers:
           - http
           - https
         default: https
-  - url: '{protocol}://qa or stg環境のURLが確定したら入れる/api'
+  - url: '{protocol}://QAorSTG環境のURLが確定したら入れる/api'
     variables:
       protocol:
         enum:
