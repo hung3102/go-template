@@ -2,20 +2,20 @@
 
 ## Backend setup(by Docker)
 
-1. .env.template -> .env (first-time only)
+1. Tool install & setup (first-time only)
 
 ```bash
-cp .env.template .env
+make init
 ```
 
 2. Login with Cloud SDK (first-time only)
 
-   ```bash
-   docker compose run --rm cloud-sdk gcloud auth application-default login
-   ```
+```bash
+docker compose run --rm cloud-sdk gcloud auth application-default login
+```
 
 3. Start up
 
-   ```bash
-   docker compose up general-api
-   ```
+```bash
+docker compose up general-api
+```
