@@ -1,0 +1,27 @@
+@startuml dependencies
+
+header 2024/09/10時点
+
+show circle
+
+class Entity
+class UseCase
+class RepositoryImpl
+interface Repository
+class DTO
+class ValueObject
+class Controller
+interface OpenAPI
+
+ValueObject <.. Entity
+Entity <.. Repository
+Entity <.. UseCase
+RepositoryImpl <.. Repository
+RepositoryImpl <|.. Volcago
+Repository <.. UseCase
+DTO <|.. UseCase
+UseCase <.. Controller
+Controller <|.. DTO
+Controller <|.. OpenAPI
+
+@enduml
