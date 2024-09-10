@@ -16,8 +16,7 @@ linters-settings:
         arguments:
           - "checkPrivateReceivers"
           - "disableStutteringCheck"
-  govet:
-    check-shadowing: true
+
   lll:
     line-length: 120
   misspell:
