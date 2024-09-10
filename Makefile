@@ -1,5 +1,6 @@
 VOLCAGO_VERSION := 1.11.1
 OAPI_CODEGEN_VERSION := 2.2.0
+SWAGGER_CLI_CONTAINER_VERSION := 1.0.0
 
 OS_NAME := `echo $(shell uname -s) | tr A-Z a-z`
 MACHINE_TYPE := $(shell uname -m)
@@ -16,6 +17,10 @@ bootstrap_volcago:
 bootstrap_oapi:
 	mkdir -p ./bin
 	GOBIN=${PWD}/bin/ go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@v$(OAPI_CODEGEN_VERSION)
+
+.PHONY: bootstrap_swagger-cli
+bootstrap_swagger-cli:
+	docker build -f ./docker/swagger_cli/Dockerfile -t swagger_cli:$(SWAGGER_CLI_CONTAINER_VERSION) .
 
 .PHONY: gomock
 gomock:
