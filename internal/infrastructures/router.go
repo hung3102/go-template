@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"gcim/example/internal/api"
 	"gcim/example/internal/controllers"
+	uploadexample "gcim/example/pkg/uploadExample"
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -11,13 +12,19 @@ import (
 
 type Server struct {
 	userController *controllers.TaskController
+	getDownloadUrl *controllers.DownloadUrlController
+	uploadExample  *uploadexample.UploadExample
 }
 
 func NewServer(
 	userController *controllers.TaskController,
+	getDownloadUrl *controllers.DownloadUrlController,
+	uploadExample *uploadexample.UploadExample,
 ) *Server {
 	return &Server{
 		userController: userController,
+		getDownloadUrl: getDownloadUrl,
+		uploadExample:  uploadExample,
 	}
 }
 
@@ -29,8 +36,12 @@ func (s *Server) GetTask(ctx echo.Context, taskId string) error {
 	return s.userController.GetTask(ctx, taskId)
 }
 
+func (s *Server) GetDownloadUrl(ctx echo.Context, params api.GetDownloadUrlParams) error {
+	return s.getDownloadUrl.GetDownloadUrl(ctx, params)
+}
+
 func (s *Server) UploadExample(ctx echo.Context, eventId string, orgCspDocId string) error {
-	return nil
+	return s.uploadExample.Run(ctx, eventId, orgCspDocId)
 }
 
 func InitRouter() {
@@ -49,6 +60,8 @@ func InitRouter() {
 	}
 
 	api.RegisterHandlers(e, server)
+
+	e.Static("/static", "static")
 
 	e.Logger.Fatal(e.Start(":1313"))
 }

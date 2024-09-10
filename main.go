@@ -18,6 +18,8 @@ func main() {
 	// 	return c.String(http.StatusOK, "Hello, World!")
 	// })
 	// e.GET("/upload-sample/:eventId/:orgCspDocId", uploadexample.UploadExample)
+	// e.GET("/get-download-url", getdownloadurlexample.GetDownloadURLExample)
+	// e.Static("/static", "static")
 	// e.Logger.Fatal(e.Start(":1313"))
 	infrastructure.InitRouter()
 }
