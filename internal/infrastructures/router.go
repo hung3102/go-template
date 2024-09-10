@@ -3,7 +3,6 @@ package infrastructure
 import (
 	"gcim/example/internal/api"
 	"gcim/example/internal/controllers"
-	"gcim/example/pkg/getdownloadurlexample"
 	uploadexample "gcim/example/pkg/uploadExample"
 	"log"
 
@@ -12,20 +11,20 @@ import (
 )
 
 type Server struct {
-	userController        *controllers.TaskController
-	getDownloadUrlExample *getdownloadurlexample.GetDownloadURLExample
-	uploadExample         *uploadexample.UploadExample
+	userController *controllers.TaskController
+	getDownloadUrl *controllers.DownloadUrlController
+	uploadExample  *uploadexample.UploadExample
 }
 
 func NewServer(
 	userController *controllers.TaskController,
-	getDownloadUrlExample *getdownloadurlexample.GetDownloadURLExample,
+	getDownloadUrl *controllers.DownloadUrlController,
 	uploadExample *uploadexample.UploadExample,
 ) *Server {
 	return &Server{
-		userController:        userController,
-		getDownloadUrlExample: getDownloadUrlExample,
-		uploadExample:         uploadExample,
+		userController: userController,
+		getDownloadUrl: getDownloadUrl,
+		uploadExample:  uploadExample,
 	}
 }
 
@@ -33,8 +32,8 @@ func (s *Server) CreateTask(ctx echo.Context) error {
 	return s.userController.CreateTask(ctx)
 }
 
-func (s *Server) GetDownloadUrlExample(ctx echo.Context, params api.GetDownloadUrlExampleParams) error {
-	return s.getDownloadUrlExample.Run(ctx, params)
+func (s *Server) GetDownloadUrl(ctx echo.Context, params api.GetDownloadUrlParams) error {
+	return s.getDownloadUrl.GetDownloadUrl(ctx, params)
 }
 
 func (s *Server) UploadExample(ctx echo.Context, eventId string, orgCspDocId string) error {

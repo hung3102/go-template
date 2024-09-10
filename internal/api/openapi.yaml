@@ -55,7 +55,7 @@ paths:
   /get-download-url:
     get:
       summary: 署名付きURLを取得する
-      operationId: GetDownloadUrlExample
+      operationId: GetDownloadUrl
       parameters:
         - name: path
           in: query
@@ -70,7 +70,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetDownloadUrlExampleResponse'
+                $ref: '#/components/schemas/GetDownloadUrlResponse'
 components:
   schemas:
     CreateTaskRequest:
@@ -113,9 +113,9 @@ components:
     UploadExampleResponse:
       type: object
       x-go-name: UploadExampleResponse
-    GetDownloadUrlExampleResponse:
+    GetDownloadUrlResponse:
       type: object
-      x-go-name: GetDownloadUrlExampleResponse      
+      x-go-name: GetDownloadUrlResponse      
       properties:
         url:
           type: string
