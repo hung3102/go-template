@@ -30,6 +30,7 @@ func BuildContainer() *dig.Container {
 
 	// usecases
 	container.Provide(usecases.NewCreateTaskUsecase)
+	container.Provide(usecases.NewGetTaskUsecase)
 	container.Provide(usecases.NewGetDownloadUrlUsecase)
 
 	// repositories

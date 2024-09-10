@@ -20,6 +20,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateTaskResponse'
+  /task/{taskId}:
+    get:
+      operationId: GetTask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 123
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTaskRequest'
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskResponse'
   /upload-sample/{eventId}/{orgCspDocId}:
     get:
       summary: ファイルをアップロードする
@@ -100,6 +123,21 @@ components:
       required:
         - id
         - desc
+    GetTaskRequest:
+      type: object
+      x-go-name: GetTaskRequest
+      properties:
+        taskId:
+          type: string
+    GetTaskResponse:
+      type: object
+      x-go-name: GetTaskResponse
+      properties:
+        taskId:
+          type: string
+          x-go-name: taskId
+        desc:
+          type: string
     UploadExampleRequest:
       type: object
       x-go-name: UploadExampleRequest

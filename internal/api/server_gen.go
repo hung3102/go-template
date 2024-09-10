@@ -16,6 +16,9 @@ type ServerInterface interface {
 	// 署名付きURLを取得する
 	// (GET /get-download-url)
 	GetDownloadUrl(ctx echo.Context, params GetDownloadUrlParams) error
+
+	// (GET /task/{taskId})
+	GetTask(ctx echo.Context, taskId string) error
 	// タスクを作成する
 	// (POST /tasks)
 	CreateTask(ctx echo.Context) error
@@ -44,6 +47,22 @@ func (w *ServerInterfaceWrapper) GetDownloadUrl(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetDownloadUrl(ctx, params)
+	return err
+}
+
+// GetTask converts echo context to params.
+func (w *ServerInterfaceWrapper) GetTask(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "taskId" -------------
+	var taskId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "taskId", ctx.Param("taskId"), &taskId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter taskId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetTask(ctx, taskId)
 	return err
 }
 
@@ -109,6 +128,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/get-download-url", wrapper.GetDownloadUrl)
+	router.GET(baseURL+"/task/:taskId", wrapper.GetTask)
 	router.POST(baseURL+"/tasks", wrapper.CreateTask)
 	router.GET(baseURL+"/upload-sample/:eventId/:orgCspDocId", wrapper.UploadExample)
 

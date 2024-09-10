@@ -24,6 +24,17 @@ type GetDownloadUrlResponse struct {
 	Url *string `json:"url,omitempty"`
 }
 
+// GetTaskRequest defines model for GetTaskRequest.
+type GetTaskRequest struct {
+	TaskId *string `json:"taskId,omitempty"`
+}
+
+// GetTaskResponse defines model for GetTaskResponse.
+type GetTaskResponse struct {
+	Desc   *string `json:"desc,omitempty"`
+	TaskId *string `json:"taskId,omitempty"`
+}
+
 // UploadExampleRequest defines model for UploadExampleRequest.
 type UploadExampleRequest struct {
 	EventId     *string `json:"eventId,omitempty"`
@@ -38,6 +49,9 @@ type GetDownloadUrlParams struct {
 	// Path ファイルパス
 	Path string `form:"path" json:"path"`
 }
+
+// GetTaskJSONRequestBody defines body for GetTask for application/json ContentType.
+type GetTaskJSONRequestBody = GetTaskRequest
 
 // CreateTaskJSONRequestBody defines body for CreateTask for application/json ContentType.
 type CreateTaskJSONRequestBody = CreateTaskRequest

@@ -32,6 +32,10 @@ func (s *Server) CreateTask(ctx echo.Context) error {
 	return s.userController.CreateTask(ctx)
 }
 
+func (s *Server) GetTask(ctx echo.Context, taskId string) error {
+	return s.userController.GetTask(ctx, taskId)
+}
+
 func (s *Server) GetDownloadUrl(ctx echo.Context, params api.GetDownloadUrlParams) error {
 	return s.getDownloadUrl.GetDownloadUrl(ctx, params)
 }
