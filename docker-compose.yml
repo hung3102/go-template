@@ -12,6 +12,15 @@ services:
     depends_on:
       - firestore
 
+  cloud-sdk:
+    image: google/cloud-sdk:491.0.0-alpine
+    environment:
+      - CLOUDSDK_CONFIG=/root/cloudsdk_config/
+    volumes:
+      - ./docker/cloudsdk_config:/root/cloudsdk_config/
+    profiles:
+      - cloud-sdk
+
   firestore:
     build:
       context: .
