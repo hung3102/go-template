@@ -13,6 +13,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/general/internal/config"
 	"github.com/topgate/gcim-temporary/back/pkg/environ"
 	"golang.org/x/xerrors"
+	"google.golang.org/api/option"
 )
 
 // ExternalDependencies - external dependencies
@@ -63,10 +64,14 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 	// Google Cloud
 	{
 		projectID := gcpen.ProjectID
+		options := make([]option.ClientOption, 0)
 		if environ.IsLocal() {
 			projectID = cfg.FirestoreProjectOnEmulator
+			options = append(options, option.WithoutAuthentication())
+			options = append(options, option.WithEndpoint("http://localhost:8080"))
 		}
-		ed.firestoreClient, err = firestore.NewClient(ctx, projectID)
+
+		ed.firestoreClient, err = firestore.NewClient(ctx, projectID, options...)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize firestore client: %w", err)
 		}
