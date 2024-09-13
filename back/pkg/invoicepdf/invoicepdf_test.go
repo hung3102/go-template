@@ -1,7 +1,7 @@
 package invoicepdf
 
 import (
-	"os"
+	"fmt"
 	"testing"
 )
 
@@ -14,8 +14,10 @@ func Test_InvoicePDF_WritePDF(t *testing.T) {
 		t.Errorf("CreateInvoicePDF err = %v", err)
 	}
 
-	err = os.WriteFile("invoice_pdf_test.pdf", pdf, 0644)
-	if err != nil {
-		t.Errorf("os.WriteFile err = %v", err)
-	}
+	fmt.Println(pdf)
+
+	// err = os.WriteFile("invoice_pdf_test.pdf", pdf, 0644)
+	// if err != nil {
+	// 	t.Errorf("os.WriteFile err = %v", err)
+	// }
 }
