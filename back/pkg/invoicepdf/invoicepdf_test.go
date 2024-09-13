@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_InvoicePDF_WritePDF(t *testing.T) {
+func Test_CreateInvoicePDF(t *testing.T) {
 	pdf, err := CreateInvoicePDF(&CreateInvoicePDFParam{
 		OrgName: "団体名12345団体名12345団体名12345",
 	})
