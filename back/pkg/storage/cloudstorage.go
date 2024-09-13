@@ -40,10 +40,10 @@ func (this *CloudStorage) Upload(ctx context.Context, file []byte, path string, 
 	writer := this.newWriter(ctx, path, contentType)
 	reader := bytes.NewReader(file)
 	if _, err := io.Copy(writer, reader); err != nil {
-		return fmt.Errorf("StorageImpl.Upload: io.Copy: %v", err)
+		return fmt.Errorf("CloudStorage.Upload: io.Copy: %v", err)
 	}
 	if err := writer.Close(); err != nil {
-		return fmt.Errorf("StorageImpl.Upload: writer.Close: %v", err)
+		return fmt.Errorf("CloudStorage.Upload: writer.Close: %v", err)
 	}
 	return nil
 }
@@ -74,7 +74,7 @@ func (this *CloudStorage) DownloadURL(path string) (string, error) {
 	}
 	url, err := this.bucket().SignedURL(path, this.signedURLOptions())
 	if err != nil {
-		return "", fmt.Errorf("StorageImpl.DownloadURL: bucket.SignedURL: %v", err)
+		return "", fmt.Errorf("CloudStorage.DownloadURL: bucket.SignedURL: %v", err)
 	}
 
 	return url, nil
