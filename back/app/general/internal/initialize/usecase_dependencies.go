@@ -8,6 +8,8 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
+	"github.com/topgate/gcim-temporary/back/pkg/environ"
+	"github.com/topgate/gcim-temporary/back/pkg/storage"
 )
 
 // UseCaseDependencies - 初期化されたユースケースの依存の集合体
@@ -15,6 +17,7 @@ type UseCaseDependencies struct {
 	EventRepository       repositories.BaseRepository[entities.Event]
 	SessionRepository     repositories.BaseRepository[entities.UserSession]
 	AuthenticationService authentication.Provider
+	Storage               storage.Storage
 }
 
 // NewUseCaseDependencies - ユースケースに依存するものの初期化
@@ -31,9 +34,18 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		},
 	)
 
+	storage := storage.NewCloudStorage(
+		&storage.CloudStorageParam{
+			Client:     externalDeps.storageClient,
+			BucketName: cfg.FirestoreProjectOnEmulator + ".appspot.com",
+			IsLocal:    environ.IsLocal(),
+		},
+	)
+
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
 		AuthenticationService: authenticationService,
+		Storage:               storage,
 	}
 }
