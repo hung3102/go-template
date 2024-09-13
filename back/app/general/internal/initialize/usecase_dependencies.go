@@ -37,7 +37,7 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 	storage := storage.NewCloudStorage(
 		&storage.CloudStorageParam{
 			Client:     externalDeps.storageClient,
-			BucketName: cfg.FirestoreProjectOnEmulator + ".appspot.com",
+			BucketName: cfg.BucketName,
 			IsLocal:    environ.IsLocal(),
 		},
 	)
