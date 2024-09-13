@@ -20,19 +20,6 @@ services:
     depends_on:
       - firebase
 
-  app:
-    container_name: gcim-app
-    build:
-      context: .
-      dockerfile: ./docker/app/Dockerfile
-    ports:
-      - 3000:3000
-      - 1313:1313
-    volumes:
-      - ./:/app
-    depends_on:
-      - firebase
-
   cloud-sdk:
     image: google/cloud-sdk:491.0.0-alpine
     environment:

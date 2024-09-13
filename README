@@ -17,5 +17,5 @@ docker compose run --rm cloud-sdk gcloud auth application-default login
 3. Start up
 
 ```bash
-docker compose up general-api
+docker compose up general-api firebase
 ```
