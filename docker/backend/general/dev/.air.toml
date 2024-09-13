@@ -4,14 +4,14 @@ tmp_dir = "../docker/backend/general/dev/tmp"
 
 [build]
   bin = "/app/docker/backend/general/dev/tmp/main"
-  cmd = "go build -buildvcs=false -o /app/docker/backend/general/dev/tmp/main ."
+  cmd = "go build -buildvcs=false -gcflags \"all=-N -l\" -o /app/docker/backend/general/dev/tmp/main ."
   delay = 1000
   exclude_dir = []
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
-  full_bin = ""
+  full_bin = "dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec --continue /app/docker/backend/general/dev/tmp/main"
   include_dir = []
   include_file = [".air.toml", ".env", "openapi.json"]
   include_ext = ["go", "tpl", "tmpl", "html", "env"]
