@@ -4,10 +4,10 @@ package invoicepdf
 import (
 	"bytes"
 	_ "embed"
-	"fmt"
 	"io"
 
 	"github.com/signintech/gopdf"
+	"golang.org/x/xerrors"
 )
 
 // fontName - フォント名
@@ -34,7 +34,11 @@ func CreateInvoicePDF(param *CreateInvoicePDFParam) ([]byte, error) {
 		pdf:   &gopdf.GoPdf{},
 		param: param,
 	}
-	return invoicePDF.execute()
+	result, err := invoicePDF.execute()
+	if err != nil {
+		return nil, xerrors.Errorf("CreateInvoicePDF: %w", err)
+	}
+	return result, err
 }
 
 // createInvoicePDF - 請求書PDFを作成
@@ -48,10 +52,10 @@ func (ip *createInvoicePDF) execute() ([]byte, error) {
 	ip.initPage()
 	ip.setTemplate()
 	if err := ip.loadFont(); err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("createInvoicePDF.execute: %w", err)
 	}
 	if err := ip.setOrgName(); err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("createInvoicePDF.execute: %w", err)
 	}
 	return ip.getPDF(), nil
 }
@@ -72,7 +76,7 @@ func (ip *createInvoicePDF) setTemplate() {
 // loadFont - フォントファイルを読み込む
 func (ip *createInvoicePDF) loadFont() error {
 	if err := ip.pdf.AddTTFFontData(fontName, fontData); err != nil {
-		return fmt.Errorf("InvoicePDFImpl.loadFont: ip.pdf.AddTTFFontData: %v", err)
+		return xerrors.Errorf("createInvoicePDF.loadFont: %w", err)
 	}
 	return nil
 }
@@ -80,11 +84,13 @@ func (ip *createInvoicePDF) loadFont() error {
 // setOrgName - PDFに団体名を設定する
 func (ip *createInvoicePDF) setOrgName() error {
 	if err := ip.pdf.SetFont(fontName, "", 14); err != nil {
-		return fmt.Errorf("InvoicePDFImpl.setOrgName: ip.pdf.SetFont: %v", err)
+		return xerrors.Errorf("createInvoicePDF.setOrgName: %w", err)
 	}
 	ip.pdf.SetXY(35, 57)
 	ip.pdf.SetTextColor(255, 0, 0)
-	ip.pdf.Cell(nil, ip.param.OrgName)
+	if err := ip.pdf.Cell(nil, ip.param.OrgName); err != nil {
+		return xerrors.Errorf("createInvoicePDF.setOrgName: %w", err)
+	}
 	return nil
 }
 
