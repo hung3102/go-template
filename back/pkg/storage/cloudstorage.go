@@ -12,11 +12,15 @@ import (
 
 var _ Storage = (*CloudStorage)(nil)
 
+// 署名付きURLの有効期間(分)
+const EXPIRES_MIN = 15
+
 // CloudStorage - CloudStorageアクセス用
 type CloudStorage struct {
 	client     *storage.Client
 	bucketName string
 	isLocal    bool
+	expiresMin int
 }
 
 // CloudStorageParam - CloudStorageを作成するためのパラメーター
@@ -32,6 +36,7 @@ func NewCloudStorage(params *CloudStorageParam) Storage {
 		client:     params.Client,
 		bucketName: params.BucketName,
 		isLocal:    params.IsLocal,
+		expiresMin: EXPIRES_MIN,
 	}
 }
 
@@ -90,6 +95,11 @@ func (this *CloudStorage) signedURLOptions() *storage.SignedURLOptions {
 	return &storage.SignedURLOptions{
 		Scheme:  storage.SigningSchemeV4,
 		Method:  "GET",
-		Expires: time.Now().Add(15 * time.Minute),
+		Expires: this.expires(),
 	}
+}
+
+// expires - 有効期限を取得する
+func (this *CloudStorage) expires() time.Time {
+	return time.Now().Add(time.Duration(this.expiresMin) * time.Minute)
 }
