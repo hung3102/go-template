@@ -1,6 +1,8 @@
 // Package - GCASダッシュボードAPIを実行
 package gcasdashboardapi
 
+//go:generate ../../../../../bin/mockgen -source=$GOFILE -destination=../../apiimpl/mocks/gcas_dashboard_api_mock.go -package=mockapi
+
 // GCASダッシュボードAPIを実行
 type GCASDashboardAPI interface {
 	// アカウント一覧を取得する。

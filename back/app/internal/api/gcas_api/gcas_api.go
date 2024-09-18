@@ -1,6 +1,8 @@
 // Package - GCAS APIを実行
 package gcasapi
 
+//go:generate ../../../../../bin/mockgen -source=$GOFILE -destination=../../apiimpl/mocks/gcas_api_mock.go -package=mockapi
+
 // GCASAPI - GCAS APIを実行
 type GCASAPI interface {
 	// GetAccounts - アカウント一覧を取得する
