@@ -1,6 +1,16 @@
 package entities
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
+
+const (
+	// STATUS_INVOICE_CREATEION_POSSIBLE - 請求書作成可能
+	STATUS_INVOICE_CREATEION_POSSIBLE = 1
+	// STATUS_STORED - 収納済
+	STATUS_STORED = 2
+)
 
 // Event - イベント
 type Event struct {
@@ -46,4 +56,9 @@ func (e *Event) Status() string {
 // Meta - meta のゲッター
 func (e *Event) Meta() *Meta {
 	return e.meta
+}
+
+// IsInvoiceCreateionPossible - 請求作成可能か判定する。
+func (e *Event) IsInvoiceCreateionPossible() bool {
+	return e.status == strconv.Itoa(STATUS_INVOICE_CREATEION_POSSIBLE)
 }

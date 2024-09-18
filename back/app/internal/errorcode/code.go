@@ -16,6 +16,15 @@ const (
 
 	// ErrorCodeAAA - AAA のエラーコード
 	ErrorCodeAAA ErrorCode = "EU0201"
+
+	// ErrorCodeDBAccess - E001:DBアクセス時のエラー
+	ErrorCodeDBAccess ErrorCode = "E001"
+	// ErrorCodeGCASDashboardAPI - GCAS ダッシュボードのAPIのエラー
+	ErrorCodeGCASDashboardAPI ErrorCode = "E002"
+	// ErrorCodeGCASAPI - GCAS のAPIのエラー
+	ErrorCodeGCASAPI ErrorCode = "E003"
+	// ErrorCodeAccountInfoIsMissing - アカウント情報が足りない場合のエラー
+	ErrorCodeAccountInfoIsMissing ErrorCode = "E004"
 )
 
 // ミドルウェアのエラーコードをここに追加する

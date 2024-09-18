@@ -8,6 +8,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
+	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
 // UseCaseDependencies - 初期化されたユースケースの依存の集合体
@@ -15,6 +16,7 @@ type UseCaseDependencies struct {
 	EventRepository       repositories.BaseRepository[entities.Event]
 	SessionRepository     repositories.BaseRepository[entities.UserSession]
 	AuthenticationService authentication.Provider
+	UUID                  uuid.UUID
 }
 
 // NewUseCaseDependencies - ユースケースに依存するものの初期化
@@ -31,9 +33,12 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		},
 	)
 
+	uuid := uuid.UUID{}
+
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
 		AuthenticationService: authenticationService,
+		UUID:                  uuid,
 	}
 }
