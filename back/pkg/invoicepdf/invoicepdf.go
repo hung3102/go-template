@@ -36,9 +36,9 @@ func CreateInvoicePDF(param *CreateInvoicePDFParam) ([]byte, error) {
 	}
 	result, err := invoicePDF.execute()
 	if err != nil {
-		return nil, xerrors.Errorf("CreateInvoicePDF: %w", err)
+		return nil, xerrors.Errorf("error in invoicePDF.execute method: %w", err)
 	}
-	return result, err
+	return result, nil
 }
 
 // createInvoicePDF - 請求書PDFを作成
