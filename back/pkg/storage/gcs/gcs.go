@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"path/filepath"
+	"time"
 
 	gcs "cloud.google.com/go/storage"
 	"github.com/topgate/gcim-temporary/back/pkg/storage"
@@ -13,9 +14,13 @@ import (
 
 const storageBaseURL = "https://storage.googleapis.com/"
 
+// 署名付きURLの有効期間(分)
+const expiresMin = 15
+
 type impl struct {
 	client     *gcs.Client
 	bucketName string
+	expiresMin int
 }
 
 // NewProvider - constructor
@@ -23,6 +28,7 @@ func NewProvider(client *gcs.Client, bucketName string) storage.Provider {
 	return &impl{
 		client:     client,
 		bucketName: bucketName,
+		expiresMin: expiresMin,
 	}
 }
 
@@ -77,4 +83,28 @@ func (i *impl) Upload(ctx context.Context, param storage.UploadParam) (string, e
 	}
 
 	return storageBaseURL + filepath.Join(i.bucketName, param.ObjectName), nil
+}
+
+// DownloadURL - 署名付きURLを取得する
+func (i *impl) DownloadURL(path string) (string, error) {
+	url, err := i.client.Bucket(i.bucketName).SignedURL(path, i.signedURLOptions())
+	if err != nil {
+		return "", xerrors.Errorf("error in CloudStorage.DownloadURL: %w", err)
+	}
+
+	return url, nil
+}
+
+// signedURLOptions - 署名付きURL取得設定を取得する
+func (i *impl) signedURLOptions() *gcs.SignedURLOptions {
+	return &gcs.SignedURLOptions{
+		Scheme:  gcs.SigningSchemeV4,
+		Method:  "GET",
+		Expires: i.expires(),
+	}
+}
+
+// expires - 有効期限を取得する
+func (i *impl) expires() time.Time {
+	return time.Now().Add(time.Duration(i.expiresMin) * time.Minute)
 }

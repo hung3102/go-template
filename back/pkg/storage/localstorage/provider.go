@@ -71,3 +71,7 @@ func (i *impl) Upload(_ context.Context, param storage.UploadParam) (string, err
 
 	return uploadPath, nil
 }
+
+func (i *impl) DownloadURL(objectName string) (string, error) {
+	return filepath.Join(i.directoryPath, objectName), nil
+}

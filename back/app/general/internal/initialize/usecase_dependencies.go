@@ -11,6 +11,8 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/environ"
 	"github.com/topgate/gcim-temporary/back/pkg/mail"
 	"github.com/topgate/gcim-temporary/back/pkg/storage"
+	storageemulator "github.com/topgate/gcim-temporary/back/pkg/storage/emulator"
+	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
 )
 
 // UseCaseDependencies - 初期化されたユースケースの依存の集合体
@@ -19,7 +21,7 @@ type UseCaseDependencies struct {
 	SessionRepository     repositories.BaseRepository[entities.UserSession]
 	AuthenticationService authentication.Provider
 	MailService           mail.Mail
-	Storage               storage.Storage
+	StorageService        storage.Provider
 }
 
 // NewUseCaseDependencies - ユースケースに依存するものの初期化
@@ -41,19 +43,20 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		FromAddress: cfg.FromEmailAddress,
 	})
 
-	storage := storage.NewCloudStorage(
-		&storage.CloudStorageParam{
-			Client:     externalDeps.storageClient,
-			BucketName: cfg.BucketName,
-			IsLocal:    environ.IsLocal(),
-		},
-	)
+	storageService := newStorageService(&cfg, &externalDeps)
 
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
 		AuthenticationService: authenticationService,
 		MailService:           mailService,
-		Storage:               storage,
+		StorageService:        storageService,
 	}
+}
+
+func newStorageService(cfg *config.Config, externalDeps *ExternalDependencies) storage.Provider {
+	if environ.IsLocal() {
+		return storageemulator.NewProvider(externalDeps.storageClient, cfg.BucketName)
+	}
+	return gcs.NewProvider(externalDeps.storageClient, cfg.BucketName)
 }
