@@ -3,6 +3,7 @@ package gcs
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"path/filepath"
 	"time"
@@ -13,6 +14,7 @@ import (
 )
 
 const storageBaseURL = "https://storage.googleapis.com/"
+const localBaseURL = "http://localhost:9199/"
 
 // 署名付きURLの有効期間(分)
 const expiresMin = 15
@@ -20,14 +22,22 @@ const expiresMin = 15
 type impl struct {
 	client     *gcs.Client
 	bucketName string
+	isLocal    bool
 	expiresMin int
 }
 
+type NewProviderParams struct {
+	Client     *gcs.Client
+	BucketName string
+	IsLocal    bool
+}
+
 // NewProvider - constructor
-func NewProvider(client *gcs.Client, bucketName string) storage.Provider {
+func NewProvider(params *NewProviderParams) storage.Provider {
 	return &impl{
-		client:     client,
-		bucketName: bucketName,
+		client:     params.Client,
+		bucketName: params.BucketName,
+		isLocal:    params.IsLocal,
 		expiresMin: expiresMin,
 	}
 }
@@ -64,9 +74,9 @@ func (i *impl) GetContentType(ctx context.Context, objectName string) (string, e
 
 // Upload - upload content
 func (i *impl) Upload(ctx context.Context, param storage.UploadParam) (string, error) {
-	bucket := i.client.Bucket(i.bucketName)
-	if _, err := bucket.Attrs(ctx); err != nil {
-		return "", xerrors.Errorf("error in bucket.Attrs method: %w", err)
+	bucket, err := i.bucket(ctx)
+	if err != nil {
+		return "", xerrors.Errorf("error in i.bucket method: %w", err)
 	}
 	object := bucket.Object(param.ObjectName)
 	writer := object.NewWriter(ctx)
@@ -82,12 +92,45 @@ func (i *impl) Upload(ctx context.Context, param storage.UploadParam) (string, e
 		return "", xerrors.Errorf("error in writer.Close method: %w", err)
 	}
 
-	return storageBaseURL + filepath.Join(i.bucketName, param.ObjectName), nil
+	return i.uploadObjectURL(param.ObjectName), nil
 }
 
-// DownloadURL - 署名付きURLを取得する
-func (i *impl) DownloadURL(path string) (string, error) {
-	url, err := i.client.Bucket(i.bucketName).SignedURL(path, i.signedURLOptions())
+// bucket - bucketを取得する
+func (i *impl) bucket(ctx context.Context) (*gcs.BucketHandle, error) {
+	bucket := i.client.Bucket(i.bucketName)
+	if i.isLocal {
+		return bucket, nil
+	}
+	if _, err := bucket.Attrs(ctx); err != nil {
+		return nil, xerrors.Errorf("error in bucket.Attrs method: %w", err)
+	}
+	return bucket, nil
+}
+
+// uploadObjectURL - アップロードしたobjectのURLを取得する
+func (i *impl) uploadObjectURL(objectName string) string {
+	baseURL := storageBaseURL
+	if i.isLocal {
+		baseURL = localBaseURL
+	}
+	return baseURL + filepath.Join(i.bucketName, objectName)
+}
+
+// DownloadURL - 指定したobjectのダウンロードURLを取得する
+func (i *impl) DownloadURL(objectName string) (string, error) {
+	if i.isLocal {
+		return i.localDownloadURL(objectName)
+	}
+	return i.signedURL(objectName)
+}
+
+// localDownloadURL - ローカル環境用：ダウンロードURLを取得する
+func (i *impl) localDownloadURL(objectName string) (string, error) {
+	return fmt.Sprintf("%s%s/%s", localBaseURL, i.bucketName, objectName), nil
+}
+
+func (i *impl) signedURL(objectName string) (string, error) {
+	url, err := i.client.Bucket(i.bucketName).SignedURL(objectName, i.signedURLOptions())
 	if err != nil {
 		return "", xerrors.Errorf("error in CloudStorage.DownloadURL: %w", err)
 	}
@@ -95,7 +138,7 @@ func (i *impl) DownloadURL(path string) (string, error) {
 	return url, nil
 }
 
-// signedURLOptions - 署名付きURL取得設定を取得する
+// signedURLOptions - 本番用：署名付きURL取得設定を取得する
 func (i *impl) signedURLOptions() *gcs.SignedURLOptions {
 	return &gcs.SignedURLOptions{
 		Scheme:  gcs.SigningSchemeV4,

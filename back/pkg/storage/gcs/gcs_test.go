@@ -1,4 +1,4 @@
-package emulator_test
+package gcs_test
 
 // import (
 // 	"bytes"
@@ -9,7 +9,7 @@ package emulator_test
 
 // 	cloudstorage "cloud.google.com/go/storage"
 // 	"github.com/topgate/gcim-temporary/back/pkg/storage"
-// 	"github.com/topgate/gcim-temporary/back/pkg/storage/emulator"
+// 	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
 // 	"google.golang.org/api/option"
 // )
 
@@ -19,7 +19,11 @@ package emulator_test
 // 	if err != nil {
 // 		t.Fatalf("error sut.Get: %+v", err)
 // 	}
-// 	sut := emulator.NewProvider(client, "test-project.appspot.com")
+// 	sut := gcs.NewProvider(&gcs.NewProviderParams{
+// 		Client:     client,
+// 		BucketName: "test-project.appspot.com",
+// 		IsLocal:    true,
+// 	})
 
 // 	objectName := "hoge.txt"
 

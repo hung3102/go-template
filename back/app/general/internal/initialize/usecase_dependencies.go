@@ -11,7 +11,6 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/environ"
 	"github.com/topgate/gcim-temporary/back/pkg/mail"
 	"github.com/topgate/gcim-temporary/back/pkg/storage"
-	storageemulator "github.com/topgate/gcim-temporary/back/pkg/storage/emulator"
 	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
 )
 
@@ -43,7 +42,11 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		FromAddress: cfg.FromEmailAddress,
 	})
 
-	storageService := newStorageService(cfg, externalDeps)
+	storageService := gcs.NewProvider(&gcs.NewProviderParams{
+		Client:     externalDeps.storageClient,
+		BucketName: cfg.BucketName,
+		IsLocal:    environ.IsLocal(),
+	})
 
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
@@ -52,11 +55,4 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		MailService:           mailService,
 		StorageService:        storageService,
 	}
-}
-
-func newStorageService(cfg config.Config, externalDeps ExternalDependencies) storage.Provider {
-	if environ.IsLocal() {
-		return storageemulator.NewProvider(externalDeps.storageClient, cfg.BucketName)
-	}
-	return gcs.NewProvider(externalDeps.storageClient, cfg.BucketName)
 }
