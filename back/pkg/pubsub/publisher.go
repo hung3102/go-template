@@ -10,10 +10,9 @@ import (
 )
 
 // PublishMsg - メッセージをpubsubに送信する
-func PublishMsg(topicID string, attr map[string]string, msg string) error {
+func PublishMsg(ctx context.Context, topicID string, attr map[string]string, msg string) error {
 	projectID := environ.ProjectID()
 
-	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
