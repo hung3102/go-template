@@ -84,3 +84,4 @@ gen
 
 # Other
 bin/
+*.DS_Store
