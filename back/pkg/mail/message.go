@@ -1,9 +1,8 @@
 package mail
 
 import (
-	"fmt"
-
 	"github.com/jhillyerd/enmime"
+	"golang.org/x/xerrors"
 )
 
 // Message - メールの本文を作成
@@ -26,9 +25,9 @@ type GetMessageParams struct {
 // GetMessage - メール本文を作成する
 func (m *Message) GetMessage(params *GetMessageParams) (*[]byte, error) {
 	builder := m.builder(params)
-	err := builder.Send(m) // 本文を作成(m.Sendがコールバックされる)
+	err := builder.Send(m) // 本文を作成(Sendの中で、m.Sendが実行される)
 	if err != nil {
-		return nil, fmt.Errorf("Message.GetMessage: builder.Send: %v", err)
+		return nil, xerrors.Errorf("error in Message.GetMessage: %w", err)
 	}
 	return &m.msg, nil
 }
@@ -56,7 +55,7 @@ func (m *Message) attachment(builder enmime.MailBuilder, file *SendParamFile) en
 	return builder
 }
 
-// Send - enmimeの内部で使用するコールバック関数。ここでメッセージ情報を取得する。
+// Send - メッセージ情報を取得する
 func (m *Message) Send(from string, tos []string, msg []byte) error {
 	m.msg = msg
 	return nil

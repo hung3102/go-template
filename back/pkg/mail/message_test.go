@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_Mail_Send(t *testing.T) {
+func Test_Message(t *testing.T) {
 	sendParams := &SendParams{
 		ToAddress: "to@address\ncom",
 		Subject:   "メールの\nタイトル",
@@ -23,7 +23,7 @@ func Test_Mail_Send(t *testing.T) {
 			SendParams:  *sendParams,
 		})
 	if err != nil {
-		t.Fatalf("err: %v", err)
+		t.Fatalf("err: %+v", err)
 	}
 	fmt.Println(string(*rawMessage))
 }

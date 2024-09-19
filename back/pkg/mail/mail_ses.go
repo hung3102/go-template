@@ -2,10 +2,10 @@ package mail
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/sesv2"
 	"github.com/aws/aws-sdk-go-v2/service/sesv2/types"
+	"golang.org/x/xerrors"
 )
 
 var _ Mail = (*MailSES)(nil)
@@ -41,12 +41,12 @@ func (m *MailSES) Send(ctx context.Context, params *SendParams) error {
 		SendParams:  *params,
 	})
 	if err != nil {
-		return fmt.Errorf("Mail.Send: m.rawMessage: %v", err)
+		return xerrors.Errorf("error in MailSES.Send: %w", err)
 	}
 
 	_, err = m.sesService.SendEmail(ctx, m.sendEmailInput(rawMessage))
 	if err != nil {
-		return fmt.Errorf("Mail.Send: m.sesService.SendEmail: %v", err)
+		return xerrors.Errorf("error in MailSES.Send: %w", err)
 	}
 	return nil
 }
