@@ -43,7 +43,7 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		FromAddress: cfg.FromEmailAddress,
 	})
 
-	storageService := newStorageService(&cfg, &externalDeps)
+	storageService := newStorageService(cfg, externalDeps)
 
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
@@ -54,7 +54,7 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 	}
 }
 
-func newStorageService(cfg *config.Config, externalDeps *ExternalDependencies) storage.Provider {
+func newStorageService(cfg config.Config, externalDeps ExternalDependencies) storage.Provider {
 	if environ.IsLocal() {
 		return storageemulator.NewProvider(externalDeps.storageClient, cfg.BucketName)
 	}

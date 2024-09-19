@@ -31,11 +31,19 @@ func NewProvider(client *cloudstorage.Client, bucketName string) storage.Provide
 }
 
 func (i *impl) Get(ctx context.Context, objectName string) (io.Reader, error) {
-	return i.gcsProvider.Get(ctx, objectName)
+	result, err := i.gcsProvider.Get(ctx, objectName)
+	if err != nil {
+		return nil, xerrors.Errorf("error in impl.Get: %w", err)
+	}
+	return result, nil
 }
 
 func (i *impl) GetContentType(ctx context.Context, objectName string) (string, error) {
-	return i.gcsProvider.GetContentType(ctx, objectName)
+	result, err := i.gcsProvider.GetContentType(ctx, objectName)
+	if err != nil {
+		return "", xerrors.Errorf("error in impl.GetContentType: %w", err)
+	}
+	return result, nil
 }
 
 func (i *impl) Upload(ctx context.Context, param storage.UploadParam) (string, error) {
