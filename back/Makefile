@@ -11,15 +11,15 @@ app_go_generate:
 .PHONY: generate
 generate: pkg_go_generate app_go_generate server_generate
 
-.PHONY: open_api_bundle
-open_api_bundle:
+.PHONY: open_api_bundle_general
+open_api_bundle_general:
 	docker run \
 		--mount "type=bind,source=${PWD}/../docs/openapi/general/,target=/openapi/" \
 		--mount "type=bind,source=${PWD}/../back/app/general/internal/initialize/,target=/openapi_bundle/" \
 		swagger_cli:$(SWAGGER_CLI_CONTAINER_VERSION)
 
-.PHONY: add_schemes_to_yaml
-add_schemes_to_yaml:
+.PHONY: add_schemes_to_yaml_general
+add_schemes_to_yaml_general:
 	cd ../scripts && go run ./add_schemas/add_schemas.go \
 		--openapi "../docs/openapi/general/openapi.yaml" \
 		--schemas-dir "../docs/openapi/general/schemas/" \
@@ -27,7 +27,7 @@ add_schemes_to_yaml:
 		../docs/openapi/general/openapi-merged.yaml
 
 .PHONY: server_generate_general
-server_generate_general: add_schemes_to_yaml open_api_bundle
+server_generate_general: add_schemes_to_yaml_general open_api_bundle_general
 	../bin/oapi-codegen -config ../docs/openapi/general/config/oapi.yaml ./app/general/internal/initialize/openapi.json
 
 .PHONY: server_generate
