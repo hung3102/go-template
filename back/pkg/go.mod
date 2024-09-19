@@ -9,7 +9,6 @@ require (
 	github.com/jhillyerd/enmime v1.3.0
 	github.com/signintech/gopdf v0.26.2
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da
-
 )
 
 require (
