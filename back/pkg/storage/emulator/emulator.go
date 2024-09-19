@@ -30,6 +30,7 @@ func NewProvider(client *cloudstorage.Client, bucketName string) storage.Provide
 	}
 }
 
+// Get - ファイルを取得する
 func (i *impl) Get(ctx context.Context, objectName string) (io.Reader, error) {
 	result, err := i.gcsProvider.Get(ctx, objectName)
 	if err != nil {
@@ -38,6 +39,7 @@ func (i *impl) Get(ctx context.Context, objectName string) (io.Reader, error) {
 	return result, nil
 }
 
+// GetContentType - 指定したobjectのcontent-typeを取得する
 func (i *impl) GetContentType(ctx context.Context, objectName string) (string, error) {
 	result, err := i.gcsProvider.GetContentType(ctx, objectName)
 	if err != nil {
@@ -46,6 +48,7 @@ func (i *impl) GetContentType(ctx context.Context, objectName string) (string, e
 	return result, nil
 }
 
+// Upload - ファイルをアップロードする
 func (i *impl) Upload(ctx context.Context, param storage.UploadParam) (string, error) {
 	writer := i.newWriter(ctx, param.ObjectName, param.ContentType)
 	if _, err := io.Copy(writer, param.Reader); err != nil {
