@@ -12,18 +12,14 @@ var _ Mail = (*mailSES)(nil)
 
 // mailSES - SESでメールを送信する
 type mailSES struct {
-	// SESクライアント
-	sesService *sesv2.Client
-	// 送信元メールアドレス
-	fromAddress string
+	sesService  *sesv2.Client // SESクライアント
+	fromAddress string        // 送信元メールアドレス
 }
 
 // NewMailSESParams - NewMailSESのパラメーター
 type NewMailSESParams struct {
-	// SESクライアント
-	SesService *sesv2.Client
-	// 送信元メールアドレス
-	FromAddress string
+	SesService  *sesv2.Client // SESクライアント
+	FromAddress string        // 送信元メールアドレス
 }
 
 // NewMailSES - MailSESを作成する
