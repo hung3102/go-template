@@ -13,6 +13,7 @@ type Config struct {
 	SkipJWT                    bool   `config:"SKIP_JWT"`                      // authentication skip
 	JWTSecret                  string `config:"JWT_SECRET"`                    // JWT生成用のシークレット
 	JWTIssuer                  string `config:"JWT_ISSUER"`                    // JWT生成時のIssuer名
+	FromEmailAddress           string `config:"FROM_EMAIL_ADDRESS"`            // 送信元メールアドレス
 	FirestoreProjectOnEmulator string `config:"FIRESTORE_PROJECT_ON_EMULATOR"` // on emulator
 }
 
