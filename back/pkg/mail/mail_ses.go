@@ -8,10 +8,10 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var _ Mail = (*MailSES)(nil)
+var _ Mail = (*mailSES)(nil)
 
-// MailSES - SESでメールを送信する
-type MailSES struct {
+// mailSES - SESでメールを送信する
+type mailSES struct {
 	// SESクライアント
 	sesService *sesv2.Client
 	// 送信元メールアドレス
@@ -27,15 +27,15 @@ type NewMailSESParams struct {
 }
 
 // NewMailSES - MailSESを作成する
-func NewMailSES(params *NewMailSESParams) *MailSES {
-	return &MailSES{
+func NewMailSES(params *NewMailSESParams) *mailSES {
+	return &mailSES{
 		sesService:  params.SesService,
 		fromAddress: params.FromAddress,
 	}
 }
 
 // Send - メールを送信する
-func (m *MailSES) Send(ctx context.Context, params *SendParams) error {
+func (m *mailSES) Send(ctx context.Context, params *SendParams) error {
 	rawMessage, err := NewMessage().GetMessage(&GetMessageParams{
 		FromAddress: m.fromAddress,
 		SendParams:  *params,
@@ -52,7 +52,7 @@ func (m *MailSES) Send(ctx context.Context, params *SendParams) error {
 }
 
 // sendEmailInput - sesのSendEmailのパラメーターを作成する
-func (m *MailSES) sendEmailInput(message *[]byte) *sesv2.SendEmailInput {
+func (m *mailSES) sendEmailInput(message *[]byte) *sesv2.SendEmailInput {
 	return &sesv2.SendEmailInput{
 		Content: &types.EmailContent{
 			Raw: &types.RawMessage{

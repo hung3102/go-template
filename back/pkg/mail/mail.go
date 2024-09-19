@@ -7,28 +7,21 @@ import (
 
 // Mail - メール送信処理
 type Mail interface {
-	// メールを送信する
+	// Send - メールを送信する
 	Send(ctx context.Context, params *SendParams) error
 }
 
 // SendParams - メール送信のパラメーター
 type SendParams struct {
-	// 送信先メールアドレス
-	ToAddress string
-	// メールタイトル
-	Subject string
-	// メール本文
-	Body string
-	// 添付ファイル
-	File *SendParamFile
+	ToAddress string         // 送信先メールアドレス
+	Subject   string         // メールタイトル
+	Body      string         // メール本文
+	File      *SendParamFile // 添付ファイル
 }
 
 // SendParamFile - 添付ファイル
 type SendParamFile struct {
-	// Data - ファイルの内容
-	Data []byte
-	// ContentType - ContentType
-	ContentType string
-	// Filename - ファイル名
-	Filename string
+	Data        []byte // ファイルの内容
+	ContentType string // ContentType
+	Filename    string // ファイル名
 }

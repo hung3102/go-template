@@ -7,8 +7,7 @@ import (
 
 // Message - メールの本文を作成
 type Message struct {
-	// メール本文を格納する変数
-	msg []byte
+	msg []byte // メール本文を格納する変数
 }
 
 // NewMessage - メールの本文を作成
