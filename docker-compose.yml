@@ -22,6 +22,23 @@ services:
     depends_on:
       - firebase
 
+  batch-api:
+    <<: *api-base
+    build:
+      context: .
+      dockerfile: docker/backend/batch/dev/Dockerfile
+    ports:
+      - target: 1234
+        published: 27002
+      - target: 2346
+        published: 2346
+    profiles:
+      - batch
+    networks:
+      - database
+    depends_on:
+      - firebase
+
   cloud-sdk:
     image: google/cloud-sdk:491.0.0-alpine
     environment:

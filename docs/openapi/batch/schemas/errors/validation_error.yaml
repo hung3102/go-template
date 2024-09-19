@@ -1,0 +1,17 @@
+type: object
+required:
+  - reason
+  - value
+  - rule
+  - schema
+properties:
+  reason:
+    type: string
+    description: エラー原因
+  value:
+    description: バリデーション対象の値
+  rule:
+    type: string
+    description: エラーとなった対象ルール
+  schema:
+    description: 対応するスキーマ
