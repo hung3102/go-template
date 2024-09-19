@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	cloud.google.com/go/storage v1.43.0
 	github.com/signintech/gopdf v0.26.2
+	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da
 	google.golang.org/api v0.196.0
 )
 

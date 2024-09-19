@@ -8,12 +8,13 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"golang.org/x/xerrors"
 )
 
 var _ Storage = (*CloudStorage)(nil)
 
 // 署名付きURLの有効期間(分)
-const EXPIRES_MIN = 15
+const expiresMin = 15
 
 // CloudStorage - CloudStorageアクセス用
 type CloudStorage struct {
@@ -36,7 +37,7 @@ func NewCloudStorage(params *CloudStorageParam) Storage {
 		client:     params.Client,
 		bucketName: params.BucketName,
 		isLocal:    params.IsLocal,
-		expiresMin: EXPIRES_MIN,
+		expiresMin: expiresMin,
 	}
 }
 
@@ -45,10 +46,10 @@ func (this *CloudStorage) Upload(ctx context.Context, file []byte, path string, 
 	writer := this.newWriter(ctx, path, contentType)
 	reader := bytes.NewReader(file)
 	if _, err := io.Copy(writer, reader); err != nil {
-		return fmt.Errorf("CloudStorage.Upload: io.Copy: %v", err)
+		return xerrors.Errorf("error in CloudStorage.Upload: %w", err)
 	}
 	if err := writer.Close(); err != nil {
-		return fmt.Errorf("CloudStorage.Upload: writer.Close: %v", err)
+		return xerrors.Errorf("error in CloudStorage.Upload: %w", err)
 	}
 	return nil
 }
@@ -79,7 +80,7 @@ func (this *CloudStorage) DownloadURL(path string) (string, error) {
 	}
 	url, err := this.bucket().SignedURL(path, this.signedURLOptions())
 	if err != nil {
-		return "", fmt.Errorf("CloudStorage.DownloadURL: bucket.SignedURL: %v", err)
+		return "", xerrors.Errorf("error in CloudStorage.DownloadURL: %w", err)
 	}
 
 	return url, nil
