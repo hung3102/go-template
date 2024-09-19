@@ -9,17 +9,36 @@ app_go_generate:
 	cd app && go generate ./...
 
 .PHONY: generate
-generate: pkg_go_generate app_go_generate server_generate
+generate: pkg_go_generate app_go_generate server_generate_batch server_generate
 
-.PHONY: open_api_bundle
-open_api_bundle:
+.PHONY: add_schemes_to_yaml_batch
+add_schemes_to_yaml_batch:
+	cd ../scripts && go run ./add_schemas/add_schemas.go \
+		--openapi "../docs/openapi/batch/openapi.yaml" \
+		--schemas-dir "../docs/openapi/batch/schemas/" \
+		--examples-dir "../docs/openapi/batch/examples/" > \
+		../docs/openapi/batch/openapi-merged.yaml
+
+.PHONY: open_api_bundle_batch
+open_api_bundle_batch:
+	docker run \
+		--mount "type=bind,source=${PWD}/../docs/openapi/batch/,target=/openapi/" \
+		--mount "type=bind,source=${PWD}/../back/app/batch/internal/initialize/,target=/openapi_bundle/" \
+		swagger_cli:$(SWAGGER_CLI_CONTAINER_VERSION)
+
+.PHONY: server_generate_batch
+server_generate_batch: add_schemes_to_yaml_batch open_api_bundle_batch
+	../bin/oapi-codegen -config ../docs/openapi/batch/config/oapi.yaml ./app/batch/internal/initialize/openapi.json
+
+.PHONY: open_api_bundle_general
+open_api_bundle_general:
 	docker run \
 		--mount "type=bind,source=${PWD}/../docs/openapi/general/,target=/openapi/" \
 		--mount "type=bind,source=${PWD}/../back/app/general/internal/initialize/,target=/openapi_bundle/" \
 		swagger_cli:$(SWAGGER_CLI_CONTAINER_VERSION)
 
-.PHONY: add_schemes_to_yaml
-add_schemes_to_yaml:
+.PHONY: add_schemes_to_yaml_general
+add_schemes_to_yaml_general:
 	cd ../scripts && go run ./add_schemas/add_schemas.go \
 		--openapi "../docs/openapi/general/openapi.yaml" \
 		--schemas-dir "../docs/openapi/general/schemas/" \
@@ -27,7 +46,7 @@ add_schemes_to_yaml:
 		../docs/openapi/general/openapi-merged.yaml
 
 .PHONY: server_generate_general
-server_generate_general: add_schemes_to_yaml open_api_bundle
+server_generate_general: add_schemes_to_yaml_general open_api_bundle_general
 	../bin/oapi-codegen -config ../docs/openapi/general/config/oapi.yaml ./app/general/internal/initialize/openapi.json
 
 .PHONY: server_generate

@@ -14,6 +14,7 @@ type Config struct {
 	JWTSecret                  string `config:"JWT_SECRET"`                     // JWT生成用のシークレット
 	JWTIssuer                  string `config:"JWT_ISSUER"`                     // JWT生成時のIssuer名
 	BucketName                 string `config:"BUCKET_NAME"`                    // Storageのバケット名
+	FromEmailAddress           string `config:"FROM_EMAIL_ADDRESS"`             // 送信元メールアドレス
 	FirestoreProjectOnEmulator string `config:"FIRESTORE_PROJECT_ON_EMULATOR"`  // on emulator
 	StorageEmulatorHost        string `config:"FIREBASE_STORAGE_EMULATOR_HOST"` // on emulator
 }

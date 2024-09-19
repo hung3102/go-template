@@ -22,16 +22,20 @@ services:
     depends_on:
       - firebase
 
-  app:
-    container_name: gcim-app
+  batch-api:
+    <<: *api-base
     build:
       context: .
-      dockerfile: ./docker/app/Dockerfile
+      dockerfile: docker/backend/batch/dev/Dockerfile
     ports:
-      - 3000:3000
-      - 1313:1313
-    volumes:
-      - ./:/app
+      - target: 1234
+        published: 27002
+      - target: 2346
+        published: 2346
+    profiles:
+      - batch
+    networks:
+      - database
     depends_on:
       - firebase
 

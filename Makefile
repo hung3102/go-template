@@ -53,11 +53,6 @@ gomock:
 	mkdir -p ./bin
 	GOBIN=$(PWD)/bin go install go.uber.org/mock/mockgen@latest
 
-graphql-gen:
-	go get github.com/99designs/gqlgen/codegen/config@v0.17.49
-	go get github.com/99designs/gqlgen@v0.17.49
-	go run github.com/99designs/gqlgen generate
-
 migrate-create:
 	docker run -v ./pkg/adapter/db/migrations/:/migrations --network host migrate/migrate create -ext sql -dir ./migrations/ $(name)
 
@@ -66,10 +61,3 @@ migrate-run:
 
 run:
 	go run main.go
-
-install-oapi-codegen:
-	@which oapi-codegen > /dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.3.0
-
-generate-oapi: install-oapi-codegen
-	oapi-codegen -generate types -package api ./internal/api/openapi.yaml > ./internal/api/types_gen.go
-	oapi-codegen -generate server -package api ./internal/api/openapi.yaml > ./internal/api/server_gen.go
