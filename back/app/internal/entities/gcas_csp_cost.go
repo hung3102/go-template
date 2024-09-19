@@ -1,5 +1,6 @@
 package entities
 
+// GCASCSPCost - コスト情報
 type GCASCSPCost struct {
 	id         string // ID
 	eventDocID string // event_doc_id

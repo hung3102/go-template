@@ -1,7 +1,7 @@
 package accountlist
 
-// AccoutnListInput - アカウントリストのinput
-type AccoutnListInput struct {
+// AccountListInput - アカウントリストのinput
+type AccountListInput struct {
 	EventDocID string
 }
 

@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/go-utils/structs"
-	gcasapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_api"
-	gcasdashboardapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_dashboard_api"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"

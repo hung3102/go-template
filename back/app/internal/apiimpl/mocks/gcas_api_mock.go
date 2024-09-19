@@ -12,7 +12,7 @@ package mockapi
 import (
 	reflect "reflect"
 
-	gcasapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_api"
+	gcasapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	gomock "go.uber.org/mock/gomock"
 )
 

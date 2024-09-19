@@ -1,4 +1,4 @@
-package accountlist
+package accountlist_test
 
 import (
 	"context"
@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
-	gcasapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_api"
-	gcasdashboardapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_dashboard_api"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	mockapi "github.com/topgate/gcim-temporary/back/app/internal/apiimpl/mocks"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	mockrepositories "github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/mocks"
+	"github.com/topgate/gcim-temporary/back/app/internal/usecases/accountlist"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 	"go.uber.org/mock/gomock"
 )
@@ -32,7 +33,7 @@ func Test_Usecase_AccountList_正常系(t *testing.T) {
 		entities.NewEvent(&entities.NewEventParam{
 			ID:           eventDocID,
 			BillingMonth: time.Now(),
-			Status:       strconv.Itoa(entities.EVENT_STATUS_INVOICE_CREATEION_POSSIBLE),
+			Status:       strconv.Itoa(entities.EventStatusInvoiceCreationPossible),
 			Meta:         &entities.Meta{},
 		}),
 		nil,
@@ -47,14 +48,14 @@ func Test_Usecase_AccountList_正常系(t *testing.T) {
 	}, nil)
 	mock.MockGCASCSPCostRepository.EXPECT().CreateMulti(ctx, gomock.Any()).Return(nil)
 
-	input := AccoutnListInput{
+	input := accountlist.AccountListInput{
 		EventDocID: eventDocID,
 	}
 	mock.MockGCASAccountRepository.EXPECT().CreateMulti(ctx, gomock.Any()).Return(nil)
 	mock.MockGCASDashboardAPI.EXPECT().GetCost(accountID).Return(&gcasdashboardapi.GetCostResponse{
-		AccountId:  accountID,
+		AccountID:  accountID,
 		TotalCost:  totalCost,
-		Identifier: map[string]int{},
+		Identifier: make(map[string]int),
 		Other:      0,
 	}, nil)
 	output, err := sut.AccountList(ctx, &input)
@@ -73,14 +74,14 @@ func Test_Usecase_AccountList(t *testing.T) {
 		entities.NewEvent(&entities.NewEventParam{
 			ID:           eventDocID,
 			BillingMonth: time.Now(),
-			Status:       strconv.Itoa(entities.EVENT_STATUS_STORED),
+			Status:       strconv.Itoa(entities.EventStatusStored),
 			Meta:         &entities.Meta{},
 		}),
 		nil,
 	)
 
 	ctx := context.Background()
-	input := AccoutnListInput{
+	input := accountlist.AccountListInput{
 		EventDocID: eventDocID,
 	}
 	output, err := sut.AccountList(ctx, &input)
@@ -99,7 +100,7 @@ type Mock struct {
 	MockGCASCSPCostRepository *mockrepositories.MockGCASCSPCostRepository
 }
 
-func NewSUT(t *testing.T) (*Usecase, *Mock) {
+func NewSUT(t *testing.T) (*accountlist.Usecase, *Mock) {
 	mockCtrlGCASDashboardAPI := gomock.NewController(t)
 	defer mockCtrlGCASDashboardAPI.Finish()
 	mockGCASDashboardAPI := mockapi.NewMockGCASDashboardAPI(mockCtrlGCASDashboardAPI)
@@ -120,7 +121,7 @@ func NewSUT(t *testing.T) (*Usecase, *Mock) {
 	defer mockCtrlGCASCSPCostRepository.Finish()
 	mockGCASCSPCostRepository := mockrepositories.NewMockGCASCSPCostRepository(mockCtrlGCASCSPCostRepository)
 
-	sut := NewUsecase(Dependencies{
+	sut := accountlist.NewUsecase(accountlist.Dependencies{
 		GCASDashboardAPI:      mockGCASDashboardAPI,
 		GCASAPI:               mockGCASAPI,
 		EventsRepository:      mockEventRepository,

@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	// EVENT_STATUS_INVOICE_CREATEION_POSSIBLE - 請求書作成可能
-	EVENT_STATUS_INVOICE_CREATEION_POSSIBLE = 1
-	// EVENT_STATUS_STORED - 収納済
-	EVENT_STATUS_STORED = 2
+	// EventStatusInvoiceCreationPossible - 請求書作成可能
+	EventStatusInvoiceCreationPossible = 1
+	// EventStatusStored - 収納済
+	EventStatusStored = 2
 )
 
 // Event - イベント
@@ -60,5 +60,5 @@ func (e *Event) Meta() *Meta {
 
 // IsInvoiceCreateionPossible - 請求作成可能か判定する。
 func (e *Event) IsInvoiceCreateionPossible() bool {
-	return e.status == strconv.Itoa(EVENT_STATUS_INVOICE_CREATEION_POSSIBLE)
+	return e.status == strconv.Itoa(EventStatusInvoiceCreationPossible)
 }

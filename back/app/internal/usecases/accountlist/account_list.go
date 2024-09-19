@@ -4,8 +4,8 @@ import (
 	"context"
 	"slices"
 
-	gcasapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_api"
-	gcasdashboardapi "github.com/topgate/gcim-temporary/back/app/internal/api/gcas_dashboard_api"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
+	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/errorcode"
 	"github.com/topgate/gcim-temporary/back/app/internal/usecaseerrors"
@@ -13,7 +13,7 @@ import (
 )
 
 // AccountList - アカウントリストを登録する
-func (u *Usecase) AccountList(ctx context.Context, input *AccoutnListInput) (*AccountListOutput, error) {
+func (u *Usecase) AccountList(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
 	event, err := u.deps.EventsRepository.GetByID(ctx, input.EventDocID)
 	if err != nil {
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in AccountList", err)
@@ -32,7 +32,7 @@ func (u *Usecase) emptyAccountListOutput() *AccountListOutput {
 }
 
 // accountListMain - アカウントリスト作成のメイン処理
-func (u *Usecase) accountListMain(ctx context.Context, input *AccoutnListInput) (*AccountListOutput, error) {
+func (u *Usecase) accountListMain(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
 	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, input.EventDocID)
 	if err != nil {
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in accountListMain", err)
@@ -44,7 +44,7 @@ func (u *Usecase) accountListMain(ctx context.Context, input *AccoutnListInput) 
 }
 
 // getAccountListOutputFromGCASAccountRepository - GCASAccountRepositoryからアカウント情報を取得しAccountListOutputを作成する
-func (u *Usecase) getAccountListOutputFromGCASAccountRepository(ctx context.Context, input *AccoutnListInput) (*AccountListOutput, error) {
+func (u *Usecase) getAccountListOutputFromGCASAccountRepository(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
 	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
 	if err != nil {
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in getAccountListOutputFromGCASAccountRepository", err)
@@ -69,7 +69,7 @@ func (u *Usecase) toAccountListFromGCASAccount(gcasAccounts []*entities.GCASAcco
 }
 
 // createAccountAndCost - アカウント情報を取得し、アカウント情報とコスト情報をDBに登録する
-func (u *Usecase) createAccountAndCost(ctx context.Context, input *AccoutnListInput) (*AccountListOutput, error) {
+func (u *Usecase) createAccountAndCost(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
 		return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
@@ -120,12 +120,12 @@ func (u *Usecase) compareAccountInfo(
 	gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse,
 	gcasAPIGetAccountsResponse *gcasapi.GetAccountsResponse,
 ) error {
-	gcaDashboardCspAccountMap := map[string][]string{}
+	gcaDashboardCspAccountMap := make(map[string][]string)
 	for csp, gcasDashboardAccounts := range *gcasDashboardAPIGetAccountsResponse {
 		slices.Sort(gcasDashboardAccounts)
 		gcaDashboardCspAccountMap[csp] = gcasDashboardAccounts
 	}
-	gcapCspAccountMap := map[string][]string{}
+	gcapCspAccountMap := make(map[string][]string)
 	for csp, gcasDashboardAccounts := range *gcasAPIGetAccountsResponse {
 		slices.Sort(gcasDashboardAccounts)
 		gcapCspAccountMap[csp] = gcasDashboardAccounts
@@ -210,9 +210,9 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 
 // fetchCostInfo - GCASダッシュボードAPIを実行しコスト情報を取得する。
 func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) (map[string]map[string]*gcasdashboardapi.GetCostResponse, error) {
-	result := map[string]map[string]*gcasdashboardapi.GetCostResponse{}
+	result := make(map[string]map[string]*gcasdashboardapi.GetCostResponse)
 	for csp, accountIDs := range *gcasDashboardAPIGetAccountsResponse {
-		accountIDCostMap := map[string]*gcasdashboardapi.GetCostResponse{}
+		accountIDCostMap := make(map[string]*gcasdashboardapi.GetCostResponse)
 		for _, accountID := range accountIDs {
 			gcasDashboardAPIGetCostResponse, err := u.deps.GCASDashboardAPI.GetCost(accountID)
 			if err != nil {
@@ -227,7 +227,7 @@ func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboa
 
 // toCSPTotalCostMapFromCspAccountIDCostInfoMap - GCASダッシュボードAPIを実行しコスト情報を取得する。
 func (u *Usecase) toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap map[string]map[string]*gcasdashboardapi.GetCostResponse) map[string]int {
-	result := map[string]int{}
+	result := make(map[string]int)
 	for csp, accountIDCostInfoMap := range cspAccountIDCostInfoMap {
 		result[csp] = 0
 		for _, constInfo := range accountIDCostInfoMap {

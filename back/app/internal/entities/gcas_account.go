@@ -1,5 +1,6 @@
 package entities
 
+// GCASAccount - GCASアカウント情報
 type GCASAccount struct {
 	id         string // ID
 	eventDocID string // event_doc_id

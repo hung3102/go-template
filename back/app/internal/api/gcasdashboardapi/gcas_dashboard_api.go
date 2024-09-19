@@ -24,8 +24,8 @@ type GetAccountsResponse map[string][]string
 
 // GetCostResponse - コスト情報
 type GetCostResponse struct {
-	AccountId  string
-	TotalCost  int
-	Identifier map[string]int
-	Other      int
+	AccountID  string         // アカウントID
+	TotalCost  int            // 合計コスト
+	Identifier map[string]int // 詳細コスト
+	Other      int            // その他のコスト
 }
