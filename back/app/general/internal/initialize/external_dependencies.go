@@ -5,10 +5,9 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ses"
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
+	"github.com/aws/aws-sdk-go-v2/service/sesv2"
 	"github.com/gcp-kit/gcpen"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/topgate/gcim-temporary/back/app/general/internal/config"
@@ -22,7 +21,7 @@ type ExternalDependencies struct {
 	firestoreClient *firestore.Client
 	storageClient   *storage.Client
 	openapi         *openapi3.T
-	sesService      *ses.SES
+	sesService      *sesv2.Client
 }
 
 // NewExternalDependencies - initialize external dependencies
@@ -42,23 +41,23 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 	// AWS
 	{
 		if environ.IsLocal() {
-			sessOpts := session.Options{
-				Config: aws.Config{
-					// リージョンは指定しておく
-					Region: aws.String("ap-northeast-1"),
-				},
-
+			awsCfg, err := awsConfig.LoadDefaultConfig(
+				ctx,
+				// リージョンは指定しておく
+				awsConfig.WithRegion("ap-northeast-1"),
 				// switch先ロールのprofileを指定
-				Profile: "",
-
+				awsConfig.WithSharedConfigProfile(""),
 				// MFAトークン取得経路を指定
-				AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
-
-				// 有効にすることで、いい感じに設定が取れるらしい
-				SharedConfigState: session.SharedConfigEnable,
+				awsConfig.WithAssumeRoleCredentialOptions(func(options *stscreds.AssumeRoleOptions) {
+					options.TokenProvider = func() (string, error) {
+						return stscreds.StdinTokenProvider()
+					}
+				}),
+			)
+			if err != nil {
+				return nil, xerrors.Errorf("failed to initialize aws client: %w", err)
 			}
-			s := session.Must(session.NewSessionWithOptions(sessOpts))
-			sesService := ses.New(s)
+			sesService := sesv2.NewFromConfig(awsCfg)
 			ed.sesService = sesService
 		}
 	}
