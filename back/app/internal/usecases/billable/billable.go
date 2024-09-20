@@ -2,21 +2,19 @@ package billable
 
 import (
 	"context"
-	"errors"
 	"slices"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/errorcode"
-	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
 	"github.com/topgate/gcim-temporary/back/app/internal/usecaseerrors"
 	"golang.org/x/xerrors"
 )
 
 // Billable - 請求書作成の開始判定をする
 func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
-	shouldcreateInvoice, err := u.shouldcreateInvoice(ctx, input.EventDocID)
+	shouldcreateInvoice, err := u.deps.EventStatusService.ShouldcreateInvoice(ctx, input.EventDocID)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
@@ -29,29 +27,10 @@ func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 
-	if err := u.setInvoiceCreationChecked(ctx, input.EventDocID); err != nil {
+	if err := u.deps.EventStatusService.SetInvoiceCreationChecked(ctx, input.EventDocID); err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 	return result, nil
-}
-
-// shouldcreateInvoice - 請求書の作成をする必要があるか判定する
-func (u *Usecase) shouldcreateInvoice(ctx context.Context, eventDocID string) (bool, error) {
-	if _, err := u.deps.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusStart); err != nil {
-		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
-		if errors.As(err, &rerr) {
-			return false, nil
-		}
-		return false, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.shouldcreateInvoice", err)
-	}
-	if _, err := u.deps.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusInvoiceCreationChecked); err != nil {
-		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
-		if errors.As(err, &rerr) {
-			return true, nil
-		}
-		return false, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.shouldcreateInvoice", err)
-	}
-	return false, nil
 }
 
 // emptyOutput - 空のOutputを作成する
@@ -219,14 +198,7 @@ func (u *Usecase) toGCASAccountsFromGetAccountsResponse(eventDocID string, gcasD
 
 // createGCASCSPCost - GCASCSPCostを登録する
 func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
-	cspAccountIDCostInfoMap, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
-	if err != nil {
-		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
-	}
-
-	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap)
-
-	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventDocID, cspTotalCostMap)
+	gcasCSPCosts, err := u.toGCASCSPCost(eventDocID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
@@ -236,6 +208,22 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASCSPCost", err)
 	}
 	return nil
+}
+
+func (u *Usecase) toGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
+	cspAccountIDCostInfoMap, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
+	if err != nil {
+		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
+	}
+
+	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap)
+
+	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventDocID, cspTotalCostMap)
+	if err != nil {
+		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
+	}
+
+	return gcasCSPCosts, nil
 }
 
 // fetchCostInfo - GCASダッシュボードAPIを実行しコスト情報を取得する。
@@ -285,18 +273,4 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 		))
 	}
 	return result, nil
-}
-
-// setInvoiceCreationChecked - 請求書開始判定済にする
-func (u *Usecase) setInvoiceCreationChecked(ctx context.Context, eventDocID string) error {
-	uuid, err := u.deps.UUID.GetUUID()
-	err = u.deps.EventStatusRepository.Create(ctx, entities.NewEventStatus(&entities.NewEventStatusParam{
-		ID:         uuid,
-		EventDocID: eventDocID,
-		Status:     entities.EventStatusInvoiceCreationChecked,
-	}))
-	if err != nil {
-		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.setInvoiceCreationChecked", err)
-	}
-	return nil
 }

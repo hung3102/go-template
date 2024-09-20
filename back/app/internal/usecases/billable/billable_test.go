@@ -2,19 +2,17 @@ package billable_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	mockapi "github.com/topgate/gcim-temporary/back/app/internal/apiimpl/mocks"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
-	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
 	mockrepositories "github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/mocks"
+	mockservices "github.com/topgate/gcim-temporary/back/app/internal/serviceimpl/mocks"
 	"github.com/topgate/gcim-temporary/back/app/internal/usecases/billable"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 	"go.uber.org/mock/gomock"
-	"golang.org/x/xerrors"
 )
 
 func Test_Usecase_Billable_正常系(t *testing.T) {
@@ -27,18 +25,7 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	accountID := "11111"
 	totalCost := 2222
 
-	mock.MockEventStatusRepository.EXPECT().GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusStart).Return(
-		entities.NewEventStatus(&entities.NewEventStatusParam{
-			ID:         fmt.Sprintf("%s_%d", eventDocID, entities.EventStatusStart),
-			EventDocID: eventDocID,
-			Status:     entities.EventStatusStart,
-			Meta:       &entities.Meta{},
-		}),
-		nil,
-	)
-	mock.MockEventStatusRepository.EXPECT().GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusInvoiceCreationChecked).Return(
-		nil, repositoryerrors.NewNotFoundError(xerrors.New("error in GetByEventDocIDAndStatus")),
-	)
+	mock.MockEventStatusService.EXPECT().ShouldcreateInvoice(ctx, eventDocID).Return(true, nil)
 	mock.MockGCASCSPCostRepository.EXPECT().Exists(ctx, eventDocID).Return(false, nil)
 	mock.MockGCASDashboardAPI.EXPECT().GetAccounts().Return(&gcasdashboardapi.GetAccountsResponse{
 		csp: []string{accountID},
@@ -55,7 +42,7 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 		Identifier: make(map[string]int),
 		Other:      0,
 	}, nil)
-	mock.MockEventStatusRepository.EXPECT().Create(ctx, gomock.Any()).Return(nil)
+	mock.MockEventStatusService.EXPECT().SetInvoiceCreationChecked(ctx, eventDocID).Return(nil)
 
 	input := billable.Input{
 		EventDocID: eventDocID,
@@ -64,8 +51,8 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error in Billable: %+v", err)
 	}
-	t.Logf("%v", output)
 
+	t.Logf("%v", output)
 }
 
 func Test_Usecase_Billable(t *testing.T) {
@@ -75,9 +62,7 @@ func Test_Usecase_Billable(t *testing.T) {
 	ctx := context.Background()
 	eventDocID := "eventDocID"
 
-	mock.MockEventStatusRepository.EXPECT().GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusStart).Return(
-		nil, repositoryerrors.NewNotFoundError(xerrors.New("error in GetByEventDocIDAndStatus")),
-	)
+	mock.MockEventStatusService.EXPECT().ShouldcreateInvoice(ctx, eventDocID).Return(false, nil)
 
 	input := billable.Input{
 		EventDocID: eventDocID,
@@ -92,7 +77,7 @@ func Test_Usecase_Billable(t *testing.T) {
 type Mock struct {
 	MockGCASDashboardAPI      *mockapi.MockGCASDashboardAPI
 	MockGCASAPI               *mockapi.MockGCASAPI
-	MockEventStatusRepository *mockrepositories.MockEventStatusRepository
+	MockEventStatusService    *mockservices.MockEventStatusService
 	MockGCASAccountRepository *mockrepositories.MockGCASAccountRepository
 	MockGCASCSPCostRepository *mockrepositories.MockGCASCSPCostRepository
 	deferFunc                 func()
@@ -101,27 +86,27 @@ type Mock struct {
 func NewSUT(t *testing.T) (*billable.Usecase, *Mock, func()) {
 	mockCtrlGCASDashboardAPI := gomock.NewController(t)
 	mockCtrlGCASAPI := gomock.NewController(t)
-	mockCtrlEventStatusRepository := gomock.NewController(t)
+	mockCtrlEventStatusService := gomock.NewController(t)
 	mockCtrlGCASAccountRepository := gomock.NewController(t)
 	mockCtrlGCASCSPCostRepository := gomock.NewController(t)
 	deferFunc := func() {
 		mockCtrlGCASDashboardAPI.Finish()
 		mockCtrlGCASAPI.Finish()
-		mockCtrlEventStatusRepository.Finish()
+		mockCtrlEventStatusService.Finish()
 		mockCtrlGCASAccountRepository.Finish()
 		mockCtrlGCASCSPCostRepository.Finish()
 	}
 
 	mockGCASDashboardAPI := mockapi.NewMockGCASDashboardAPI(mockCtrlGCASDashboardAPI)
 	mockGCASAPI := mockapi.NewMockGCASAPI(mockCtrlGCASAPI)
-	mockEventStatusRepository := mockrepositories.NewMockEventStatusRepository(mockCtrlEventStatusRepository)
+	mockEventStatusService := mockservices.NewMockEventStatusService(mockCtrlEventStatusService)
 	mockGCASAccountRepository := mockrepositories.NewMockGCASAccountRepository(mockCtrlGCASAccountRepository)
 	mockGCASCSPCostRepository := mockrepositories.NewMockGCASCSPCostRepository(mockCtrlGCASCSPCostRepository)
 
 	sut := billable.NewUsecase(billable.Dependencies{
 		GCASDashboardAPI:      mockGCASDashboardAPI,
 		GCASAPI:               mockGCASAPI,
-		EventStatusRepository: mockEventStatusRepository,
+		EventStatusService:    mockEventStatusService,
 		GCASAccountRepository: mockGCASAccountRepository,
 		GCASCSPCostRepository: mockGCASCSPCostRepository,
 		UUID:                  uuid.UUID{},
@@ -130,7 +115,7 @@ func NewSUT(t *testing.T) (*billable.Usecase, *Mock, func()) {
 	return sut, &Mock{
 		MockGCASDashboardAPI:      mockGCASDashboardAPI,
 		MockGCASAPI:               mockGCASAPI,
-		MockEventStatusRepository: mockEventStatusRepository,
+		MockEventStatusService:    mockEventStatusService,
 		MockGCASAccountRepository: mockGCASAccountRepository,
 		MockGCASCSPCostRepository: mockGCASCSPCostRepository,
 	}, deferFunc

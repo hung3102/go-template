@@ -7,6 +7,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
+	"github.com/topgate/gcim-temporary/back/app/internal/services"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
@@ -19,7 +20,7 @@ type Usecase struct {
 type Dependencies struct {
 	GCASDashboardAPI      gcasdashboardapi.GCASDashboardAPI
 	GCASAPI               gcasapi.GCASAPI
-	EventStatusRepository repositories.EventStatusRepository
+	EventStatusService    services.EventStatusService
 	GCASAccountRepository repositories.GCASAccountRepository
 	GCASCSPCostRepository repositories.GCASCSPCostRepository
 	UUID                  uuid.UUID
