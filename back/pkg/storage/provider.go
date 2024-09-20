@@ -19,6 +19,7 @@ type Provider interface {
 	Get(ctx context.Context, objectName string) (io.Reader, error)
 	GetContentType(ctx context.Context, objectName string) (string, error)
 	Upload(ctx context.Context, param UploadParam) (string, error)
+	DownloadURL(objectName string) (string, error)
 }
 
 var (

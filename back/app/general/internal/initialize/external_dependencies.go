@@ -69,7 +69,6 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 		if environ.IsLocal() {
 			projectID = cfg.FirestoreProjectOnEmulator
 			options = append(options, option.WithoutAuthentication())
-			options = append(options, option.WithEndpoint("http://localhost:8080")) // TODO: move to .env?
 		}
 
 		ed.firestoreClient, err = firestore.NewClient(ctx, projectID, options...)
@@ -80,7 +79,7 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 		options = make([]option.ClientOption, 0)
 		if environ.IsLocal() {
 			options = append(options, option.WithoutAuthentication())
-			options = append(options, option.WithEndpoint("http://localhost:9199")) // TODO: move to .env?
+			options = append(options, option.WithEndpoint("http://"+cfg.StorageEmulatorHost))
 		}
 		ed.storageClient, err = storage.NewClient(ctx, options...)
 		if err != nil {
