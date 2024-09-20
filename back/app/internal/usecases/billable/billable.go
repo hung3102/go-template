@@ -135,12 +135,12 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 }
 
 func (u *Usecase) toGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
-	cspAccountIDCostInfoMap, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
+	cspCostInfo, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
 
-	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap)
+	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspCostInfo)
 
 	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventDocID, cspTotalCostMap)
 	if err != nil {
@@ -151,29 +151,29 @@ func (u *Usecase) toGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsRe
 }
 
 // fetchCostInfo - GCASダッシュボードAPIを実行しコスト情報を取得する。
-func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) (map[string]map[string]*gcasdashboardapi.GetCostResponse, error) {
-	result := make(map[string]map[string]*gcasdashboardapi.GetCostResponse)
+func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) (map[string][]*gcasdashboardapi.GetCostResponse, error) {
+	result := make(map[string][]*gcasdashboardapi.GetCostResponse)
 	for csp, accountIDs := range *gcasDashboardAPIGetAccountsResponse {
-		accountIDCostMap := make(map[string]*gcasdashboardapi.GetCostResponse)
-		for _, accountID := range accountIDs {
+		costInfo := make([]*gcasdashboardapi.GetCostResponse, len(accountIDs))
+		for i, accountID := range accountIDs {
 			gcasDashboardAPIGetCostResponse, err := u.deps.GCASDashboardAPI.GetCost(accountID)
 			if err != nil {
 				return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in billable.fetchCostInfo", err)
 			}
-			accountIDCostMap[accountID] = gcasDashboardAPIGetCostResponse
+			costInfo[i] = gcasDashboardAPIGetCostResponse
 		}
-		result[csp] = accountIDCostMap
+		result[csp] = costInfo
 	}
 	return result, nil
 }
 
 // toCSPTotalCostMapFromCspAccountIDCostInfoMap - GCASダッシュボードAPIを実行しコスト情報を取得する。
-func (u *Usecase) toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap map[string]map[string]*gcasdashboardapi.GetCostResponse) map[string]int {
+func (u *Usecase) toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspCostInfo map[string][]*gcasdashboardapi.GetCostResponse) map[string]int {
 	result := make(map[string]int)
-	for csp, accountIDCostInfoMap := range cspAccountIDCostInfoMap {
+	for csp, costInfo := range cspCostInfo {
 		result[csp] = 0
-		for _, constInfo := range accountIDCostInfoMap {
-			result[csp] = result[csp] + constInfo.TotalCost
+		for _, ci := range costInfo {
+			result[csp] = result[csp] + ci.TotalCost
 		}
 	}
 	return result
