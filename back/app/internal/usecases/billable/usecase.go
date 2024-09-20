@@ -21,7 +21,6 @@ type Dependencies struct {
 	GCASDashboardAPI      gcasdashboardapi.GCASDashboardAPI
 	GCASAPI               gcasapi.GCASAPI
 	EventStatusService    services.EventStatusService
-	GCASAccountRepository repositories.GCASAccountRepository
 	GCASCSPCostRepository repositories.GCASCSPCostRepository
 	UUID                  uuid.UUID
 }

@@ -36,64 +36,15 @@ func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
 // emptyOutput - 空のOutputを作成する
 func (u *Usecase) emptyOutput() *Output {
 	return &Output{
-		GCASAccountDocIDs: []string{},
+		GCASAccounts: []*OutputAccount{},
 	}
 }
 
 // billableMain - 請求書作成の開始判定のメイン処理
 func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, error) {
-	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, input.EventDocID)
-	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.billableMain", err)
-	}
-	if gcapCSPCostExists {
-		return u.getOutputFromGCASAccountRepository(ctx, input)
-	}
-	return u.createAccountAndCost(ctx, input)
-}
-
-// getOutputFromGCASAccountRepository - GCASAccountRepositoryからアカウント情報を取得しOutputを作成する
-func (u *Usecase) getOutputFromGCASAccountRepository(ctx context.Context, input *Input) (*Output, error) {
-	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
-	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.getOutputFromGCASAccountRepository", err)
-	}
-	return u.toOutputFromGCASAccount(gcasAccounts), nil
-}
-
-// toOutputFromGCASAccount - []*entities.GCASAccountをOutputに変換する
-func (u *Usecase) toOutputFromGCASAccount(gcasAccounts []*entities.GCASAccount) *Output {
-	return &Output{
-		GCASAccountDocIDs: u.toAccountIDsFromGCASAccount(gcasAccounts),
-	}
-}
-
-// toAccountIDsFromGCASAccount - []*entities.GCASAccountをアカウントIDの配列に変換する
-func (u *Usecase) toAccountIDsFromGCASAccount(gcasAccounts []*entities.GCASAccount) []string {
-	result := make([]string, len(gcasAccounts))
-	for i, gcasAccount := range gcasAccounts {
-		result[i] = gcasAccount.ID()
-	}
-	return result
-}
-
-// createAccountAndCost - アカウント情報を取得し、アカウント情報とコスト情報をDBに登録する
-func (u *Usecase) createAccountAndCost(ctx context.Context, input *Input) (*Output, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
-	}
-
-	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
-	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createAccountAndCost", err)
-	}
-
-	if len(gcasAccounts) == 0 {
-		gcasAccounts, err = u.createGCASAccount(ctx, input.EventDocID, gcasDashboardAPIGetAccountsResponse)
-		if err != nil {
-			return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
-		}
 	}
 
 	err = u.createGCASCSPCost(ctx, input.EventDocID, gcasDashboardAPIGetAccountsResponse)
@@ -101,7 +52,7 @@ func (u *Usecase) createAccountAndCost(ctx context.Context, input *Input) (*Outp
 		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
 	}
 
-	return u.toOutputFromGCASAccount(gcasAccounts), nil
+	return u.toOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse), nil
 }
 
 // fetchAccountInfo - APIからアカウント情報を取得する
@@ -161,43 +112,16 @@ func (u *Usecase) compareAccountInfo(
 	return nil
 }
 
-// createGCASAccount - アカウント情報をDBに登録する
-func (u *Usecase) createGCASAccount(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASAccount, error) {
-	gcasAccounts, err := u.toGCASAccountsFromGetAccountsResponse(eventDocID, gcasDashboardAPIGetAccountsResponse)
-	if err != nil {
-		return nil, xerrors.Errorf("error in billable.createGCASAccount: %w", err)
-	}
-
-	err = u.deps.GCASAccountRepository.CreateMany(ctx, gcasAccounts)
-	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASAccount", err)
-	}
-	return gcasAccounts, nil
-}
-
-// toGCASAccountsFromGetAccountsResponse - GetAccountsResponseをGCASAccountに変換する
-func (u *Usecase) toGCASAccountsFromGetAccountsResponse(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASAccount, error) {
-	result := []*entities.GCASAccount{}
-	for _, accountIDs := range *gcasDashboardAPIGetAccountsResponse {
-		for _, accountID := range accountIDs {
-			uuid, err := u.deps.UUID.GetUUID()
-			if err != nil {
-				return nil, xerrors.Errorf("error in billable.toGCASAccountsFromGetAccountsResponse: %w", err)
-			}
-			result = append(result, entities.NewGCASAccount(
-				&entities.NewGCASAccountParam{
-					ID:         uuid,
-					EventDocID: eventDocID,
-					AccountID:  accountID,
-				},
-			))
-		}
-	}
-	return result, nil
-}
-
 // createGCASCSPCost - GCASCSPCostを登録する
 func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
+	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, eventDocID)
+	if err != nil {
+		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASCSPCost", err)
+	}
+	if gcapCSPCostExists {
+		return nil
+	}
+
 	gcasCSPCosts, err := u.toGCASCSPCost(eventDocID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
@@ -273,4 +197,20 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 		))
 	}
 	return result, nil
+}
+
+// toOutputFromGCASAccount - gcasDashboardAPIGetAccountsResponseをOutputに変換する
+func (u *Usecase) toOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) *Output {
+	outputAccounts := []*OutputAccount{}
+	for csp, accontIDs := range *gcasDashboardAPIGetAccountsResponse {
+		for _, accountID := range accontIDs {
+			outputAccounts = append(outputAccounts, &OutputAccount{
+				CSP:       csp,
+				AccountID: accountID,
+			})
+		}
+	}
+	return &Output{
+		GCASAccounts: outputAccounts,
+	}
 }
