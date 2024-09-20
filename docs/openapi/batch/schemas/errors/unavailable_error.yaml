@@ -1,0 +1,15 @@
+type: object
+required:
+  - reason
+  - errorCode
+  - kind
+properties:
+  reason:
+    type: string
+    description: 表示されるメッセージ
+  errorCode:
+    type: string
+    description: エラーコード
+  kind:
+    type: string
+    enum: [unavailable]

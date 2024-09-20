@@ -8,6 +8,10 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
+	"github.com/topgate/gcim-temporary/back/pkg/environ"
+	"github.com/topgate/gcim-temporary/back/pkg/mail"
+	"github.com/topgate/gcim-temporary/back/pkg/storage"
+	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
@@ -16,6 +20,8 @@ type UseCaseDependencies struct {
 	EventRepository       repositories.BaseRepository[entities.Event]
 	SessionRepository     repositories.BaseRepository[entities.UserSession]
 	AuthenticationService authentication.Provider
+	MailService           mail.Mail
+	StorageService        storage.Provider
 	UUID                  uuid.UUID
 }
 
@@ -33,12 +39,25 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		},
 	)
 
+	mailService := mail.NewMailSES(&mail.NewMailSESParams{
+		SesService:  externalDeps.sesService,
+		FromAddress: cfg.FromEmailAddress,
+	})
+
+	storageService := gcs.NewProvider(&gcs.NewProviderParams{
+		Client:     externalDeps.storageClient,
+		BucketName: cfg.BucketName,
+		IsLocal:    environ.IsLocal(),
+	})
+
 	uuid := uuid.UUID{}
 
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
 		AuthenticationService: authenticationService,
+		MailService:           mailService,
+		StorageService:        storageService,
 		UUID:                  uuid,
 	}
 }

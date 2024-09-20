@@ -1,0 +1,50 @@
+openapi: '3.0.0'
+info:
+  title: GCIM Batch API
+  version: '0.1.0'
+
+servers:
+  - url: '{protocol}://localhost:{port}/batch/api'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      port:
+        enum:
+          - '27002'
+        default: '27002'
+  - url: '{protocol}://dev環境のURLが確定したら入れる/batch/api'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+  - url: '{protocol}://QAorSTG環境のURLが確定したら入れる/batch/api'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+  - url: '{protocol}://本番環境のURLが確定したら入れる/batch/api'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+
+paths:
+  /health:
+    $ref: ./paths/health/index.yaml
+
+components:
+  schemas:
+  # schemas: これはschemasディレクトリにあるファイルを自動で入れるため指定してはいけない
+  #     別途 scripts/add_schemas に存在するツールにて schemasディレクトリ の中身をここにインジェクションする
+  examples:
+  # schemas: これはexamplesディレクトリにあるファイルを自動で入れるため指定してはいけない
+  #     別途 scripts/add_schemas に存在するツールにて examplesディレクトリ の中身をここにインジェクションする
