@@ -1,4 +1,4 @@
-package accountlist
+package billable
 
 import (
 	"context"
@@ -12,55 +12,55 @@ import (
 	"golang.org/x/xerrors"
 )
 
-// AccountList - アカウントリストを登録する
-func (u *Usecase) AccountList(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
+// Billable - 請求書作成の開始判定をする
+func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
 	event, err := u.deps.EventsRepository.GetByID(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in AccountList", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in Billable", err)
 	}
 	if !event.IsInvoiceCreateionPossible() {
-		return u.emptyAccountListOutput(), nil
+		return u.emptyOutput(), nil
 	}
-	return u.accountListMain(ctx, input)
+	return u.billableMain(ctx, input)
 }
 
-// emptyAccountListOutput - 空のAccountListOutputを作成する
-func (u *Usecase) emptyAccountListOutput() *AccountListOutput {
-	return &AccountListOutput{
+// emptyOutput - 空のOutputを作成する
+func (u *Usecase) emptyOutput() *Output {
+	return &Output{
 		GCASAccountDocIDs: []string{},
 	}
 }
 
-// accountListMain - アカウントリスト作成のメイン処理
-func (u *Usecase) accountListMain(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
+// billableMain - 請求書作成の開始判定のメイン処理
+func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, error) {
 	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in accountListMain", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billableMain", err)
 	}
 	if gcapCSPCostExists {
-		return u.getAccountListOutputFromGCASAccountRepository(ctx, input)
+		return u.getOutputFromGCASAccountRepository(ctx, input)
 	}
 	return u.createAccountAndCost(ctx, input)
 }
 
-// getAccountListOutputFromGCASAccountRepository - GCASAccountRepositoryからアカウント情報を取得しAccountListOutputを作成する
-func (u *Usecase) getAccountListOutputFromGCASAccountRepository(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
+// getOutputFromGCASAccountRepository - GCASAccountRepositoryからアカウント情報を取得しOutputを作成する
+func (u *Usecase) getOutputFromGCASAccountRepository(ctx context.Context, input *Input) (*Output, error) {
 	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in getAccountListOutputFromGCASAccountRepository", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in getOutputFromGCASAccountRepository", err)
 	}
-	return u.toAccountListOutputFromGCASAccount(gcasAccounts), nil
+	return u.toOutputFromGCASAccount(gcasAccounts), nil
 }
 
-// toAccountListOutputFromGCASAccount - []*entities.GCASAccountをAccountListOutputに変換する
-func (u *Usecase) toAccountListOutputFromGCASAccount(gcasAccounts []*entities.GCASAccount) *AccountListOutput {
-	return &AccountListOutput{
-		GCASAccountDocIDs: u.toAccountListFromGCASAccount(gcasAccounts),
+// toOutputFromGCASAccount - []*entities.GCASAccountをOutputに変換する
+func (u *Usecase) toOutputFromGCASAccount(gcasAccounts []*entities.GCASAccount) *Output {
+	return &Output{
+		GCASAccountDocIDs: u.toAccountIDsFromGCASAccount(gcasAccounts),
 	}
 }
 
-// toAccountListFromGCASAccount - []*entities.GCASAccountをアカウントIDの配列に変換する
-func (u *Usecase) toAccountListFromGCASAccount(gcasAccounts []*entities.GCASAccount) []string {
+// toAccountIDsFromGCASAccount - []*entities.GCASAccountをアカウントIDの配列に変換する
+func (u *Usecase) toAccountIDsFromGCASAccount(gcasAccounts []*entities.GCASAccount) []string {
 	result := make([]string, len(gcasAccounts))
 	for i, gcasAccount := range gcasAccounts {
 		result[i] = gcasAccount.ID()
@@ -69,7 +69,7 @@ func (u *Usecase) toAccountListFromGCASAccount(gcasAccounts []*entities.GCASAcco
 }
 
 // createAccountAndCost - アカウント情報を取得し、アカウント情報とコスト情報をDBに登録する
-func (u *Usecase) createAccountAndCost(ctx context.Context, input *AccountListInput) (*AccountListOutput, error) {
+func (u *Usecase) createAccountAndCost(ctx context.Context, input *Input) (*Output, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
 		return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
@@ -92,7 +92,7 @@ func (u *Usecase) createAccountAndCost(ctx context.Context, input *AccountListIn
 		return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
 	}
 
-	return u.toAccountListOutputFromGCASAccount(gcasAccounts), nil
+	return u.toOutputFromGCASAccount(gcasAccounts), nil
 }
 
 // fetchAccountInfo - APIからアカウント情報を取得する
@@ -140,7 +140,7 @@ func (u *Usecase) compareAccountInfo(
 		if !ok {
 			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
 		}
-		for len(gcapDashboardAccountIDs) != len(gcapAccountIDs) {
+		if len(gcapDashboardAccountIDs) != len(gcapAccountIDs) {
 			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
 		}
 		for i, gcasDashboardAccountID := range gcapDashboardAccountIDs {
@@ -159,7 +159,7 @@ func (u *Usecase) createGCASAccount(ctx context.Context, eventDocID string, gcas
 		return nil, xerrors.Errorf("error in createGCASAccount: %w", err)
 	}
 
-	err = u.deps.GCASAccountRepository.CreateMulti(ctx, gcasAccounts)
+	err = u.deps.GCASAccountRepository.CreateMany(ctx, gcasAccounts)
 	if err != nil {
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in createGCASAccount", err)
 	}
@@ -201,7 +201,7 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 		return xerrors.Errorf("error in createGCASCSPCost: %w", err)
 	}
 
-	err = u.deps.GCASCSPCostRepository.CreateMulti(ctx, gcasCSPCosts)
+	err = u.deps.GCASCSPCostRepository.CreateMany(ctx, gcasCSPCosts)
 	if err != nil {
 		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in createGCASCSPCost", err)
 	}

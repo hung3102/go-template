@@ -1,4 +1,4 @@
-package accountlist_test
+package billable_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	mockapi "github.com/topgate/gcim-temporary/back/app/internal/apiimpl/mocks"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	mockrepositories "github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/mocks"
-	"github.com/topgate/gcim-temporary/back/app/internal/usecases/accountlist"
+	"github.com/topgate/gcim-temporary/back/app/internal/usecases/billable"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 	"go.uber.org/mock/gomock"
 )
@@ -21,7 +21,7 @@ type Hoge struct {
 	Map map[string][]string
 }
 
-func Test_Usecase_AccountList_正常系(t *testing.T) {
+func Test_Usecase_Billable_正常系(t *testing.T) {
 	sut, mock := NewSUT(t)
 	ctx := context.Background()
 	eventDocID := "eventDocID"
@@ -46,27 +46,27 @@ func Test_Usecase_AccountList_正常系(t *testing.T) {
 	mock.MockGCASAPI.EXPECT().GetAccounts().Return(&gcasapi.GetAccountsResponse{
 		csp: []string{accountID},
 	}, nil)
-	mock.MockGCASCSPCostRepository.EXPECT().CreateMulti(ctx, gomock.Any()).Return(nil)
+	mock.MockGCASCSPCostRepository.EXPECT().CreateMany(ctx, gomock.Any()).Return(nil)
 
-	input := accountlist.AccountListInput{
+	input := billable.Input{
 		EventDocID: eventDocID,
 	}
-	mock.MockGCASAccountRepository.EXPECT().CreateMulti(ctx, gomock.Any()).Return(nil)
+	mock.MockGCASAccountRepository.EXPECT().CreateMany(ctx, gomock.Any()).Return(nil)
 	mock.MockGCASDashboardAPI.EXPECT().GetCost(accountID).Return(&gcasdashboardapi.GetCostResponse{
 		AccountID:  accountID,
 		TotalCost:  totalCost,
 		Identifier: make(map[string]int),
 		Other:      0,
 	}, nil)
-	output, err := sut.AccountList(ctx, &input)
+	output, err := sut.Billable(ctx, &input)
 	if err != nil {
-		t.Fatalf("error in AccountList: %v", err)
+		t.Fatalf("error in Billable: %v", err)
 	}
 	t.Logf("%v", output)
 
 }
 
-func Test_Usecase_AccountList(t *testing.T) {
+func Test_Usecase_Billable(t *testing.T) {
 	sut, mock := NewSUT(t)
 	eventDocID := "eventDocID"
 
@@ -81,12 +81,12 @@ func Test_Usecase_AccountList(t *testing.T) {
 	)
 
 	ctx := context.Background()
-	input := accountlist.AccountListInput{
+	input := billable.Input{
 		EventDocID: eventDocID,
 	}
-	output, err := sut.AccountList(ctx, &input)
+	output, err := sut.Billable(ctx, &input)
 	if err != nil {
-		t.Fatalf("error in AccountList: %v", err)
+		t.Fatalf("error in Billable: %v", err)
 	}
 	t.Logf("%v", output)
 
@@ -100,7 +100,7 @@ type Mock struct {
 	MockGCASCSPCostRepository *mockrepositories.MockGCASCSPCostRepository
 }
 
-func NewSUT(t *testing.T) (*accountlist.Usecase, *Mock) {
+func NewSUT(t *testing.T) (*billable.Usecase, *Mock) {
 	mockCtrlGCASDashboardAPI := gomock.NewController(t)
 	defer mockCtrlGCASDashboardAPI.Finish()
 	mockGCASDashboardAPI := mockapi.NewMockGCASDashboardAPI(mockCtrlGCASDashboardAPI)
@@ -121,7 +121,7 @@ func NewSUT(t *testing.T) (*accountlist.Usecase, *Mock) {
 	defer mockCtrlGCASCSPCostRepository.Finish()
 	mockGCASCSPCostRepository := mockrepositories.NewMockGCASCSPCostRepository(mockCtrlGCASCSPCostRepository)
 
-	sut := accountlist.NewUsecase(accountlist.Dependencies{
+	sut := billable.NewUsecase(billable.Dependencies{
 		GCASDashboardAPI:      mockGCASDashboardAPI,
 		GCASAPI:               mockGCASAPI,
 		EventsRepository:      mockEventRepository,

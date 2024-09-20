@@ -1,4 +1,4 @@
-package accountlist
+package billable
 
 import (
 	"log"
@@ -11,7 +11,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
-// Usecase - アカウントリストのユースケース
+// Usecase - 請求書作成の開始判定のユースケース
 type Usecase struct {
 	deps Dependencies
 }

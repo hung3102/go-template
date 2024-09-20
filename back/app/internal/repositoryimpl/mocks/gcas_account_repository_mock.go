@@ -40,18 +40,18 @@ func (m *MockGCASAccountRepository) EXPECT() *MockGCASAccountRepositoryMockRecor
 	return m.recorder
 }
 
-// CreateMulti mocks base method.
-func (m *MockGCASAccountRepository) CreateMulti(ctx context.Context, gcasAccounts []*entities.GCASAccount) error {
+// CreateMany mocks base method.
+func (m *MockGCASAccountRepository) CreateMany(ctx context.Context, gcasAccounts []*entities.GCASAccount) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateMulti", ctx, gcasAccounts)
+	ret := m.ctrl.Call(m, "CreateMany", ctx, gcasAccounts)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// CreateMulti indicates an expected call of CreateMulti.
-func (mr *MockGCASAccountRepositoryMockRecorder) CreateMulti(ctx, gcasAccounts any) *gomock.Call {
+// CreateMany indicates an expected call of CreateMany.
+func (mr *MockGCASAccountRepositoryMockRecorder) CreateMany(ctx, gcasAccounts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMulti", reflect.TypeOf((*MockGCASAccountRepository)(nil).CreateMulti), ctx, gcasAccounts)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMany", reflect.TypeOf((*MockGCASAccountRepository)(nil).CreateMany), ctx, gcasAccounts)
 }
 
 // GetAccounts mocks base method.

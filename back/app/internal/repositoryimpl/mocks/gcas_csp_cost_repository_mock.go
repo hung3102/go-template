@@ -40,18 +40,18 @@ func (m *MockGCASCSPCostRepository) EXPECT() *MockGCASCSPCostRepositoryMockRecor
 	return m.recorder
 }
 
-// CreateMulti mocks base method.
-func (m *MockGCASCSPCostRepository) CreateMulti(ctx context.Context, gcasCSPCosts []*entities.GCASCSPCost) error {
+// CreateMany mocks base method.
+func (m *MockGCASCSPCostRepository) CreateMany(ctx context.Context, gcasCSPCosts []*entities.GCASCSPCost) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateMulti", ctx, gcasCSPCosts)
+	ret := m.ctrl.Call(m, "CreateMany", ctx, gcasCSPCosts)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// CreateMulti indicates an expected call of CreateMulti.
-func (mr *MockGCASCSPCostRepositoryMockRecorder) CreateMulti(ctx, gcasCSPCosts any) *gomock.Call {
+// CreateMany indicates an expected call of CreateMany.
+func (mr *MockGCASCSPCostRepositoryMockRecorder) CreateMany(ctx, gcasCSPCosts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMulti", reflect.TypeOf((*MockGCASCSPCostRepository)(nil).CreateMulti), ctx, gcasCSPCosts)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMany", reflect.TypeOf((*MockGCASCSPCostRepository)(nil).CreateMany), ctx, gcasCSPCosts)
 }
 
 // Exists mocks base method.
