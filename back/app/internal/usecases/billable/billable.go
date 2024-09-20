@@ -2,26 +2,56 @@ package billable
 
 import (
 	"context"
+	"errors"
 	"slices"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/errorcode"
+	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
 	"github.com/topgate/gcim-temporary/back/app/internal/usecaseerrors"
 	"golang.org/x/xerrors"
 )
 
 // Billable - 請求書作成の開始判定をする
 func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
-	event, err := u.deps.EventsRepository.GetByID(ctx, input.EventDocID)
+	shouldcreateInvoice, err := u.shouldcreateInvoice(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in Billable", err)
+		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
-	if !event.IsInvoiceCreateionPossible() {
+	if !shouldcreateInvoice {
 		return u.emptyOutput(), nil
 	}
-	return u.billableMain(ctx, input)
+
+	result, err := u.billableMain(ctx, input)
+	if err != nil {
+		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
+	}
+
+	if err := u.setInvoiceCreationChecked(ctx, input.EventDocID); err != nil {
+		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
+	}
+	return result, nil
+}
+
+// shouldcreateInvoice - 請求書の作成をする必要があるか判定する
+func (u *Usecase) shouldcreateInvoice(ctx context.Context, eventDocID string) (bool, error) {
+	if _, err := u.deps.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusStart); err != nil {
+		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
+		if errors.As(err, &rerr) {
+			return false, nil
+		}
+		return false, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.shouldcreateInvoice", err)
+	}
+	if _, err := u.deps.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusInvoiceCreationChecked); err != nil {
+		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
+		if errors.As(err, &rerr) {
+			return true, nil
+		}
+		return false, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.shouldcreateInvoice", err)
+	}
+	return false, nil
 }
 
 // emptyOutput - 空のOutputを作成する
@@ -35,7 +65,7 @@ func (u *Usecase) emptyOutput() *Output {
 func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, error) {
 	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billableMain", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.billableMain", err)
 	}
 	if gcapCSPCostExists {
 		return u.getOutputFromGCASAccountRepository(ctx, input)
@@ -47,7 +77,7 @@ func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, erro
 func (u *Usecase) getOutputFromGCASAccountRepository(ctx context.Context, input *Input) (*Output, error) {
 	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in getOutputFromGCASAccountRepository", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.getOutputFromGCASAccountRepository", err)
 	}
 	return u.toOutputFromGCASAccount(gcasAccounts), nil
 }
@@ -72,24 +102,24 @@ func (u *Usecase) toAccountIDsFromGCASAccount(gcasAccounts []*entities.GCASAccou
 func (u *Usecase) createAccountAndCost(ctx context.Context, input *Input) (*Output, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
-		return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
 	}
 
 	gcasAccounts, err := u.deps.GCASAccountRepository.GetAccounts(ctx, input.EventDocID)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in createAccountAndCost", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createAccountAndCost", err)
 	}
 
 	if len(gcasAccounts) == 0 {
 		gcasAccounts, err = u.createGCASAccount(ctx, input.EventDocID, gcasDashboardAPIGetAccountsResponse)
 		if err != nil {
-			return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
+			return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
 		}
 	}
 
 	err = u.createGCASCSPCost(ctx, input.EventDocID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
-		return nil, xerrors.Errorf("error in createAccountAndCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
 	}
 
 	return u.toOutputFromGCASAccount(gcasAccounts), nil
@@ -99,17 +129,17 @@ func (u *Usecase) createAccountAndCost(ctx context.Context, input *Input) (*Outp
 func (u *Usecase) fetchAccountInfo() (*gcasdashboardapi.GetAccountsResponse, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.deps.GCASDashboardAPI.GetAccounts()
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in fetchAccountInfo", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in billable.fetchAccountInfo", err)
 	}
 
 	gcasAPIGetAccountsResponse, err := u.deps.GCASAPI.GetAccounts()
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in fetchAccountInfo", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in billable.fetchAccountInfo", err)
 	}
 
 	err = u.compareAccountInfo(gcasDashboardAPIGetAccountsResponse, gcasAPIGetAccountsResponse)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in fetchAccountInfo", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in billable.fetchAccountInfo", err)
 	}
 
 	return gcasDashboardAPIGetAccountsResponse, nil
@@ -132,20 +162,20 @@ func (u *Usecase) compareAccountInfo(
 	}
 
 	if len(gcaDashboardCspAccountMap) != len(gcapCspAccountMap) {
-		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
+		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
 	}
 
 	for csp, gcapDashboardAccountIDs := range gcaDashboardCspAccountMap {
 		gcapAccountIDs, ok := gcapCspAccountMap[csp]
 		if !ok {
-			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
+			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
 		}
 		if len(gcapDashboardAccountIDs) != len(gcapAccountIDs) {
-			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
+			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
 		}
 		for i, gcasDashboardAccountID := range gcapDashboardAccountIDs {
 			if gcapAccountIDs[i] != gcasDashboardAccountID {
-				return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in compareAccountInfo: accountID does not match", nil)
+				return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
 			}
 		}
 	}
@@ -156,12 +186,12 @@ func (u *Usecase) compareAccountInfo(
 func (u *Usecase) createGCASAccount(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASAccount, error) {
 	gcasAccounts, err := u.toGCASAccountsFromGetAccountsResponse(eventDocID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
-		return nil, xerrors.Errorf("error in createGCASAccount: %w", err)
+		return nil, xerrors.Errorf("error in billable.createGCASAccount: %w", err)
 	}
 
 	err = u.deps.GCASAccountRepository.CreateMany(ctx, gcasAccounts)
 	if err != nil {
-		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in createGCASAccount", err)
+		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASAccount", err)
 	}
 	return gcasAccounts, nil
 }
@@ -173,7 +203,7 @@ func (u *Usecase) toGCASAccountsFromGetAccountsResponse(eventDocID string, gcasD
 		for _, accountID := range accountIDs {
 			uuid, err := u.deps.UUID.GetUUID()
 			if err != nil {
-				return nil, xerrors.Errorf("error in toGCASAccountsFromGetAccountsResponse: %w", err)
+				return nil, xerrors.Errorf("error in billable.toGCASAccountsFromGetAccountsResponse: %w", err)
 			}
 			result = append(result, entities.NewGCASAccount(
 				&entities.NewGCASAccountParam{
@@ -191,19 +221,19 @@ func (u *Usecase) toGCASAccountsFromGetAccountsResponse(eventDocID string, gcasD
 func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
 	cspAccountIDCostInfoMap, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
-		return xerrors.Errorf("error in createGCASCSPCost: %w", err)
+		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
 
 	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspAccountIDCostInfoMap)
 
 	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventDocID, cspTotalCostMap)
 	if err != nil {
-		return xerrors.Errorf("error in createGCASCSPCost: %w", err)
+		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
 
 	err = u.deps.GCASCSPCostRepository.CreateMany(ctx, gcasCSPCosts)
 	if err != nil {
-		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in createGCASCSPCost", err)
+		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASCSPCost", err)
 	}
 	return nil
 }
@@ -216,7 +246,7 @@ func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboa
 		for _, accountID := range accountIDs {
 			gcasDashboardAPIGetCostResponse, err := u.deps.GCASDashboardAPI.GetCost(accountID)
 			if err != nil {
-				return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in fetchCostInfo", err)
+				return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in billable.fetchCostInfo", err)
 			}
 			accountIDCostMap[accountID] = gcasDashboardAPIGetCostResponse
 		}
@@ -243,7 +273,7 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 	for csp, totalCost := range cspTotalCostMap {
 		uuid, err := u.deps.UUID.GetUUID()
 		if err != nil {
-			return nil, xerrors.Errorf("error in toGCAPCSPCostsFromCostTotalCostMap: %w", err)
+			return nil, xerrors.Errorf("error in billable.toGCAPCSPCostsFromCostTotalCostMap: %w", err)
 		}
 		result = append(result, entities.NewGCASCSPCost(
 			&entities.NewGCASCSPCostParam{
@@ -255,4 +285,18 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 		))
 	}
 	return result, nil
+}
+
+// setInvoiceCreationChecked - 請求書開始判定済にする
+func (u *Usecase) setInvoiceCreationChecked(ctx context.Context, eventDocID string) error {
+	uuid, err := u.deps.UUID.GetUUID()
+	err = u.deps.EventStatusRepository.Create(ctx, entities.NewEventStatus(&entities.NewEventStatusParam{
+		ID:         uuid,
+		EventDocID: eventDocID,
+		Status:     entities.EventStatusInvoiceCreationChecked,
+	}))
+	if err != nil {
+		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.setInvoiceCreationChecked", err)
+	}
+	return nil
 }

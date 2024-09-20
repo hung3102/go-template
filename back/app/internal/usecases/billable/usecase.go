@@ -6,7 +6,6 @@ import (
 	"github.com/go-utils/structs"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
-	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
@@ -20,7 +19,7 @@ type Usecase struct {
 type Dependencies struct {
 	GCASDashboardAPI      gcasdashboardapi.GCASDashboardAPI
 	GCASAPI               gcasapi.GCASAPI
-	EventsRepository      repositories.BaseRepository[entities.Event]
+	EventStatusRepository repositories.EventStatusRepository
 	GCASAccountRepository repositories.GCASAccountRepository
 	GCASCSPCostRepository repositories.GCASCSPCostRepository
 	UUID                  uuid.UUID
