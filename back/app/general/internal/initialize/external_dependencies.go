@@ -69,7 +69,6 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 		if environ.IsLocal() {
 			projectID = cfg.FirestoreProjectOnEmulator
 			options = append(options, option.WithoutAuthentication())
-			options = append(options, option.WithEndpoint("http://localhost:8080"))
 		}
 
 		ed.firestoreClient, err = firestore.NewClient(ctx, projectID, options...)

@@ -17,7 +17,7 @@ init: bootstrap
 	cd back && make gowork
 
 .PHONY: bootstrap
-bootstrap: bootstrap_golangci_lint bootstrap_mockgen bootstrap_oapi bootstrap_revive bootstrap_swagger-cli
+bootstrap: bootstrap_volcago bootstrap_golangci_lint bootstrap_mockgen bootstrap_oapi bootstrap_revive bootstrap_swagger-cli
 
 .PHONY: bootstrap_volcago
 bootstrap_volcago:
