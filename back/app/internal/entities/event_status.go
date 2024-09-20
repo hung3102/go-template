@@ -3,8 +3,8 @@ package entities
 const (
 	EventStatusStart                  = 1 // 1. 開始
 	EventStatusInvoiceCreationChecked = 2 // 2.請求作成可能確認済
-	EventStatusApportionmentStart     = 3 // 3. 按分処理開始
-	EventStatusApportionmentCompleted = 4 // 4. 按分処理済
+	EventStatusProportionStart        = 3 // 3. 按分処理開始
+	EventStatusProportionCompleted    = 4 // 4. 按分処理済
 )
 
 // EventStatus - イベントステータス
