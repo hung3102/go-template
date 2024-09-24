@@ -12,6 +12,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/mail"
 	"github.com/topgate/gcim-temporary/back/pkg/storage"
 	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
+	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
 // UseCaseDependencies - 初期化されたユースケースの依存の集合体
@@ -21,6 +22,7 @@ type UseCaseDependencies struct {
 	AuthenticationService authentication.Provider
 	MailService           mail.Mail
 	StorageService        storage.Provider
+	UUID                  uuid.UUID
 }
 
 // NewUseCaseDependencies - ユースケースに依存するものの初期化
@@ -48,11 +50,14 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		IsLocal:    environ.IsLocal(),
 	})
 
+	uuid := uuid.UUID{}
+
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
 		AuthenticationService: authenticationService,
 		MailService:           mailService,
 		StorageService:        storageService,
+		UUID:                  uuid,
 	}
 }
