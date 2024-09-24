@@ -19,8 +19,8 @@ type EventStatusServiceImpl struct {
 	uuid                  uuid.UUID
 }
 
-// shouldcreateInvoice - 請求書の作成をする必要があるか判定する
-func (i *EventStatusServiceImpl) ShouldCreateInvoice(ctx context.Context, eventID string) (bool, error) {
+// IsInvoiceCreatable - 請求書の作成ができる状態か判定する
+func (i *EventStatusServiceImpl) IsInvoiceCreatable(ctx context.Context, eventID string) (bool, error) {
 	if _, err := i.EventStatusRepository.GetByEventIDAndStatus(ctx, eventID, entities.EventStatusStart); err != nil {
 		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
 		if errors.As(err, &rerr) {

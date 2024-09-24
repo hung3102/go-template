@@ -39,6 +39,21 @@ func (m *MockEventStatusService) EXPECT() *MockEventStatusServiceMockRecorder {
 	return m.recorder
 }
 
+// IsInvoiceCreatable mocks base method.
+func (m *MockEventStatusService) IsInvoiceCreatable(ctx context.Context, eventID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsInvoiceCreatable", ctx, eventID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsInvoiceCreatable indicates an expected call of IsInvoiceCreatable.
+func (mr *MockEventStatusServiceMockRecorder) IsInvoiceCreatable(ctx, eventID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsInvoiceCreatable", reflect.TypeOf((*MockEventStatusService)(nil).IsInvoiceCreatable), ctx, eventID)
+}
+
 // SetBillable mocks base method.
 func (m *MockEventStatusService) SetBillable(ctx context.Context, eventID string) error {
 	m.ctrl.T.Helper()
@@ -51,19 +66,4 @@ func (m *MockEventStatusService) SetBillable(ctx context.Context, eventID string
 func (mr *MockEventStatusServiceMockRecorder) SetBillable(ctx, eventID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBillable", reflect.TypeOf((*MockEventStatusService)(nil).SetBillable), ctx, eventID)
-}
-
-// ShouldCreateInvoice mocks base method.
-func (m *MockEventStatusService) ShouldCreateInvoice(ctx context.Context, eventID string) (bool, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ShouldCreateInvoice", ctx, eventID)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ShouldCreateInvoice indicates an expected call of ShouldCreateInvoice.
-func (mr *MockEventStatusServiceMockRecorder) ShouldCreateInvoice(ctx, eventID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShouldCreateInvoice", reflect.TypeOf((*MockEventStatusService)(nil).ShouldCreateInvoice), ctx, eventID)
 }

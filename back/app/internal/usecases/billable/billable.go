@@ -14,7 +14,7 @@ import (
 
 // Billable - 請求書作成の開始判定をする
 func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
-	shouldcreateInvoice, err := u.deps.EventStatusService.ShouldCreateInvoice(ctx, input.EventID)
+	shouldcreateInvoice, err := u.deps.EventStatusService.IsInvoiceCreatable(ctx, input.EventID)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}

@@ -6,8 +6,8 @@ import "context"
 
 // EventStatusService - EventStatusサービス
 type EventStatusService interface {
-	// ShouldCreateInvoice - 請求書の作成をする必要があるか判定する
-	ShouldCreateInvoice(ctx context.Context, eventID string) (bool, error)
+	// IsInvoiceCreatable - 請求書の作成ができる状態か判定する
+	IsInvoiceCreatable(ctx context.Context, eventID string) (bool, error)
 	// SetBillable - 請求書開始判定済にする
 	SetBillable(ctx context.Context, eventID string) error
 }

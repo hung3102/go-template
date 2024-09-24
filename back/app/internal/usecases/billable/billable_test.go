@@ -28,7 +28,7 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	accountID := "11111"
 	totalCost := 2222
 
-	mock.MockEventStatusService.EXPECT().ShouldCreateInvoice(ctx, eventID).Return(true, nil)
+	mock.MockEventStatusService.EXPECT().IsInvoiceCreatable(ctx, eventID).Return(true, nil)
 	mock.MockGCASCSPCostRepository.EXPECT().Exists(ctx, eventID).Return(false, nil)
 	mock.MockGCASDashboardAPI.EXPECT().GetAccounts().Return(&gcasdashboardapi.GetAccountsResponse{
 		csp: []string{accountID},
@@ -63,7 +63,7 @@ func Test_Usecase_Billable_請求書開始判定済の場合(t *testing.T) {
 	ctx := context.Background()
 	eventID := "eventID"
 
-	mock.MockEventStatusService.EXPECT().ShouldCreateInvoice(ctx, eventID).Return(false, nil)
+	mock.MockEventStatusService.EXPECT().IsInvoiceCreatable(ctx, eventID).Return(false, nil)
 
 	input := billable.Input{
 		EventID: eventID,
