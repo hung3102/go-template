@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/event_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/org_csp_account_gen.go
 
-// EventRepository - Repository of Event
-type EventRepository interface {
+// OrgCSPAccountRepository - Repository of OrgCSPAccount
+type OrgCSPAccountRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.Event, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error)
-	Insert(ctx context.Context, subject *model.Event) (_ string, err error)
-	Update(ctx context.Context, subject *model.Event) (err error)
-	StrictUpdate(ctx context.Context, id string, param *EventUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccount, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error)
+	Insert(ctx context.Context, subject *model.OrgCSPAccount) (_ string, err error)
+	Update(ctx context.Context, subject *model.OrgCSPAccount) (err error)
+	StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Event, error)
-	InsertMulti(ctx context.Context, subjects []*model.Event) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.Event) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.Event, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error)
+	InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Event, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccount, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Event, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error)
-	SearchWithTx(tx *firestore.Transaction, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error)
-	SearchByParam(ctx context.Context, param *EventSearchParam) ([]*model.Event, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *EventSearchParam) ([]*model.Event, *PagingResult, error)
+	Search(ctx context.Context, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error)
+	SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error)
+	SearchByParam(ctx context.Context, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type EventRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// EventRepositoryMiddleware - middleware of EventRepository
-type EventRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.Event) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.Event) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (bool, error)
+// OrgCSPAccountRepositoryMiddleware - middleware of OrgCSPAccountRepository
+type OrgCSPAccountRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.OrgCSPAccount) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccount) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type eventRepository struct {
+type orgCspaccountRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []EventRepositoryMiddleware
+	middleware       []OrgCSPAccountRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewEventRepository - constructor
-func NewEventRepository(firestoreClient *firestore.Client, middleware ...EventRepositoryMiddleware) EventRepository {
-	return &eventRepository{
-		collectionName:   "Event",
+// NewOrgCSPAccountRepository - constructor
+func NewOrgCSPAccountRepository(firestoreClient *firestore.Client, middleware ...OrgCSPAccountRepositoryMiddleware) OrgCSPAccountRepository {
+	return &orgCspaccountRepository{
+		collectionName:   "OrgCSPAccount",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "Event"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "OrgCSPAccount"),
 	}
 }
 
-func (repo *eventRepository) setMeta(subject *model.Event, isInsert bool) {
+func (repo *orgCspaccountRepository) setMeta(subject *model.OrgCSPAccount, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *eventRepository) setMeta(subject *model.Event, isInsert bool) {
 	subject.Version++
 }
 
-func (repo *eventRepository) setMetaWithStrictUpdate(param *EventUpdateParam) {
+func (repo *orgCspaccountRepository) setMetaWithStrictUpdate(param *OrgCSPAccountUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *eventRepository) beforeInsert(ctx context.Context, subject *model.Event) error {
+func (repo *orgCspaccountRepository) beforeInsert(ctx context.Context, subject *model.OrgCSPAccount) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *eventRepository) beforeInsert(ctx context.Context, subject *model.Ev
 	return nil
 }
 
-func (repo *eventRepository) beforeUpdate(ctx context.Context, old, subject *model.Event) error {
+func (repo *orgCspaccountRepository) beforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccount) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *eventRepository) beforeUpdate(ctx context.Context, old, subject *mod
 	return nil
 }
 
-func (repo *eventRepository) beforeDelete(ctx context.Context, subject *model.Event, opts ...DeleteOption) error {
+func (repo *orgCspaccountRepository) beforeDelete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,80 +189,92 @@ func (repo *eventRepository) beforeDelete(ctx context.Context, subject *model.Ev
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *eventRepository) GetCollection() *firestore.CollectionRef {
+func (repo *orgCspaccountRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *eventRepository) GetCollectionName() string {
+func (repo *orgCspaccountRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *eventRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *orgCspaccountRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *eventRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *orgCspaccountRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// EventSearchParam - params for search
-type EventSearchParam struct {
-	ID             *QueryChainer
-	BillingMonth   *QueryChainer
-	ExecutionCount *QueryChainer
-	CreatedAt      *QueryChainer
-	CreatedBy      *QueryChainer
-	UpdatedAt      *QueryChainer
-	UpdatedBy      *QueryChainer
-	DeletedAt      *QueryChainer
-	DeletedBy      *QueryChainer
-	Version        *QueryChainer
+// OrgCSPAccountSearchParam - params for search
+type OrgCSPAccountSearchParam struct {
+	ID                   *QueryChainer
+	EventID              *QueryChainer
+	GCASProportionCostID *QueryChainer
+	GCASAccountCostID    *QueryChainer
+	Organization         *QueryChainer
+	CSP                  *QueryChainer
+	AccountID            *QueryChainer
+	Cost                 *QueryChainer
+	BillingUnitID        *QueryChainer
+	CreatedAt            *QueryChainer
+	CreatedBy            *QueryChainer
+	UpdatedAt            *QueryChainer
+	UpdatedBy            *QueryChainer
+	DeletedAt            *QueryChainer
+	DeletedBy            *QueryChainer
+	Version              *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
 	CursorLimit        int
 }
 
-// EventUpdateParam - params for strict updates
-type EventUpdateParam struct {
-	BillingMonth   interface{}
-	ExecutionCount interface{}
-	CreatedAt      interface{}
-	CreatedBy      interface{}
-	UpdatedAt      interface{}
-	UpdatedBy      interface{}
-	DeletedAt      interface{}
-	DeletedBy      interface{}
-	Version        interface{}
+// OrgCSPAccountUpdateParam - params for strict updates
+type OrgCSPAccountUpdateParam struct {
+	EventID              interface{}
+	GCASProportionCostID interface{}
+	GCASAccountCostID    interface{}
+	Organization         interface{}
+	CSP                  interface{}
+	AccountID            interface{}
+	Cost                 interface{}
+	BillingUnitID        interface{}
+	CreatedAt            interface{}
+	CreatedBy            interface{}
+	UpdatedAt            interface{}
+	UpdatedBy            interface{}
+	DeletedAt            interface{}
+	DeletedBy            interface{}
+	Version              interface{}
 }
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *eventRepository) Search(ctx context.Context, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *orgCspaccountRepository) Search(ctx context.Context, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *eventRepository) SearchByParam(ctx context.Context, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *orgCspaccountRepository) SearchByParam(ctx context.Context, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `Event` by `Event.ID`
-func (repo *eventRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.Event, error) {
+// Get - get `OrgCSPAccount` by `OrgCSPAccount.ID`
+func (repo *orgCspaccountRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccount, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `Event` by *firestore.DocumentRef
-func (repo *eventRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+// GetWithDoc - get `OrgCSPAccount` by *firestore.DocumentRef
+func (repo *orgCspaccountRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `Event`
-func (repo *eventRepository) Insert(ctx context.Context, subject *model.Event) (_ string, err error) {
+// Insert - insert of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) Insert(ctx context.Context, subject *model.OrgCSPAccount) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -270,8 +282,8 @@ func (repo *eventRepository) Insert(ctx context.Context, subject *model.Event) (
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `Event`
-func (repo *eventRepository) Update(ctx context.Context, subject *model.Event) (err error) {
+// Update - update of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) Update(ctx context.Context, subject *model.OrgCSPAccount) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -289,13 +301,13 @@ func (repo *eventRepository) Update(ctx context.Context, subject *model.Event) (
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `Event`
-func (repo *eventRepository) StrictUpdate(ctx context.Context, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `Event`
-func (repo *eventRepository) Delete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (err error) {
+// Delete - delete of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) Delete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -312,8 +324,8 @@ func (repo *eventRepository) Delete(ctx context.Context, subject *model.Event, o
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `Event` by `Event.ID`
-func (repo *eventRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `OrgCSPAccount` by `OrgCSPAccount.ID`
+func (repo *orgCspaccountRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -335,13 +347,13 @@ func (repo *eventRepository) DeleteByID(ctx context.Context, id string, opts ...
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `Event` in bulk by array of `Event.ID`
-func (repo *eventRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Event, error) {
+// GetMulti - get `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID`
+func (repo *orgCspaccountRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `Event`
-func (repo *eventRepository) InsertMulti(ctx context.Context, subjects []*model.Event) (_ []string, er error) {
+// InsertMulti - bulk insert of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -383,8 +395,8 @@ func (repo *eventRepository) InsertMulti(ctx context.Context, subjects []*model.
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `Event`
-func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.Event) (er error) {
+// UpdateMulti - bulk update of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -400,7 +412,7 @@ func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.Event)
+		old := new(model.OrgCSPAccount)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -427,8 +439,8 @@ func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.
 	return nil
 }
 
-// DeleteMulti - bulk delete of `Event`
-func (repo *eventRepository) DeleteMulti(ctx context.Context, subjects []*model.Event, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `OrgCSPAccount`
+func (repo *orgCspaccountRepository) DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -472,9 +484,9 @@ func (repo *eventRepository) DeleteMulti(ctx context.Context, subjects []*model.
 	return nil
 }
 
-// DeleteMultiByIDs - delete `Event` in bulk by array of `Event.ID`
-func (repo *eventRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.Event, len(ids))
+// DeleteMultiByIDs - delete `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID`
+func (repo *orgCspaccountRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.OrgCSPAccount, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -492,28 +504,28 @@ func (repo *eventRepository) DeleteMultiByIDs(ctx context.Context, ids []string,
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *eventRepository) SearchWithTx(tx *firestore.Transaction, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *orgCspaccountRepository) SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *eventRepository) SearchByParamWithTx(tx *firestore.Transaction, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *orgCspaccountRepository) SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `Event` by `Event.ID` in transaction
-func (repo *eventRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Event, error) {
+// GetWithTx - get `OrgCSPAccount` by `OrgCSPAccount.ID` in transaction
+func (repo *orgCspaccountRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccount, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `Event` by *firestore.DocumentRef in transaction
-func (repo *eventRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+// GetWithDocWithTx - get `OrgCSPAccount` by *firestore.DocumentRef in transaction
+func (repo *orgCspaccountRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `Event` in transaction
-func (repo *eventRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (_ string, err error) {
+// InsertWithTx - insert of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -521,8 +533,8 @@ func (repo *eventRepository) InsertWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `Event` in transaction
-func (repo *eventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (err error) {
+// UpdateWithTx - update of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -530,13 +542,13 @@ func (repo *eventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `Event` in transaction
-func (repo *eventRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `Event` in transaction
-func (repo *eventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -553,8 +565,8 @@ func (repo *eventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `Event` by `Event.ID` in transaction
-func (repo *eventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `OrgCSPAccount` by `OrgCSPAccount.ID` in transaction
+func (repo *orgCspaccountRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -576,13 +588,13 @@ func (repo *eventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `Event` in bulk by array of `Event.ID` in transaction
-func (repo *eventRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Event, error) {
+// GetMultiWithTx - get `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID` in transaction
+func (repo *orgCspaccountRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `Event` in transaction
-func (repo *eventRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -607,8 +619,8 @@ func (repo *eventRepository) InsertMultiWithTx(ctx context.Context, tx *firestor
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `Event` in transaction
-func (repo *eventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (er error) {
+// UpdateMultiWithTx - bulk update of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -626,8 +638,8 @@ func (repo *eventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestor
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `Event` in transaction
-func (repo *eventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `OrgCSPAccount` in transaction
+func (repo *orgCspaccountRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -671,8 +683,8 @@ func (repo *eventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestor
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `Event` in bulk by array of `Event.ID` in transaction
-func (repo *eventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID` in transaction
+func (repo *orgCspaccountRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -710,7 +722,7 @@ func (repo *eventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *fir
 	return nil
 }
 
-func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+func (repo *orgCspaccountRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -732,7 +744,7 @@ func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.Event)
+	subject := new(model.OrgCSPAccount)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -747,7 +759,7 @@ func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts
 	return subject, nil
 }
 
-func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.Event, error) {
+func (repo *orgCspaccountRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -773,7 +785,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.Event, 0, len(ids))
+	subjects := make([]*model.OrgCSPAccount, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -781,7 +793,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 			continue
 		}
 
-		subject := new(model.Event)
+		subject := new(model.OrgCSPAccount)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -803,7 +815,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 	return subjects, mErr
 }
 
-func (repo *eventRepository) insert(v interface{}, subject *model.Event) (string, error) {
+func (repo *orgCspaccountRepository) insert(v interface{}, subject *model.OrgCSPAccount) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -830,7 +842,7 @@ func (repo *eventRepository) insert(v interface{}, subject *model.Event) (string
 	return dr.ID, nil
 }
 
-func (repo *eventRepository) update(v interface{}, subject *model.Event) error {
+func (repo *orgCspaccountRepository) update(v interface{}, subject *model.OrgCSPAccount) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -852,7 +864,7 @@ func (repo *eventRepository) update(v interface{}, subject *model.Event) error {
 	return nil
 }
 
-func (repo *eventRepository) strictUpdate(v interface{}, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+func (repo *orgCspaccountRepository) strictUpdate(v interface{}, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -860,7 +872,7 @@ func (repo *eventRepository) strictUpdate(v interface{}, id string, param *Event
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.Event{}, param)
+	updates := updater(model.OrgCSPAccount{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -878,7 +890,7 @@ func (repo *eventRepository) strictUpdate(v interface{}, id string, param *Event
 	return nil
 }
 
-func (repo *eventRepository) deleteByID(v interface{}, id string) error {
+func (repo *orgCspaccountRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -898,7 +910,7 @@ func (repo *eventRepository) deleteByID(v interface{}, id string) error {
 	return nil
 }
 
-func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*model.Event, error) {
+func (repo *orgCspaccountRepository) runQuery(v interface{}, query firestore.Query) ([]*model.OrgCSPAccount, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -912,7 +924,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 
 	defer iter.Stop()
 
-	subjects := make([]*model.Event, 0)
+	subjects := make([]*model.OrgCSPAccount, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -923,7 +935,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.Event)
+		subject := new(model.OrgCSPAccount)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -937,7 +949,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *orgCspaccountRepository) searchByParam(v interface{}, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -963,22 +975,76 @@ func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchPara
 			query = param.ID.BuildCursorQuery(query)
 		}
 	}
-	if param.BillingMonth != nil {
-		for _, chain := range param.BillingMonth.QueryGroup {
-			query = query.Where("BillingMonth", chain.Operator, chain.Value)
+	if param.EventID != nil {
+		for _, chain := range param.EventID.QueryGroup {
+			query = query.Where("EventID", chain.Operator, chain.Value)
 		}
-		if direction := param.BillingMonth.OrderByDirection; direction > 0 {
-			query = query.OrderBy("BillingMonth", direction)
-			query = param.BillingMonth.BuildCursorQuery(query)
+		if direction := param.EventID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("EventID", direction)
+			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
-	if param.ExecutionCount != nil {
-		for _, chain := range param.ExecutionCount.QueryGroup {
-			query = query.Where("ExecutionCount", chain.Operator, chain.Value)
+	if param.GCASProportionCostID != nil {
+		for _, chain := range param.GCASProportionCostID.QueryGroup {
+			query = query.Where("GCASProportionCostID", chain.Operator, chain.Value)
 		}
-		if direction := param.ExecutionCount.OrderByDirection; direction > 0 {
-			query = query.OrderBy("ExecutionCount", direction)
-			query = param.ExecutionCount.BuildCursorQuery(query)
+		if direction := param.GCASProportionCostID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("GCASProportionCostID", direction)
+			query = param.GCASProportionCostID.BuildCursorQuery(query)
+		}
+	}
+	if param.GCASAccountCostID != nil {
+		for _, chain := range param.GCASAccountCostID.QueryGroup {
+			query = query.Where("GCASAccountCostID", chain.Operator, chain.Value)
+		}
+		if direction := param.GCASAccountCostID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("GCASAccountCostID", direction)
+			query = param.GCASAccountCostID.BuildCursorQuery(query)
+		}
+	}
+	if param.Organization != nil {
+		for _, chain := range param.Organization.QueryGroup {
+			query = query.Where("Organization", chain.Operator, chain.Value)
+		}
+		if direction := param.Organization.OrderByDirection; direction > 0 {
+			query = query.OrderBy("Organization", direction)
+			query = param.Organization.BuildCursorQuery(query)
+		}
+	}
+	if param.CSP != nil {
+		for _, chain := range param.CSP.QueryGroup {
+			query = query.Where("CSP", chain.Operator, chain.Value)
+		}
+		if direction := param.CSP.OrderByDirection; direction > 0 {
+			query = query.OrderBy("CSP", direction)
+			query = param.CSP.BuildCursorQuery(query)
+		}
+	}
+	if param.AccountID != nil {
+		for _, chain := range param.AccountID.QueryGroup {
+			query = query.Where("AccountID", chain.Operator, chain.Value)
+		}
+		if direction := param.AccountID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("AccountID", direction)
+			query = param.AccountID.BuildCursorQuery(query)
+		}
+	}
+	if param.Cost != nil {
+		for _, chain := range param.Cost.QueryGroup {
+			query = query.Where("Cost", chain.Operator, chain.Value)
+		}
+		if direction := param.Cost.OrderByDirection; direction > 0 {
+			query = query.OrderBy("Cost", direction)
+			query = param.Cost.BuildCursorQuery(query)
+		}
+	}
+	if param.BillingUnitID != nil {
+		for _, chain := range param.BillingUnitID.QueryGroup {
+			query = query.Where("BillingUnitID", chain.Operator, chain.Value)
+		}
+		if direction := param.BillingUnitID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("BillingUnitID", direction)
+			query = param.BillingUnitID.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
@@ -1094,7 +1160,7 @@ func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchPara
 	return subjects, pagingResult, nil
 }
 
-func (repo *eventRepository) search(v interface{}, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *orgCspaccountRepository) search(v interface{}, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}

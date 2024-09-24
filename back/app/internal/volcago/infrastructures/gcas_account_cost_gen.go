@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/event_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/gcas_account_cost_gen.go
 
-// EventRepository - Repository of Event
-type EventRepository interface {
+// GCASAccountCostRepository - Repository of GCASAccountCost
+type GCASAccountCostRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.Event, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error)
-	Insert(ctx context.Context, subject *model.Event) (_ string, err error)
-	Update(ctx context.Context, subject *model.Event) (err error)
-	StrictUpdate(ctx context.Context, id string, param *EventUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.GCASAccountCost, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.GCASAccountCost, error)
+	Insert(ctx context.Context, subject *model.GCASAccountCost) (_ string, err error)
+	Update(ctx context.Context, subject *model.GCASAccountCost) (err error)
+	StrictUpdate(ctx context.Context, id string, param *GCASAccountCostUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.GCASAccountCost, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Event, error)
-	InsertMulti(ctx context.Context, subjects []*model.Event) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.Event) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.Event, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.GCASAccountCost, error)
+	InsertMulti(ctx context.Context, subjects []*model.GCASAccountCost) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.GCASAccountCost) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.GCASAccountCost, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Event, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.GCASAccountCost, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.GCASAccountCost, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *GCASAccountCostUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Event, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.GCASAccountCost, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error)
-	SearchWithTx(tx *firestore.Transaction, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error)
-	SearchByParam(ctx context.Context, param *EventSearchParam) ([]*model.Event, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *EventSearchParam) ([]*model.Event, *PagingResult, error)
+	Search(ctx context.Context, param *GCASAccountCostSearchParam, q *firestore.Query) ([]*model.GCASAccountCost, error)
+	SearchWithTx(tx *firestore.Transaction, param *GCASAccountCostSearchParam, q *firestore.Query) ([]*model.GCASAccountCost, error)
+	SearchByParam(ctx context.Context, param *GCASAccountCostSearchParam) ([]*model.GCASAccountCost, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *GCASAccountCostSearchParam) ([]*model.GCASAccountCost, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type EventRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// EventRepositoryMiddleware - middleware of EventRepository
-type EventRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.Event) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.Event) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (bool, error)
+// GCASAccountCostRepositoryMiddleware - middleware of GCASAccountCostRepository
+type GCASAccountCostRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.GCASAccountCost) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.GCASAccountCost) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.GCASAccountCost, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type eventRepository struct {
+type gcasaccountCostRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []EventRepositoryMiddleware
+	middleware       []GCASAccountCostRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewEventRepository - constructor
-func NewEventRepository(firestoreClient *firestore.Client, middleware ...EventRepositoryMiddleware) EventRepository {
-	return &eventRepository{
-		collectionName:   "Event",
+// NewGCASAccountCostRepository - constructor
+func NewGCASAccountCostRepository(firestoreClient *firestore.Client, middleware ...GCASAccountCostRepositoryMiddleware) GCASAccountCostRepository {
+	return &gcasaccountCostRepository{
+		collectionName:   "GCASAccountCost",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "Event"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "GCASAccountCost"),
 	}
 }
 
-func (repo *eventRepository) setMeta(subject *model.Event, isInsert bool) {
+func (repo *gcasaccountCostRepository) setMeta(subject *model.GCASAccountCost, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *eventRepository) setMeta(subject *model.Event, isInsert bool) {
 	subject.Version++
 }
 
-func (repo *eventRepository) setMetaWithStrictUpdate(param *EventUpdateParam) {
+func (repo *gcasaccountCostRepository) setMetaWithStrictUpdate(param *GCASAccountCostUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *eventRepository) beforeInsert(ctx context.Context, subject *model.Event) error {
+func (repo *gcasaccountCostRepository) beforeInsert(ctx context.Context, subject *model.GCASAccountCost) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *eventRepository) beforeInsert(ctx context.Context, subject *model.Ev
 	return nil
 }
 
-func (repo *eventRepository) beforeUpdate(ctx context.Context, old, subject *model.Event) error {
+func (repo *gcasaccountCostRepository) beforeUpdate(ctx context.Context, old, subject *model.GCASAccountCost) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *eventRepository) beforeUpdate(ctx context.Context, old, subject *mod
 	return nil
 }
 
-func (repo *eventRepository) beforeDelete(ctx context.Context, subject *model.Event, opts ...DeleteOption) error {
+func (repo *gcasaccountCostRepository) beforeDelete(ctx context.Context, subject *model.GCASAccountCost, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,80 +189,78 @@ func (repo *eventRepository) beforeDelete(ctx context.Context, subject *model.Ev
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *eventRepository) GetCollection() *firestore.CollectionRef {
+func (repo *gcasaccountCostRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *eventRepository) GetCollectionName() string {
+func (repo *gcasaccountCostRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *eventRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *gcasaccountCostRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *eventRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *gcasaccountCostRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// EventSearchParam - params for search
-type EventSearchParam struct {
-	ID             *QueryChainer
-	BillingMonth   *QueryChainer
-	ExecutionCount *QueryChainer
-	CreatedAt      *QueryChainer
-	CreatedBy      *QueryChainer
-	UpdatedAt      *QueryChainer
-	UpdatedBy      *QueryChainer
-	DeletedAt      *QueryChainer
-	DeletedBy      *QueryChainer
-	Version        *QueryChainer
+// GCASAccountCostSearchParam - params for search
+type GCASAccountCostSearchParam struct {
+	ID        *QueryChainer
+	EventID   *QueryChainer
+	CreatedAt *QueryChainer
+	CreatedBy *QueryChainer
+	UpdatedAt *QueryChainer
+	UpdatedBy *QueryChainer
+	DeletedAt *QueryChainer
+	DeletedBy *QueryChainer
+	Version   *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
 	CursorLimit        int
 }
 
-// EventUpdateParam - params for strict updates
-type EventUpdateParam struct {
-	BillingMonth   interface{}
-	ExecutionCount interface{}
-	CreatedAt      interface{}
-	CreatedBy      interface{}
-	UpdatedAt      interface{}
-	UpdatedBy      interface{}
-	DeletedAt      interface{}
-	DeletedBy      interface{}
-	Version        interface{}
+// GCASAccountCostUpdateParam - params for strict updates
+type GCASAccountCostUpdateParam struct {
+	EventID   interface{}
+	CreatedAt interface{}
+	CreatedBy interface{}
+	UpdatedAt interface{}
+	UpdatedBy interface{}
+	DeletedAt interface{}
+	DeletedBy interface{}
+	Version   interface{}
 }
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *eventRepository) Search(ctx context.Context, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *gcasaccountCostRepository) Search(ctx context.Context, param *GCASAccountCostSearchParam, q *firestore.Query) ([]*model.GCASAccountCost, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *eventRepository) SearchByParam(ctx context.Context, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *gcasaccountCostRepository) SearchByParam(ctx context.Context, param *GCASAccountCostSearchParam) ([]*model.GCASAccountCost, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `Event` by `Event.ID`
-func (repo *eventRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.Event, error) {
+// Get - get `GCASAccountCost` by `GCASAccountCost.ID`
+func (repo *gcasaccountCostRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.GCASAccountCost, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `Event` by *firestore.DocumentRef
-func (repo *eventRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+// GetWithDoc - get `GCASAccountCost` by *firestore.DocumentRef
+func (repo *gcasaccountCostRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.GCASAccountCost, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `Event`
-func (repo *eventRepository) Insert(ctx context.Context, subject *model.Event) (_ string, err error) {
+// Insert - insert of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) Insert(ctx context.Context, subject *model.GCASAccountCost) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -270,8 +268,8 @@ func (repo *eventRepository) Insert(ctx context.Context, subject *model.Event) (
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `Event`
-func (repo *eventRepository) Update(ctx context.Context, subject *model.Event) (err error) {
+// Update - update of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) Update(ctx context.Context, subject *model.GCASAccountCost) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -289,13 +287,13 @@ func (repo *eventRepository) Update(ctx context.Context, subject *model.Event) (
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `Event`
-func (repo *eventRepository) StrictUpdate(ctx context.Context, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) StrictUpdate(ctx context.Context, id string, param *GCASAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `Event`
-func (repo *eventRepository) Delete(ctx context.Context, subject *model.Event, opts ...DeleteOption) (err error) {
+// Delete - delete of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) Delete(ctx context.Context, subject *model.GCASAccountCost, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -312,8 +310,8 @@ func (repo *eventRepository) Delete(ctx context.Context, subject *model.Event, o
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `Event` by `Event.ID`
-func (repo *eventRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `GCASAccountCost` by `GCASAccountCost.ID`
+func (repo *gcasaccountCostRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -335,13 +333,13 @@ func (repo *eventRepository) DeleteByID(ctx context.Context, id string, opts ...
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `Event` in bulk by array of `Event.ID`
-func (repo *eventRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Event, error) {
+// GetMulti - get `GCASAccountCost` in bulk by array of `GCASAccountCost.ID`
+func (repo *gcasaccountCostRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.GCASAccountCost, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `Event`
-func (repo *eventRepository) InsertMulti(ctx context.Context, subjects []*model.Event) (_ []string, er error) {
+// InsertMulti - bulk insert of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) InsertMulti(ctx context.Context, subjects []*model.GCASAccountCost) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -383,8 +381,8 @@ func (repo *eventRepository) InsertMulti(ctx context.Context, subjects []*model.
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `Event`
-func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.Event) (er error) {
+// UpdateMulti - bulk update of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) UpdateMulti(ctx context.Context, subjects []*model.GCASAccountCost) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -400,7 +398,7 @@ func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.Event)
+		old := new(model.GCASAccountCost)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -427,8 +425,8 @@ func (repo *eventRepository) UpdateMulti(ctx context.Context, subjects []*model.
 	return nil
 }
 
-// DeleteMulti - bulk delete of `Event`
-func (repo *eventRepository) DeleteMulti(ctx context.Context, subjects []*model.Event, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `GCASAccountCost`
+func (repo *gcasaccountCostRepository) DeleteMulti(ctx context.Context, subjects []*model.GCASAccountCost, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -472,9 +470,9 @@ func (repo *eventRepository) DeleteMulti(ctx context.Context, subjects []*model.
 	return nil
 }
 
-// DeleteMultiByIDs - delete `Event` in bulk by array of `Event.ID`
-func (repo *eventRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.Event, len(ids))
+// DeleteMultiByIDs - delete `GCASAccountCost` in bulk by array of `GCASAccountCost.ID`
+func (repo *gcasaccountCostRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.GCASAccountCost, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -492,28 +490,28 @@ func (repo *eventRepository) DeleteMultiByIDs(ctx context.Context, ids []string,
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *eventRepository) SearchWithTx(tx *firestore.Transaction, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *gcasaccountCostRepository) SearchWithTx(tx *firestore.Transaction, param *GCASAccountCostSearchParam, q *firestore.Query) ([]*model.GCASAccountCost, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *eventRepository) SearchByParamWithTx(tx *firestore.Transaction, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *gcasaccountCostRepository) SearchByParamWithTx(tx *firestore.Transaction, param *GCASAccountCostSearchParam) ([]*model.GCASAccountCost, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `Event` by `Event.ID` in transaction
-func (repo *eventRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Event, error) {
+// GetWithTx - get `GCASAccountCost` by `GCASAccountCost.ID` in transaction
+func (repo *gcasaccountCostRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.GCASAccountCost, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `Event` by *firestore.DocumentRef in transaction
-func (repo *eventRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+// GetWithDocWithTx - get `GCASAccountCost` by *firestore.DocumentRef in transaction
+func (repo *gcasaccountCostRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.GCASAccountCost, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `Event` in transaction
-func (repo *eventRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (_ string, err error) {
+// InsertWithTx - insert of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -521,8 +519,8 @@ func (repo *eventRepository) InsertWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `Event` in transaction
-func (repo *eventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event) (err error) {
+// UpdateWithTx - update of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -530,13 +528,13 @@ func (repo *eventRepository) UpdateWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `Event` in transaction
-func (repo *eventRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *GCASAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `Event` in transaction
-func (repo *eventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Event, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.GCASAccountCost, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -553,8 +551,8 @@ func (repo *eventRepository) DeleteWithTx(ctx context.Context, tx *firestore.Tra
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `Event` by `Event.ID` in transaction
-func (repo *eventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `GCASAccountCost` by `GCASAccountCost.ID` in transaction
+func (repo *gcasaccountCostRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -576,13 +574,13 @@ func (repo *eventRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `Event` in bulk by array of `Event.ID` in transaction
-func (repo *eventRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Event, error) {
+// GetMultiWithTx - get `GCASAccountCost` in bulk by array of `GCASAccountCost.ID` in transaction
+func (repo *gcasaccountCostRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.GCASAccountCost, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `Event` in transaction
-func (repo *eventRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -607,8 +605,8 @@ func (repo *eventRepository) InsertMultiWithTx(ctx context.Context, tx *firestor
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `Event` in transaction
-func (repo *eventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event) (er error) {
+// UpdateMultiWithTx - bulk update of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -626,8 +624,8 @@ func (repo *eventRepository) UpdateMultiWithTx(ctx context.Context, tx *firestor
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `Event` in transaction
-func (repo *eventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Event, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `GCASAccountCost` in transaction
+func (repo *gcasaccountCostRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.GCASAccountCost, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -671,8 +669,8 @@ func (repo *eventRepository) DeleteMultiWithTx(ctx context.Context, tx *firestor
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `Event` in bulk by array of `Event.ID` in transaction
-func (repo *eventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `GCASAccountCost` in bulk by array of `GCASAccountCost.ID` in transaction
+func (repo *gcasaccountCostRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -710,7 +708,7 @@ func (repo *eventRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *fir
 	return nil
 }
 
-func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.Event, error) {
+func (repo *gcasaccountCostRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.GCASAccountCost, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -732,7 +730,7 @@ func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.Event)
+	subject := new(model.GCASAccountCost)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -747,7 +745,7 @@ func (repo *eventRepository) get(v interface{}, doc *firestore.DocumentRef, opts
 	return subject, nil
 }
 
-func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.Event, error) {
+func (repo *gcasaccountCostRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.GCASAccountCost, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -773,7 +771,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.Event, 0, len(ids))
+	subjects := make([]*model.GCASAccountCost, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -781,7 +779,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 			continue
 		}
 
-		subject := new(model.Event)
+		subject := new(model.GCASAccountCost)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -803,7 +801,7 @@ func (repo *eventRepository) getMulti(v interface{}, ids []string, opts ...GetOp
 	return subjects, mErr
 }
 
-func (repo *eventRepository) insert(v interface{}, subject *model.Event) (string, error) {
+func (repo *gcasaccountCostRepository) insert(v interface{}, subject *model.GCASAccountCost) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -830,7 +828,7 @@ func (repo *eventRepository) insert(v interface{}, subject *model.Event) (string
 	return dr.ID, nil
 }
 
-func (repo *eventRepository) update(v interface{}, subject *model.Event) error {
+func (repo *gcasaccountCostRepository) update(v interface{}, subject *model.GCASAccountCost) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -852,7 +850,7 @@ func (repo *eventRepository) update(v interface{}, subject *model.Event) error {
 	return nil
 }
 
-func (repo *eventRepository) strictUpdate(v interface{}, id string, param *EventUpdateParam, opts ...firestore.Precondition) error {
+func (repo *gcasaccountCostRepository) strictUpdate(v interface{}, id string, param *GCASAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -860,7 +858,7 @@ func (repo *eventRepository) strictUpdate(v interface{}, id string, param *Event
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.Event{}, param)
+	updates := updater(model.GCASAccountCost{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -878,7 +876,7 @@ func (repo *eventRepository) strictUpdate(v interface{}, id string, param *Event
 	return nil
 }
 
-func (repo *eventRepository) deleteByID(v interface{}, id string) error {
+func (repo *gcasaccountCostRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -898,7 +896,7 @@ func (repo *eventRepository) deleteByID(v interface{}, id string) error {
 	return nil
 }
 
-func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*model.Event, error) {
+func (repo *gcasaccountCostRepository) runQuery(v interface{}, query firestore.Query) ([]*model.GCASAccountCost, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -912,7 +910,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 
 	defer iter.Stop()
 
-	subjects := make([]*model.Event, 0)
+	subjects := make([]*model.GCASAccountCost, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -923,7 +921,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.Event)
+		subject := new(model.GCASAccountCost)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -937,7 +935,7 @@ func (repo *eventRepository) runQuery(v interface{}, query firestore.Query) ([]*
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchParam) ([]*model.Event, *PagingResult, error) {
+func (repo *gcasaccountCostRepository) searchByParam(v interface{}, param *GCASAccountCostSearchParam) ([]*model.GCASAccountCost, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -963,22 +961,13 @@ func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchPara
 			query = param.ID.BuildCursorQuery(query)
 		}
 	}
-	if param.BillingMonth != nil {
-		for _, chain := range param.BillingMonth.QueryGroup {
-			query = query.Where("BillingMonth", chain.Operator, chain.Value)
+	if param.EventID != nil {
+		for _, chain := range param.EventID.QueryGroup {
+			query = query.Where("EventID", chain.Operator, chain.Value)
 		}
-		if direction := param.BillingMonth.OrderByDirection; direction > 0 {
-			query = query.OrderBy("BillingMonth", direction)
-			query = param.BillingMonth.BuildCursorQuery(query)
-		}
-	}
-	if param.ExecutionCount != nil {
-		for _, chain := range param.ExecutionCount.QueryGroup {
-			query = query.Where("ExecutionCount", chain.Operator, chain.Value)
-		}
-		if direction := param.ExecutionCount.OrderByDirection; direction > 0 {
-			query = query.OrderBy("ExecutionCount", direction)
-			query = param.ExecutionCount.BuildCursorQuery(query)
+		if direction := param.EventID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("EventID", direction)
+			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
@@ -1094,7 +1083,7 @@ func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchPara
 	return subjects, pagingResult, nil
 }
 
-func (repo *eventRepository) search(v interface{}, param *EventSearchParam, q *firestore.Query) ([]*model.Event, error) {
+func (repo *gcasaccountCostRepository) search(v interface{}, param *GCASAccountCostSearchParam, q *firestore.Query) ([]*model.GCASAccountCost, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}

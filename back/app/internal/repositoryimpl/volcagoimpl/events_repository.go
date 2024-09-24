@@ -26,7 +26,6 @@ func (e *eventImpl) Create(ctx context.Context, event *entities.Event) error {
 	_, err := e.infra.Insert(ctx, &volcago.Event{
 		ID:           event.ID(),
 		BillingMonth: event.BillingMonth(),
-		Status:       event.Status(),
 		Meta: volcago.Meta{
 			CreatedAt: event.Meta().CreatedAt(),
 			CreatedBy: event.Meta().CreatedBy(),
@@ -56,7 +55,6 @@ func (e *eventImpl) GetByID(ctx context.Context, id string) (*entities.Event, er
 	return entities.NewEvent(&entities.NewEventParam{
 		ID:           event.ID,
 		BillingMonth: event.BillingMonth,
-		Status:       event.Status,
 		Meta: entities.NewMeta(&entities.NewMetaParam{
 			CreatedAt: event.CreatedAt,
 			CreatedBy: event.CreatedBy,
