@@ -3,6 +3,7 @@ package billable_test
 import (
 	"context"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasapi"
@@ -55,7 +56,7 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	t.Logf("%v", output)
 }
 
-func Test_Usecase_Billable(t *testing.T) {
+func Test_Usecase_Billable_請求書開始判定済の場合(t *testing.T) {
 	sut, mock, deferFunc := NewSUT(t)
 	defer deferFunc()
 
@@ -234,8 +235,8 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 			},
 			want: []*entities.GCASCSPCost{
 				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "1", EventDocID: "eventDocID", CSP: "aws", TotalCost: 1222}),
-				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "2", EventDocID: "eventDocID", CSP: "gcp", TotalCost: 11}),
 				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "3", EventDocID: "eventDocID", CSP: "azure", TotalCost: 0}),
+				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "2", EventDocID: "eventDocID", CSP: "gcp", TotalCost: 11}),
 			},
 			wantErr: false,
 		},
@@ -271,21 +272,12 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 				t.Fatalf("error in Test_Usecase_ToGCASCSPCost: name = %s, len(got) = %d, len(want) = %d", tt.name, len(got), len(tt.want))
 			}
 
+			sort.Slice(got, func(i, j int) bool {
+				return got[i].CSP() < got[j].CSP()
+			})
+
 			for i := range got {
-				gi := got[i]
-
-				var wi *entities.GCASCSPCost
-				if gi.CSP() == "aws" {
-					wi = tt.want[0]
-				} else if gi.CSP() == "gcp" {
-					wi = tt.want[1]
-				} else if gi.CSP() == "azure" {
-					wi = tt.want[2]
-				} else {
-					t.Fatalf("error in Test_Usecase_ToGCASCSPCost: name = %s, got[%d] = %v", tt.name, i, got[i])
-				}
-
-				if gi.EventDocID() != wi.EventDocID() || gi.CSP() != wi.CSP() || gi.TotalCost() != wi.TotalCost() {
+				if got[i].EventDocID() != tt.want[i].EventDocID() || got[i].CSP() != tt.want[i].CSP() || got[i].TotalCost() != tt.want[i].TotalCost() {
 					t.Fatalf("error in Test_Usecase_ToGCASCSPCost: name = %s, got[%d] = %v, want[%d] = %v", tt.name, i, got[i], i, tt.want[i])
 				}
 			}
@@ -366,6 +358,13 @@ func Test_Usecase_ToOutputFromGCASAccount(t *testing.T) {
 			if len(got.GCASAccounts) != len(tt.want.GCASAccounts) {
 				t.Fatalf("error in Test_Usecase_ToOutputFromGCASAccount: name = %s, len(got) = %d, len(want) = %d", tt.name, len(got.GCASAccounts), len(tt.want.GCASAccounts))
 			}
+
+			sort.Slice(got.GCASAccounts, func(i, j int) bool {
+				if got.GCASAccounts[i].CSP != got.GCASAccounts[j].CSP {
+					return got.GCASAccounts[i].CSP < got.GCASAccounts[j].CSP
+				}
+				return got.GCASAccounts[i].AccountID < got.GCASAccounts[j].AccountID
+			})
 			for i := range got.GCASAccounts {
 				if !reflect.DeepEqual(got.GCASAccounts[i], tt.want.GCASAccounts[i]) {
 					t.Fatalf("error in Test_Usecase_ToOutputFromGCASAccount: name = %s, got[%d] = %v, want[%d] = %v", tt.name, i, got.GCASAccounts[i], i, tt.want.GCASAccounts[i])
