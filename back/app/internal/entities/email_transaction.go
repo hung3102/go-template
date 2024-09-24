@@ -2,27 +2,27 @@ package entities
 
 // EmailTransaction - email_transaction
 type EmailTransaction struct {
-	id          string // id
-	eventDocID  string // event_doc_id
-	orgCspDocID string // org_csp_doc_id
-	meta        *Meta  // メタ
+	id        string // id
+	eventID   string // event_id
+	billingID string // billing_id
+	meta      *Meta  // メタ
 }
 
 // NewEmailTransactionParam - email_transaction作成パラメータ
 type NewEmailTransactionParam struct {
-	ID          string // id
-	EventDocID  string // event_doc_id
-	OrgCspDocID string // org_csp_doc_id
-	Meta        *Meta  // メタ
+	ID        string // id
+	EventID   string // event_id
+	BillingID string // billing_id
+	Meta      *Meta  // メタ
 }
 
 // NewEmailTransaction - email_transaction作成
 func NewEmailTransaction(param *NewEmailTransactionParam) *EmailTransaction {
 	return &EmailTransaction{
-		id:          param.ID,
-		eventDocID:  param.EventDocID,
-		orgCspDocID: param.OrgCspDocID,
-		meta:        param.Meta,
+		id:        param.ID,
+		eventID:   param.EventID,
+		billingID: param.BillingID,
+		meta:      param.Meta,
 	}
 }
 
@@ -31,14 +31,14 @@ func (e *EmailTransaction) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *EmailTransaction) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *EmailTransaction) EventID() string {
+	return e.eventID
 }
 
-// OrgCspDocID - OrgCspDocID のゲッター
-func (e *EmailTransaction) OrgCspDocID() string {
-	return e.orgCspDocID
+// BillingID - BillingID のゲッター
+func (e *EmailTransaction) BillingID() string {
+	return e.billingID
 }
 
 // Meta - Meta のゲッター

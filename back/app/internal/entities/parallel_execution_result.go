@@ -3,9 +3,8 @@ package entities
 // ParallelExecutionResult - 並列実行結果
 type ParallelExecutionResult struct {
 	id            string                               // id
-	eventDocID    string                               // event_doc_id
-	executionType int                                  // 実行種別
-	identifierID  string                               // account_id or org_csp_id
+	eventID       string                               // event_id
+	executionType int                                  // 費用按分計算請求データ
 	resultCode    int                                  // 実行結果 成功 or 失敗
 	errorMessage  *ParallelExecutionResultErrorMessage // error object
 	meta          *Meta                                // メタ
@@ -14,9 +13,8 @@ type ParallelExecutionResult struct {
 // NewParallelExecutionResultParam - 並列実行結果作成パラメータ
 type NewParallelExecutionResultParam struct {
 	ID            string                               // id
-	EventDocID    string                               // event_doc_id
-	ExecutionType int                                  // 実行種別
-	IdentifierID  string                               // account_id or org_csp_id
+	EventID       string                               // event_id
+	ExecutionType int                                  // 費用按分計算請求データ
 	ResultCode    int                                  // 実行結果 成功 or 失敗
 	ErrorMessage  *ParallelExecutionResultErrorMessage // error object
 	Meta          *Meta                                // メタ
@@ -26,9 +24,8 @@ type NewParallelExecutionResultParam struct {
 func NewParallelExecutionResult(param *NewParallelExecutionResultParam) *ParallelExecutionResult {
 	return &ParallelExecutionResult{
 		id:            param.ID,
-		eventDocID:    param.EventDocID,
+		eventID:       param.EventID,
 		executionType: param.ExecutionType,
-		identifierID:  param.IdentifierID,
 		resultCode:    param.ResultCode,
 		errorMessage:  param.ErrorMessage,
 		meta:          param.Meta,
@@ -40,19 +37,14 @@ func (e *ParallelExecutionResult) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *ParallelExecutionResult) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *ParallelExecutionResult) EventID() string {
+	return e.eventID
 }
 
 // ExecutionType - ExecutionType のゲッター
 func (e *ParallelExecutionResult) ExecutionType() int {
 	return e.executionType
-}
-
-// IdentifierID - IdentifierID のゲッター
-func (e *ParallelExecutionResult) IdentifierID() string {
-	return e.identifierID
 }
 
 // ResultCode - ResultCode のゲッター

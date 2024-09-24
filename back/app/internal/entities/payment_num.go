@@ -3,8 +3,8 @@ package entities
 // PaymentNum - 収納番号
 type PaymentNum struct {
 	id            string // id
-	eventDocID    string // event_doc_id
-	billingDocID  string //
+	eventID       string // event_id
+	billingID     string //
 	billingUnitID string //
 	paymentNum    string // 収納番号
 	cost          int    // この収納番号で請求している金額
@@ -14,8 +14,8 @@ type PaymentNum struct {
 // NewPaymentNumParam - 収納番号作成パラメータ
 type NewPaymentNumParam struct {
 	ID            string // id
-	EventDocID    string // event_doc_id
-	BillingDocID  string //
+	EventID       string // event_id
+	BillingID     string //
 	BillingUnitID string //
 	PaymentNum    string // 収納番号
 	Cost          int    // この収納番号で請求している金額
@@ -26,8 +26,8 @@ type NewPaymentNumParam struct {
 func NewPaymentNum(param *NewPaymentNumParam) *PaymentNum {
 	return &PaymentNum{
 		id:            param.ID,
-		eventDocID:    param.EventDocID,
-		billingDocID:  param.BillingDocID,
+		eventID:       param.EventID,
+		billingID:     param.BillingID,
 		billingUnitID: param.BillingUnitID,
 		paymentNum:    param.PaymentNum,
 		cost:          param.Cost,
@@ -40,14 +40,14 @@ func (e *PaymentNum) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *PaymentNum) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *PaymentNum) EventID() string {
+	return e.eventID
 }
 
-// BillingDocID - BillingDocID のゲッター
-func (e *PaymentNum) BillingDocID() string {
-	return e.billingDocID
+// BillingID - BillingID のゲッター
+func (e *PaymentNum) BillingID() string {
+	return e.billingID
 }
 
 // BillingUnitID - BillingUnitID のゲッター

@@ -3,7 +3,7 @@ package entities
 // Creator - 請求書の発行元情報
 type Creator struct {
 	id           string // id
-	eventDocID   string // event_doc_id
+	eventID      string // event_id
 	organization string // 団体名
 	address      string // 住所
 	personName   string // person_name
@@ -12,8 +12,8 @@ type Creator struct {
 
 // NewCreatorParam - 請求書の発行元情報作成パラメータ
 type NewCreatorParam struct {
-	Id           string // id
-	EventDocID   string // event_doc_id
+	ID           string // id
+	EventID      string // event_id
 	Organization string // 団体名
 	Address      string // 住所
 	PersonName   string // person_name
@@ -23,8 +23,8 @@ type NewCreatorParam struct {
 // NewCreator - 請求書の発行元情報作成
 func NewCreator(param *NewCreatorParam) *Creator {
 	return &Creator{
-		id:           param.Id,
-		eventDocID:   param.EventDocID,
+		id:           param.ID,
+		eventID:      param.EventID,
 		organization: param.Organization,
 		address:      param.Address,
 		personName:   param.PersonName,
@@ -32,14 +32,14 @@ func NewCreator(param *NewCreatorParam) *Creator {
 	}
 }
 
-// Id - Id のゲッター
-func (e *Creator) Id() string {
+// ID - ID のゲッター
+func (e *Creator) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *Creator) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *Creator) EventID() string {
+	return e.eventID
 }
 
 // Organization - Organization のゲッター
