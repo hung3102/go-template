@@ -54,17 +54,17 @@ func (mr *MockEventStatusRepositoryMockRecorder) Create(ctx, eventStatus any) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockEventStatusRepository)(nil).Create), ctx, eventStatus)
 }
 
-// GetByEventDocIDAndStatus mocks base method.
-func (m *MockEventStatusRepository) GetByEventDocIDAndStatus(ctx context.Context, eventDocID string, status int) (*entities.EventStatus, error) {
+// GetByEventIDAndStatus mocks base method.
+func (m *MockEventStatusRepository) GetByEventIDAndStatus(ctx context.Context, eventID string, status int) (*entities.EventStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByEventDocIDAndStatus", ctx, eventDocID, status)
+	ret := m.ctrl.Call(m, "GetByEventIDAndStatus", ctx, eventID, status)
 	ret0, _ := ret[0].(*entities.EventStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetByEventDocIDAndStatus indicates an expected call of GetByEventDocIDAndStatus.
-func (mr *MockEventStatusRepositoryMockRecorder) GetByEventDocIDAndStatus(ctx, eventDocID, status any) *gomock.Call {
+// GetByEventIDAndStatus indicates an expected call of GetByEventIDAndStatus.
+func (mr *MockEventStatusRepositoryMockRecorder) GetByEventIDAndStatus(ctx, eventID, status any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByEventDocIDAndStatus", reflect.TypeOf((*MockEventStatusRepository)(nil).GetByEventDocIDAndStatus), ctx, eventDocID, status)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByEventIDAndStatus", reflect.TypeOf((*MockEventStatusRepository)(nil).GetByEventIDAndStatus), ctx, eventID, status)
 }

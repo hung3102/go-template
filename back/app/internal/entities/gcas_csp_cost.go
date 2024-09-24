@@ -1,30 +1,31 @@
 package entities
 
-// GCASCSPCost - コスト情報
+// GCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト
 type GCASCSPCost struct {
-	id         string // ID
-	eventDocID string // event_doc_id
-	csp        string // CSP名
-	totalCost  int    // コスト合計
-	meta       *Meta  // メタ
+	id        string // id
+	eventID   string // event_id
+	csp       string // AWSなど
+	totalCost int    //
+	meta      *Meta  // メタ
 }
 
-// NewGCASCSPCostParam - GCASCSPCost作成パラメータ
+// NewGCASCSPCostParam - GCAS Dashboardから貰ったCSPのトータルコスト作成パラメータ
 type NewGCASCSPCostParam struct {
-	ID         string // ID
-	EventDocID string // event_doc_id
-	CSP        string // CSP名
-	TotalCost  int    // コスト合計
-	Meta       *Meta  // Meta
+	ID        string // id
+	EventID   string // event_id
+	CSP       string // AWSなど
+	TotalCost int    //
+	Meta      *Meta  // メタ
 }
 
-// GCASCSPCost - GCASCSPCost作成
+// NewGCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト作成
 func NewGCASCSPCost(param *NewGCASCSPCostParam) *GCASCSPCost {
 	return &GCASCSPCost{
-		id:         param.ID,
-		eventDocID: param.EventDocID,
-		csp:        param.CSP,
-		totalCost:  param.TotalCost,
+		id:        param.ID,
+		eventID:   param.EventID,
+		csp:       param.CSP,
+		totalCost: param.TotalCost,
+		meta:      param.Meta,
 	}
 }
 
@@ -33,9 +34,9 @@ func (e *GCASCSPCost) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *GCASCSPCost) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *GCASCSPCost) EventID() string {
+	return e.eventID
 }
 
 // CSP - CSP のゲッター
@@ -48,7 +49,7 @@ func (e *GCASCSPCost) TotalCost() int {
 	return e.totalCost
 }
 
-// Meta - meta のゲッター
+// Meta - Meta のゲッター
 func (e *GCASCSPCost) Meta() *Meta {
 	return e.meta
 }

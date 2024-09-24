@@ -39,31 +39,31 @@ func (m *MockEventStatusService) EXPECT() *MockEventStatusServiceMockRecorder {
 	return m.recorder
 }
 
-// SetInvoiceCreationChecked mocks base method.
-func (m *MockEventStatusService) SetInvoiceCreationChecked(ctx context.Context, eventDocID string) error {
+// SetBillable mocks base method.
+func (m *MockEventStatusService) SetBillable(ctx context.Context, eventID string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SetInvoiceCreationChecked", ctx, eventDocID)
+	ret := m.ctrl.Call(m, "SetBillable", ctx, eventID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// SetInvoiceCreationChecked indicates an expected call of SetInvoiceCreationChecked.
-func (mr *MockEventStatusServiceMockRecorder) SetInvoiceCreationChecked(ctx, eventDocID any) *gomock.Call {
+// SetBillable indicates an expected call of SetBillable.
+func (mr *MockEventStatusServiceMockRecorder) SetBillable(ctx, eventID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetInvoiceCreationChecked", reflect.TypeOf((*MockEventStatusService)(nil).SetInvoiceCreationChecked), ctx, eventDocID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBillable", reflect.TypeOf((*MockEventStatusService)(nil).SetBillable), ctx, eventID)
 }
 
-// ShouldcreateInvoice mocks base method.
-func (m *MockEventStatusService) ShouldcreateInvoice(ctx context.Context, eventDocID string) (bool, error) {
+// ShouldCreateInvoice mocks base method.
+func (m *MockEventStatusService) ShouldCreateInvoice(ctx context.Context, eventID string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ShouldcreateInvoice", ctx, eventDocID)
+	ret := m.ctrl.Call(m, "ShouldCreateInvoice", ctx, eventID)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ShouldcreateInvoice indicates an expected call of ShouldcreateInvoice.
-func (mr *MockEventStatusServiceMockRecorder) ShouldcreateInvoice(ctx, eventDocID any) *gomock.Call {
+// ShouldCreateInvoice indicates an expected call of ShouldCreateInvoice.
+func (mr *MockEventStatusServiceMockRecorder) ShouldCreateInvoice(ctx, eventID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShouldcreateInvoice", reflect.TypeOf((*MockEventStatusService)(nil).ShouldcreateInvoice), ctx, eventDocID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShouldCreateInvoice", reflect.TypeOf((*MockEventStatusService)(nil).ShouldCreateInvoice), ctx, eventID)
 }

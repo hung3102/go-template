@@ -14,7 +14,7 @@ import (
 
 // Billable - 請求書作成の開始判定をする
 func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
-	shouldcreateInvoice, err := u.deps.EventStatusService.ShouldcreateInvoice(ctx, input.EventDocID)
+	shouldcreateInvoice, err := u.deps.EventStatusService.ShouldCreateInvoice(ctx, input.EventID)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
@@ -27,7 +27,7 @@ func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 
-	if err := u.deps.EventStatusService.SetInvoiceCreationChecked(ctx, input.EventDocID); err != nil {
+	if err := u.deps.EventStatusService.SetBillable(ctx, input.EventID); err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 	return result, nil
@@ -44,12 +44,12 @@ func (u *Usecase) emptyOutput() *Output {
 func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
-		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.billableMain: %w", err)
 	}
 
-	err = u.createGCASCSPCost(ctx, input.EventDocID, gcasDashboardAPIGetAccountsResponse)
+	err = u.createGCASCSPCost(ctx, input.EventID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
-		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.billableMain: %w", err)
 	}
 
 	return u.ToOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse), nil
@@ -92,20 +92,20 @@ func (u *Usecase) CompareAccountInfo(
 	}
 
 	if len(gcaDashboardCspAccountMap) != len(gcapCspAccountMap) {
-		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
+		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.CompareAccountInfo", nil)
 	}
 
 	for csp, gcapDashboardAccountIDs := range gcaDashboardCspAccountMap {
 		gcapAccountIDs, ok := gcapCspAccountMap[csp]
 		if !ok {
-			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
+			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.CompareAccountInfo", nil)
 		}
 		if len(gcapDashboardAccountIDs) != len(gcapAccountIDs) {
-			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
+			return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.CompareAccountInfo", nil)
 		}
 		for i, gcasDashboardAccountID := range gcapDashboardAccountIDs {
 			if gcapAccountIDs[i] != gcasDashboardAccountID {
-				return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.compareAccountInfo", nil)
+				return usecaseerrors.NewUnknownError(errorcode.ErrorCodeAccountInfoIsMissing, "error in billable.CompareAccountInfo", nil)
 			}
 		}
 	}
@@ -113,8 +113,8 @@ func (u *Usecase) CompareAccountInfo(
 }
 
 // createGCASCSPCost - GCASCSPCostを登録する
-func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
-	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, eventDocID)
+func (u *Usecase) createGCASCSPCost(ctx context.Context, eventID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
+	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, eventID)
 	if err != nil {
 		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASCSPCost", err)
 	}
@@ -122,7 +122,7 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 		return nil
 	}
 
-	gcasCSPCosts, err := u.ToGCASCSPCost(eventDocID, gcasDashboardAPIGetAccountsResponse)
+	gcasCSPCosts, err := u.ToGCASCSPCost(eventID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
@@ -134,17 +134,17 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 	return nil
 }
 
-func (u *Usecase) ToGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
+func (u *Usecase) ToGCASCSPCost(eventID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
 	cspCostInfo, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
-		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.ToGCASCSPCost: %w", err)
 	}
 
 	cspTotalCostMap := u.toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspCostInfo)
 
-	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventDocID, cspTotalCostMap)
+	gcasCSPCosts, err := u.toGCAPCSPCostsFromCostTotalCostMap(eventID, cspTotalCostMap)
 	if err != nil {
-		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
+		return nil, xerrors.Errorf("error in billable.ToGCASCSPCost: %w", err)
 	}
 
 	return gcasCSPCosts, nil
@@ -180,7 +180,7 @@ func (u *Usecase) toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspCostInfo map[s
 }
 
 // toGCAPCSPCostsFromCostTotalCostMap - コスト情報をGCASCSPCostに変換する
-func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotalCostMap map[string]int) ([]*entities.GCASCSPCost, error) {
+func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventID string, cspTotalCostMap map[string]int) ([]*entities.GCASCSPCost, error) {
 	result := []*entities.GCASCSPCost{}
 	for csp, totalCost := range cspTotalCostMap {
 		uuid, err := u.deps.UUID.GetUUID()
@@ -189,10 +189,10 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 		}
 		result = append(result, entities.NewGCASCSPCost(
 			&entities.NewGCASCSPCostParam{
-				ID:         uuid,
-				EventDocID: eventDocID,
-				CSP:        csp,
-				TotalCost:  totalCost,
+				ID:        uuid,
+				EventID:   eventID,
+				CSP:       csp,
+				TotalCost: totalCost,
 			},
 		))
 	}

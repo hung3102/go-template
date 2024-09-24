@@ -9,27 +9,27 @@ const (
 
 // EventStatus - イベントステータス
 type EventStatus struct {
-	id         string // id
-	eventDocID string // event_doc_id
-	status     int    // ステータス
-	meta       *Meta  // メタ
+	id      string // {event_id}_{status}
+	eventID string // event_id
+	status  int    // ステータス
+	meta    *Meta  // メタ
 }
 
 // NewEventStatusParam - イベントステータス作成パラメータ
 type NewEventStatusParam struct {
-	ID         string // id
-	EventDocID string // event_doc_id
-	Status     int    // ステータス
-	Meta       *Meta  // Meta
+	ID      string // {event_id}_{status}
+	EventID string // event_id
+	Status  int    // ステータス
+	Meta    *Meta  // メタ
 }
 
 // NewEventStatus - イベントステータス作成
 func NewEventStatus(param *NewEventStatusParam) *EventStatus {
 	return &EventStatus{
-		id:         param.ID,
-		eventDocID: param.EventDocID,
-		status:     param.Status,
-		meta:       param.Meta,
+		id:      param.ID,
+		eventID: param.EventID,
+		status:  param.Status,
+		meta:    param.Meta,
 	}
 }
 
@@ -38,9 +38,9 @@ func (e *EventStatus) ID() string {
 	return e.id
 }
 
-// EventDocID - EventDocID のゲッター
-func (e *EventStatus) EventDocID() string {
-	return e.eventDocID
+// EventID - EventID のゲッター
+func (e *EventStatus) EventID() string {
+	return e.eventID
 }
 
 // Status - Status のゲッター
@@ -48,7 +48,7 @@ func (e *EventStatus) Status() int {
 	return e.status
 }
 
-// Meta - meta のゲッター
+// Meta - Meta のゲッター
 func (e *EventStatus) Meta() *Meta {
 	return e.meta
 }

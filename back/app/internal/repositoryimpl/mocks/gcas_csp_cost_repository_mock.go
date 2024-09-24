@@ -55,16 +55,16 @@ func (mr *MockGCASCSPCostRepositoryMockRecorder) CreateMany(ctx, gcasCSPCosts an
 }
 
 // Exists mocks base method.
-func (m *MockGCASCSPCostRepository) Exists(ctx context.Context, eventDocID string) (bool, error) {
+func (m *MockGCASCSPCostRepository) Exists(ctx context.Context, eventID string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Exists", ctx, eventDocID)
+	ret := m.ctrl.Call(m, "Exists", ctx, eventID)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Exists indicates an expected call of Exists.
-func (mr *MockGCASCSPCostRepositoryMockRecorder) Exists(ctx, eventDocID any) *gomock.Call {
+func (mr *MockGCASCSPCostRepositoryMockRecorder) Exists(ctx, eventID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exists", reflect.TypeOf((*MockGCASCSPCostRepository)(nil).Exists), ctx, eventDocID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exists", reflect.TypeOf((*MockGCASCSPCostRepository)(nil).Exists), ctx, eventID)
 }

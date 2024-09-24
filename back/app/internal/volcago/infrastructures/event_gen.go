@@ -210,16 +210,16 @@ func (repo *eventRepository) RunInTransaction() func(ctx context.Context, f func
 
 // EventSearchParam - params for search
 type EventSearchParam struct {
-	ID           *QueryChainer
-	BillingMonth *QueryChainer
-	Status       *QueryChainer
-	CreatedAt    *QueryChainer
-	CreatedBy    *QueryChainer
-	UpdatedAt    *QueryChainer
-	UpdatedBy    *QueryChainer
-	DeletedAt    *QueryChainer
-	DeletedBy    *QueryChainer
-	Version      *QueryChainer
+	ID             *QueryChainer
+	BillingMonth   *QueryChainer
+	ExecutionCount *QueryChainer
+	CreatedAt      *QueryChainer
+	CreatedBy      *QueryChainer
+	UpdatedAt      *QueryChainer
+	UpdatedBy      *QueryChainer
+	DeletedAt      *QueryChainer
+	DeletedBy      *QueryChainer
+	Version        *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
@@ -228,15 +228,15 @@ type EventSearchParam struct {
 
 // EventUpdateParam - params for strict updates
 type EventUpdateParam struct {
-	BillingMonth interface{}
-	Status       interface{}
-	CreatedAt    interface{}
-	CreatedBy    interface{}
-	UpdatedAt    interface{}
-	UpdatedBy    interface{}
-	DeletedAt    interface{}
-	DeletedBy    interface{}
-	Version      interface{}
+	BillingMonth   interface{}
+	ExecutionCount interface{}
+	CreatedAt      interface{}
+	CreatedBy      interface{}
+	UpdatedAt      interface{}
+	UpdatedBy      interface{}
+	DeletedAt      interface{}
+	DeletedBy      interface{}
+	Version        interface{}
 }
 
 // Search - search documents
@@ -972,13 +972,13 @@ func (repo *eventRepository) searchByParam(v interface{}, param *EventSearchPara
 			query = param.BillingMonth.BuildCursorQuery(query)
 		}
 	}
-	if param.Status != nil {
-		for _, chain := range param.Status.QueryGroup {
-			query = query.Where("Status", chain.Operator, chain.Value)
+	if param.ExecutionCount != nil {
+		for _, chain := range param.ExecutionCount.QueryGroup {
+			query = query.Where("ExecutionCount", chain.Operator, chain.Value)
 		}
-		if direction := param.Status.OrderByDirection; direction > 0 {
-			query = query.OrderBy("Status", direction)
-			query = param.Status.BuildCursorQuery(query)
+		if direction := param.ExecutionCount.OrderByDirection; direction > 0 {
+			query = query.OrderBy("ExecutionCount", direction)
+			query = param.ExecutionCount.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {

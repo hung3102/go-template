@@ -5,7 +5,6 @@ import "time"
 // Event - イベント
 type Event struct {
 	ID           string    // イベントID
-	BillingMonth time.Time // 請求月
-	Status       string    // ステータス
+	BillingMonth string    // 請求月
 	CreatedAt    time.Time // 作成日時
 }

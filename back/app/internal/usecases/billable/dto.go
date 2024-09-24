@@ -2,7 +2,7 @@ package billable
 
 // Input - 請求書作成の開始判定のinput
 type Input struct {
-	EventDocID string
+	EventID string
 }
 
 // Output - 請求書作成の開始判定のoutput

@@ -23,13 +23,13 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	defer deferFunc()
 
 	ctx := context.Background()
-	eventDocID := "eventDocID"
+	eventID := "eventID"
 	csp := "aws"
 	accountID := "11111"
 	totalCost := 2222
 
-	mock.MockEventStatusService.EXPECT().ShouldcreateInvoice(ctx, eventDocID).Return(true, nil)
-	mock.MockGCASCSPCostRepository.EXPECT().Exists(ctx, eventDocID).Return(false, nil)
+	mock.MockEventStatusService.EXPECT().ShouldCreateInvoice(ctx, eventID).Return(true, nil)
+	mock.MockGCASCSPCostRepository.EXPECT().Exists(ctx, eventID).Return(false, nil)
 	mock.MockGCASDashboardAPI.EXPECT().GetAccounts().Return(&gcasdashboardapi.GetAccountsResponse{
 		csp: []string{accountID},
 	}, nil)
@@ -43,10 +43,10 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 		Identifier: make(map[string]int),
 		Other:      0,
 	}, nil)
-	mock.MockEventStatusService.EXPECT().SetInvoiceCreationChecked(ctx, eventDocID).Return(nil)
+	mock.MockEventStatusService.EXPECT().SetBillable(ctx, eventID).Return(nil)
 
 	input := billable.Input{
-		EventDocID: eventDocID,
+		EventID: eventID,
 	}
 	output, err := sut.Billable(ctx, &input)
 	if err != nil {
@@ -61,12 +61,12 @@ func Test_Usecase_Billable_請求書開始判定済の場合(t *testing.T) {
 	defer deferFunc()
 
 	ctx := context.Background()
-	eventDocID := "eventDocID"
+	eventID := "eventID"
 
-	mock.MockEventStatusService.EXPECT().ShouldcreateInvoice(ctx, eventDocID).Return(false, nil)
+	mock.MockEventStatusService.EXPECT().ShouldCreateInvoice(ctx, eventID).Return(false, nil)
 
 	input := billable.Input{
-		EventDocID: eventDocID,
+		EventID: eventID,
 	}
 	output, err := sut.Billable(ctx, &input)
 	if err != nil {
@@ -198,7 +198,7 @@ func Test_Usecase_CompareAccountInfo(t *testing.T) {
 
 func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 	type args struct {
-		eventDocID                          string
+		eventID                             string
 		gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse
 	}
 	tests := []struct {
@@ -212,7 +212,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 			name:          "正常系：0件の場合",
 			prepareMockFn: func(mock *Mock) {},
 			args: args{
-				eventDocID:                          "eventDocID",
+				eventID:                             "eventID",
 				gcasDashboardAPIGetAccountsResponse: &gcasdashboardapi.GetAccountsResponse{},
 			},
 			want:    []*entities.GCASCSPCost{},
@@ -226,7 +226,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 				mock.MockGCASDashboardAPI.EXPECT().GetCost("gcp", "1111").Return(&gcasdashboardapi.GetCostResponse{AccountID: "1111", TotalCost: 11}, nil)
 			},
 			args: args{
-				eventDocID: "eventDocID",
+				eventID: "eventID",
 				gcasDashboardAPIGetAccountsResponse: &gcasdashboardapi.GetAccountsResponse{
 					"aws":   {"1111", "2222"},
 					"gcp":   {"1111"},
@@ -234,9 +234,9 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 				},
 			},
 			want: []*entities.GCASCSPCost{
-				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "1", EventDocID: "eventDocID", CSP: "aws", TotalCost: 1222}),
-				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "3", EventDocID: "eventDocID", CSP: "azure", TotalCost: 0}),
-				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "2", EventDocID: "eventDocID", CSP: "gcp", TotalCost: 11}),
+				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "1", EventID: "eventID", CSP: "aws", TotalCost: 1222}),
+				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "3", EventID: "eventID", CSP: "azure", TotalCost: 0}),
+				entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{ID: "2", EventID: "eventID", CSP: "gcp", TotalCost: 11}),
 			},
 			wantErr: false,
 		},
@@ -246,7 +246,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 				mock.MockGCASDashboardAPI.EXPECT().GetCost("aws", "1111").Return(nil, xerrors.New("mock api error"))
 			},
 			args: args{
-				eventDocID: "eventDocID",
+				eventID: "eventID",
 				gcasDashboardAPIGetAccountsResponse: &gcasdashboardapi.GetAccountsResponse{
 					"aws": {"1111", "2222"},
 				},
@@ -262,7 +262,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 
 			tt.prepareMockFn(mock)
 
-			got, err := sut.ToGCASCSPCost(tt.args.eventDocID, tt.args.gcasDashboardAPIGetAccountsResponse)
+			got, err := sut.ToGCASCSPCost(tt.args.eventID, tt.args.gcasDashboardAPIGetAccountsResponse)
 
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("error in Test_Usecase_ToGCASCSPCost: name = %s, err = %+v", tt.name, err)
@@ -277,7 +277,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 			})
 
 			for i := range got {
-				if got[i].EventDocID() != tt.want[i].EventDocID() || got[i].CSP() != tt.want[i].CSP() || got[i].TotalCost() != tt.want[i].TotalCost() {
+				if got[i].EventID() != tt.want[i].EventID() || got[i].CSP() != tt.want[i].CSP() || got[i].TotalCost() != tt.want[i].TotalCost() {
 					t.Fatalf("error in Test_Usecase_ToGCASCSPCost: name = %s, got[%d] = %v, want[%d] = %v", tt.name, i, got[i], i, tt.want[i])
 				}
 			}

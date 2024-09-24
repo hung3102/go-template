@@ -20,15 +20,15 @@ type EventStatusServiceImpl struct {
 }
 
 // shouldcreateInvoice - 請求書の作成をする必要があるか判定する
-func (i *EventStatusServiceImpl) ShouldcreateInvoice(ctx context.Context, eventDocID string) (bool, error) {
-	if _, err := i.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusStart); err != nil {
+func (i *EventStatusServiceImpl) ShouldCreateInvoice(ctx context.Context, eventID string) (bool, error) {
+	if _, err := i.EventStatusRepository.GetByEventIDAndStatus(ctx, eventID, entities.EventStatusStart); err != nil {
 		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
 		if errors.As(err, &rerr) {
 			return false, nil
 		}
 		return false, xerrors.Errorf("error in EventStatusServiceImpl.ShouldcreateInvoice: %w", err)
 	}
-	if _, err := i.EventStatusRepository.GetByEventDocIDAndStatus(ctx, eventDocID, entities.EventStatusInvoiceCreationChecked); err != nil {
+	if _, err := i.EventStatusRepository.GetByEventIDAndStatus(ctx, eventID, entities.EventStatusInvoiceCreationChecked); err != nil {
 		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
 		if errors.As(err, &rerr) {
 			return true, nil
@@ -38,19 +38,19 @@ func (i *EventStatusServiceImpl) ShouldcreateInvoice(ctx context.Context, eventD
 	return false, nil
 }
 
-// SetInvoiceCreationChecked - 請求書開始判定済にする
-func (i *EventStatusServiceImpl) SetInvoiceCreationChecked(ctx context.Context, eventDocID string) error {
+// SetBillable - 請求書開始判定済にする
+func (i *EventStatusServiceImpl) SetBillable(ctx context.Context, eventID string) error {
 	uuid, err := i.uuid.GetUUID()
 	if err != nil {
-		return xerrors.Errorf("error in EventStatusServiceImpl.SetInvoiceCreationChecked: %w", err)
+		return xerrors.Errorf("error in EventStatusServiceImpl.SetBillable: %w", err)
 	}
 	err = i.EventStatusRepository.Create(ctx, entities.NewEventStatus(&entities.NewEventStatusParam{
-		ID:         uuid,
-		EventDocID: eventDocID,
-		Status:     entities.EventStatusInvoiceCreationChecked,
+		ID:      uuid,
+		EventID: eventID,
+		Status:  entities.EventStatusInvoiceCreationChecked,
 	}))
 	if err != nil {
-		return xerrors.Errorf("error in EventStatusServiceImpl.SetInvoiceCreationChecked: %w", err)
+		return xerrors.Errorf("error in EventStatusServiceImpl.SetBillable: %w", err)
 	}
 	return nil
 }
