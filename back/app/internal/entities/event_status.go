@@ -1,24 +1,24 @@
 package entities
 
-// EventsStatus - イベントステータス
-type EventsStatus struct {
+// EventStatus - イベントステータス
+type EventStatus struct {
 	id      string // {event_id}_{status}
 	eventID string // event_id
 	status  int    // ステータス
 	meta    *Meta  // メタ
 }
 
-// NewEventsStatusParam - イベントステータス作成パラメータ
-type NewEventsStatusParam struct {
+// NewEventStatusParam - イベントステータス作成パラメータ
+type NewEventStatusParam struct {
 	ID      string // {event_id}_{status}
 	EventID string // event_id
 	Status  int    // ステータス
 	Meta    *Meta  // メタ
 }
 
-// NewEventsStatus - イベントステータス作成
-func NewEventsStatus(param *NewEventsStatusParam) *EventsStatus {
-	return &EventsStatus{
+// NewEventStatus - イベントステータス作成
+func NewEventStatus(param *NewEventStatusParam) *EventStatus {
+	return &EventStatus{
 		id:      param.ID,
 		eventID: param.EventID,
 		status:  param.Status,
@@ -27,21 +27,21 @@ func NewEventsStatus(param *NewEventsStatusParam) *EventsStatus {
 }
 
 // ID - ID のゲッター
-func (e *EventsStatus) ID() string {
+func (e *EventStatus) ID() string {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *EventsStatus) EventID() string {
+func (e *EventStatus) EventID() string {
 	return e.eventID
 }
 
 // Status - Status のゲッター
-func (e *EventsStatus) Status() int {
+func (e *EventStatus) Status() int {
 	return e.status
 }
 
 // Meta - Meta のゲッター
-func (e *EventsStatus) Meta() *Meta {
+func (e *EventStatus) Meta() *Meta {
 	return e.meta
 }

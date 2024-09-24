@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/events_status_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/event_status_gen.go
 
-// EventsStatusRepository - Repository of EventsStatus
-type EventsStatusRepository interface {
+// EventStatusRepository - Repository of EventStatus
+type EventStatusRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.EventsStatus, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventsStatus, error)
-	Insert(ctx context.Context, subject *model.EventsStatus) (_ string, err error)
-	Update(ctx context.Context, subject *model.EventsStatus) (err error)
-	StrictUpdate(ctx context.Context, id string, param *EventsStatusUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.EventsStatus, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.EventStatus, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventStatus, error)
+	Insert(ctx context.Context, subject *model.EventStatus) (_ string, err error)
+	Update(ctx context.Context, subject *model.EventStatus) (err error)
+	StrictUpdate(ctx context.Context, id string, param *EventStatusUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.EventStatus, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.EventsStatus, error)
-	InsertMulti(ctx context.Context, subjects []*model.EventsStatus) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.EventsStatus) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.EventsStatus, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.EventStatus, error)
+	InsertMulti(ctx context.Context, subjects []*model.EventStatus) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.EventStatus) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.EventStatus, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.EventsStatus, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventsStatus, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventsStatusUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.EventStatus, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventStatus, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventStatusUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.EventsStatus, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.EventStatus, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *EventsStatusSearchParam, q *firestore.Query) ([]*model.EventsStatus, error)
-	SearchWithTx(tx *firestore.Transaction, param *EventsStatusSearchParam, q *firestore.Query) ([]*model.EventsStatus, error)
-	SearchByParam(ctx context.Context, param *EventsStatusSearchParam) ([]*model.EventsStatus, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *EventsStatusSearchParam) ([]*model.EventsStatus, *PagingResult, error)
+	Search(ctx context.Context, param *EventStatusSearchParam, q *firestore.Query) ([]*model.EventStatus, error)
+	SearchWithTx(tx *firestore.Transaction, param *EventStatusSearchParam, q *firestore.Query) ([]*model.EventStatus, error)
+	SearchByParam(ctx context.Context, param *EventStatusSearchParam) ([]*model.EventStatus, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *EventStatusSearchParam) ([]*model.EventStatus, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type EventsStatusRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// EventsStatusRepositoryMiddleware - middleware of EventsStatusRepository
-type EventsStatusRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.EventsStatus) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.EventsStatus) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.EventsStatus, opts ...DeleteOption) (bool, error)
+// EventStatusRepositoryMiddleware - middleware of EventStatusRepository
+type EventStatusRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.EventStatus) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.EventStatus) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.EventStatus, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type eventsStatusRepository struct {
+type eventStatusRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []EventsStatusRepositoryMiddleware
+	middleware       []EventStatusRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewEventsStatusRepository - constructor
-func NewEventsStatusRepository(firestoreClient *firestore.Client, middleware ...EventsStatusRepositoryMiddleware) EventsStatusRepository {
-	return &eventsStatusRepository{
-		collectionName:   "EventsStatus",
+// NewEventStatusRepository - constructor
+func NewEventStatusRepository(firestoreClient *firestore.Client, middleware ...EventStatusRepositoryMiddleware) EventStatusRepository {
+	return &eventStatusRepository{
+		collectionName:   "EventStatus",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "EventsStatus"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "EventStatus"),
 	}
 }
 
-func (repo *eventsStatusRepository) setMeta(subject *model.EventsStatus, isInsert bool) {
+func (repo *eventStatusRepository) setMeta(subject *model.EventStatus, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *eventsStatusRepository) setMeta(subject *model.EventsStatus, isInser
 	subject.Version++
 }
 
-func (repo *eventsStatusRepository) setMetaWithStrictUpdate(param *EventsStatusUpdateParam) {
+func (repo *eventStatusRepository) setMetaWithStrictUpdate(param *EventStatusUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *eventsStatusRepository) beforeInsert(ctx context.Context, subject *model.EventsStatus) error {
+func (repo *eventStatusRepository) beforeInsert(ctx context.Context, subject *model.EventStatus) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *eventsStatusRepository) beforeInsert(ctx context.Context, subject *m
 	return nil
 }
 
-func (repo *eventsStatusRepository) beforeUpdate(ctx context.Context, old, subject *model.EventsStatus) error {
+func (repo *eventStatusRepository) beforeUpdate(ctx context.Context, old, subject *model.EventStatus) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *eventsStatusRepository) beforeUpdate(ctx context.Context, old, subje
 	return nil
 }
 
-func (repo *eventsStatusRepository) beforeDelete(ctx context.Context, subject *model.EventsStatus, opts ...DeleteOption) error {
+func (repo *eventStatusRepository) beforeDelete(ctx context.Context, subject *model.EventStatus, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,27 +189,27 @@ func (repo *eventsStatusRepository) beforeDelete(ctx context.Context, subject *m
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *eventsStatusRepository) GetCollection() *firestore.CollectionRef {
+func (repo *eventStatusRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *eventsStatusRepository) GetCollectionName() string {
+func (repo *eventStatusRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *eventsStatusRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *eventStatusRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *eventsStatusRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *eventStatusRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// EventsStatusSearchParam - params for search
-type EventsStatusSearchParam struct {
+// EventStatusSearchParam - params for search
+type EventStatusSearchParam struct {
 	ID        *QueryChainer
 	EventID   *QueryChainer
 	Status    *QueryChainer
@@ -226,8 +226,8 @@ type EventsStatusSearchParam struct {
 	CursorLimit        int
 }
 
-// EventsStatusUpdateParam - params for strict updates
-type EventsStatusUpdateParam struct {
+// EventStatusUpdateParam - params for strict updates
+type EventStatusUpdateParam struct {
 	EventID   interface{}
 	Status    interface{}
 	CreatedAt interface{}
@@ -241,28 +241,28 @@ type EventsStatusUpdateParam struct {
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *eventsStatusRepository) Search(ctx context.Context, param *EventsStatusSearchParam, q *firestore.Query) ([]*model.EventsStatus, error) {
+func (repo *eventStatusRepository) Search(ctx context.Context, param *EventStatusSearchParam, q *firestore.Query) ([]*model.EventStatus, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *eventsStatusRepository) SearchByParam(ctx context.Context, param *EventsStatusSearchParam) ([]*model.EventsStatus, *PagingResult, error) {
+func (repo *eventStatusRepository) SearchByParam(ctx context.Context, param *EventStatusSearchParam) ([]*model.EventStatus, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `EventsStatus` by `EventsStatus.ID`
-func (repo *eventsStatusRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.EventsStatus, error) {
+// Get - get `EventStatus` by `EventStatus.ID`
+func (repo *eventStatusRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.EventStatus, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `EventsStatus` by *firestore.DocumentRef
-func (repo *eventsStatusRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventsStatus, error) {
+// GetWithDoc - get `EventStatus` by *firestore.DocumentRef
+func (repo *eventStatusRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventStatus, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `EventsStatus`
-func (repo *eventsStatusRepository) Insert(ctx context.Context, subject *model.EventsStatus) (_ string, err error) {
+// Insert - insert of `EventStatus`
+func (repo *eventStatusRepository) Insert(ctx context.Context, subject *model.EventStatus) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -270,8 +270,8 @@ func (repo *eventsStatusRepository) Insert(ctx context.Context, subject *model.E
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `EventsStatus`
-func (repo *eventsStatusRepository) Update(ctx context.Context, subject *model.EventsStatus) (err error) {
+// Update - update of `EventStatus`
+func (repo *eventStatusRepository) Update(ctx context.Context, subject *model.EventStatus) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -289,13 +289,13 @@ func (repo *eventsStatusRepository) Update(ctx context.Context, subject *model.E
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `EventsStatus`
-func (repo *eventsStatusRepository) StrictUpdate(ctx context.Context, id string, param *EventsStatusUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `EventStatus`
+func (repo *eventStatusRepository) StrictUpdate(ctx context.Context, id string, param *EventStatusUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `EventsStatus`
-func (repo *eventsStatusRepository) Delete(ctx context.Context, subject *model.EventsStatus, opts ...DeleteOption) (err error) {
+// Delete - delete of `EventStatus`
+func (repo *eventStatusRepository) Delete(ctx context.Context, subject *model.EventStatus, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -312,8 +312,8 @@ func (repo *eventsStatusRepository) Delete(ctx context.Context, subject *model.E
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `EventsStatus` by `EventsStatus.ID`
-func (repo *eventsStatusRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `EventStatus` by `EventStatus.ID`
+func (repo *eventStatusRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -335,13 +335,13 @@ func (repo *eventsStatusRepository) DeleteByID(ctx context.Context, id string, o
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `EventsStatus` in bulk by array of `EventsStatus.ID`
-func (repo *eventsStatusRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.EventsStatus, error) {
+// GetMulti - get `EventStatus` in bulk by array of `EventStatus.ID`
+func (repo *eventStatusRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.EventStatus, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `EventsStatus`
-func (repo *eventsStatusRepository) InsertMulti(ctx context.Context, subjects []*model.EventsStatus) (_ []string, er error) {
+// InsertMulti - bulk insert of `EventStatus`
+func (repo *eventStatusRepository) InsertMulti(ctx context.Context, subjects []*model.EventStatus) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -383,8 +383,8 @@ func (repo *eventsStatusRepository) InsertMulti(ctx context.Context, subjects []
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `EventsStatus`
-func (repo *eventsStatusRepository) UpdateMulti(ctx context.Context, subjects []*model.EventsStatus) (er error) {
+// UpdateMulti - bulk update of `EventStatus`
+func (repo *eventStatusRepository) UpdateMulti(ctx context.Context, subjects []*model.EventStatus) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -400,7 +400,7 @@ func (repo *eventsStatusRepository) UpdateMulti(ctx context.Context, subjects []
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.EventsStatus)
+		old := new(model.EventStatus)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -427,8 +427,8 @@ func (repo *eventsStatusRepository) UpdateMulti(ctx context.Context, subjects []
 	return nil
 }
 
-// DeleteMulti - bulk delete of `EventsStatus`
-func (repo *eventsStatusRepository) DeleteMulti(ctx context.Context, subjects []*model.EventsStatus, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `EventStatus`
+func (repo *eventStatusRepository) DeleteMulti(ctx context.Context, subjects []*model.EventStatus, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -472,9 +472,9 @@ func (repo *eventsStatusRepository) DeleteMulti(ctx context.Context, subjects []
 	return nil
 }
 
-// DeleteMultiByIDs - delete `EventsStatus` in bulk by array of `EventsStatus.ID`
-func (repo *eventsStatusRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.EventsStatus, len(ids))
+// DeleteMultiByIDs - delete `EventStatus` in bulk by array of `EventStatus.ID`
+func (repo *eventStatusRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.EventStatus, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -492,28 +492,28 @@ func (repo *eventsStatusRepository) DeleteMultiByIDs(ctx context.Context, ids []
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *eventsStatusRepository) SearchWithTx(tx *firestore.Transaction, param *EventsStatusSearchParam, q *firestore.Query) ([]*model.EventsStatus, error) {
+func (repo *eventStatusRepository) SearchWithTx(tx *firestore.Transaction, param *EventStatusSearchParam, q *firestore.Query) ([]*model.EventStatus, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *eventsStatusRepository) SearchByParamWithTx(tx *firestore.Transaction, param *EventsStatusSearchParam) ([]*model.EventsStatus, *PagingResult, error) {
+func (repo *eventStatusRepository) SearchByParamWithTx(tx *firestore.Transaction, param *EventStatusSearchParam) ([]*model.EventStatus, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `EventsStatus` by `EventsStatus.ID` in transaction
-func (repo *eventsStatusRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.EventsStatus, error) {
+// GetWithTx - get `EventStatus` by `EventStatus.ID` in transaction
+func (repo *eventStatusRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.EventStatus, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `EventsStatus` by *firestore.DocumentRef in transaction
-func (repo *eventsStatusRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventsStatus, error) {
+// GetWithDocWithTx - get `EventStatus` by *firestore.DocumentRef in transaction
+func (repo *eventStatusRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventStatus, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus) (_ string, err error) {
+// InsertWithTx - insert of `EventStatus` in transaction
+func (repo *eventStatusRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -521,8 +521,8 @@ func (repo *eventsStatusRepository) InsertWithTx(ctx context.Context, tx *firest
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus) (err error) {
+// UpdateWithTx - update of `EventStatus` in transaction
+func (repo *eventStatusRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -530,13 +530,13 @@ func (repo *eventsStatusRepository) UpdateWithTx(ctx context.Context, tx *firest
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventsStatusUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `EventStatus` in transaction
+func (repo *eventStatusRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *EventStatusUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventsStatus, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `EventStatus` in transaction
+func (repo *eventStatusRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.EventStatus, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -553,8 +553,8 @@ func (repo *eventsStatusRepository) DeleteWithTx(ctx context.Context, tx *firest
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `EventsStatus` by `EventsStatus.ID` in transaction
-func (repo *eventsStatusRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `EventStatus` by `EventStatus.ID` in transaction
+func (repo *eventStatusRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -576,13 +576,13 @@ func (repo *eventsStatusRepository) DeleteByIDWithTx(ctx context.Context, tx *fi
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `EventsStatus` in bulk by array of `EventsStatus.ID` in transaction
-func (repo *eventsStatusRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.EventsStatus, error) {
+// GetMultiWithTx - get `EventStatus` in bulk by array of `EventStatus.ID` in transaction
+func (repo *eventStatusRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.EventStatus, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `EventStatus` in transaction
+func (repo *eventStatusRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -607,8 +607,8 @@ func (repo *eventsStatusRepository) InsertMultiWithTx(ctx context.Context, tx *f
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus) (er error) {
+// UpdateMultiWithTx - bulk update of `EventStatus` in transaction
+func (repo *eventStatusRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -626,8 +626,8 @@ func (repo *eventsStatusRepository) UpdateMultiWithTx(ctx context.Context, tx *f
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `EventsStatus` in transaction
-func (repo *eventsStatusRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventsStatus, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `EventStatus` in transaction
+func (repo *eventStatusRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.EventStatus, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -671,8 +671,8 @@ func (repo *eventsStatusRepository) DeleteMultiWithTx(ctx context.Context, tx *f
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `EventsStatus` in bulk by array of `EventsStatus.ID` in transaction
-func (repo *eventsStatusRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `EventStatus` in bulk by array of `EventStatus.ID` in transaction
+func (repo *eventStatusRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -710,7 +710,7 @@ func (repo *eventsStatusRepository) DeleteMultiByIDsWithTx(ctx context.Context, 
 	return nil
 }
 
-func (repo *eventsStatusRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventsStatus, error) {
+func (repo *eventStatusRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.EventStatus, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -732,7 +732,7 @@ func (repo *eventsStatusRepository) get(v interface{}, doc *firestore.DocumentRe
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.EventsStatus)
+	subject := new(model.EventStatus)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -747,7 +747,7 @@ func (repo *eventsStatusRepository) get(v interface{}, doc *firestore.DocumentRe
 	return subject, nil
 }
 
-func (repo *eventsStatusRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.EventsStatus, error) {
+func (repo *eventStatusRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.EventStatus, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -773,7 +773,7 @@ func (repo *eventsStatusRepository) getMulti(v interface{}, ids []string, opts .
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.EventsStatus, 0, len(ids))
+	subjects := make([]*model.EventStatus, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -781,7 +781,7 @@ func (repo *eventsStatusRepository) getMulti(v interface{}, ids []string, opts .
 			continue
 		}
 
-		subject := new(model.EventsStatus)
+		subject := new(model.EventStatus)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -803,7 +803,7 @@ func (repo *eventsStatusRepository) getMulti(v interface{}, ids []string, opts .
 	return subjects, mErr
 }
 
-func (repo *eventsStatusRepository) insert(v interface{}, subject *model.EventsStatus) (string, error) {
+func (repo *eventStatusRepository) insert(v interface{}, subject *model.EventStatus) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -830,7 +830,7 @@ func (repo *eventsStatusRepository) insert(v interface{}, subject *model.EventsS
 	return dr.ID, nil
 }
 
-func (repo *eventsStatusRepository) update(v interface{}, subject *model.EventsStatus) error {
+func (repo *eventStatusRepository) update(v interface{}, subject *model.EventStatus) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -852,7 +852,7 @@ func (repo *eventsStatusRepository) update(v interface{}, subject *model.EventsS
 	return nil
 }
 
-func (repo *eventsStatusRepository) strictUpdate(v interface{}, id string, param *EventsStatusUpdateParam, opts ...firestore.Precondition) error {
+func (repo *eventStatusRepository) strictUpdate(v interface{}, id string, param *EventStatusUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -860,7 +860,7 @@ func (repo *eventsStatusRepository) strictUpdate(v interface{}, id string, param
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.EventsStatus{}, param)
+	updates := updater(model.EventStatus{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -878,7 +878,7 @@ func (repo *eventsStatusRepository) strictUpdate(v interface{}, id string, param
 	return nil
 }
 
-func (repo *eventsStatusRepository) deleteByID(v interface{}, id string) error {
+func (repo *eventStatusRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -898,7 +898,7 @@ func (repo *eventsStatusRepository) deleteByID(v interface{}, id string) error {
 	return nil
 }
 
-func (repo *eventsStatusRepository) runQuery(v interface{}, query firestore.Query) ([]*model.EventsStatus, error) {
+func (repo *eventStatusRepository) runQuery(v interface{}, query firestore.Query) ([]*model.EventStatus, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -912,7 +912,7 @@ func (repo *eventsStatusRepository) runQuery(v interface{}, query firestore.Quer
 
 	defer iter.Stop()
 
-	subjects := make([]*model.EventsStatus, 0)
+	subjects := make([]*model.EventStatus, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -923,7 +923,7 @@ func (repo *eventsStatusRepository) runQuery(v interface{}, query firestore.Quer
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.EventsStatus)
+		subject := new(model.EventStatus)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -937,7 +937,7 @@ func (repo *eventsStatusRepository) runQuery(v interface{}, query firestore.Quer
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *eventsStatusRepository) searchByParam(v interface{}, param *EventsStatusSearchParam) ([]*model.EventsStatus, *PagingResult, error) {
+func (repo *eventStatusRepository) searchByParam(v interface{}, param *EventStatusSearchParam) ([]*model.EventStatus, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -1094,7 +1094,7 @@ func (repo *eventsStatusRepository) searchByParam(v interface{}, param *EventsSt
 	return subjects, pagingResult, nil
 }
 
-func (repo *eventsStatusRepository) search(v interface{}, param *EventsStatusSearchParam, q *firestore.Query) ([]*model.EventsStatus, error) {
+func (repo *eventStatusRepository) search(v interface{}, param *EventStatusSearchParam, q *firestore.Query) ([]*model.EventStatus, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}
