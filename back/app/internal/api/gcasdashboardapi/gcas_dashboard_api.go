@@ -8,7 +8,7 @@ type GCASDashboardAPI interface {
 	// アカウント一覧を取得する。
 	GetAccounts() (*GetAccountsResponse, error)
 	// 指定したアカウントのコスト情報を取得する。
-	GetCost(accountID string) (*GetCostResponse, error)
+	GetCost(csp string, accountID string) (*GetCostResponse, error)
 }
 
 /*

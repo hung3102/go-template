@@ -55,16 +55,16 @@ func (mr *MockGCASDashboardAPIMockRecorder) GetAccounts() *gomock.Call {
 }
 
 // GetCost mocks base method.
-func (m *MockGCASDashboardAPI) GetCost(accountID string) (*gcasdashboardapi.GetCostResponse, error) {
+func (m *MockGCASDashboardAPI) GetCost(csp, accountID string) (*gcasdashboardapi.GetCostResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetCost", accountID)
+	ret := m.ctrl.Call(m, "GetCost", csp, accountID)
 	ret0, _ := ret[0].(*gcasdashboardapi.GetCostResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetCost indicates an expected call of GetCost.
-func (mr *MockGCASDashboardAPIMockRecorder) GetCost(accountID any) *gomock.Call {
+func (mr *MockGCASDashboardAPIMockRecorder) GetCost(csp, accountID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCost", reflect.TypeOf((*MockGCASDashboardAPI)(nil).GetCost), accountID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCost", reflect.TypeOf((*MockGCASDashboardAPI)(nil).GetCost), csp, accountID)
 }

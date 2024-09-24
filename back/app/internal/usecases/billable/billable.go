@@ -52,7 +52,7 @@ func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, erro
 		return nil, xerrors.Errorf("error in billable.createAccountAndCost: %w", err)
 	}
 
-	return u.toOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse), nil
+	return u.ToOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse), nil
 }
 
 // fetchAccountInfo - APIからアカウント情報を取得する
@@ -67,7 +67,7 @@ func (u *Usecase) fetchAccountInfo() (*gcasdashboardapi.GetAccountsResponse, err
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in billable.fetchAccountInfo", err)
 	}
 
-	err = u.compareAccountInfo(gcasDashboardAPIGetAccountsResponse, gcasAPIGetAccountsResponse)
+	err = u.CompareAccountInfo(gcasDashboardAPIGetAccountsResponse, gcasAPIGetAccountsResponse)
 	if err != nil {
 		return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASAPI, "error in billable.fetchAccountInfo", err)
 	}
@@ -75,8 +75,8 @@ func (u *Usecase) fetchAccountInfo() (*gcasdashboardapi.GetAccountsResponse, err
 	return gcasDashboardAPIGetAccountsResponse, nil
 }
 
-// compareAccountInfo - GCASダッシュボードAPIとGCASAPIのアカウント情報が一致するか確認する
-func (u *Usecase) compareAccountInfo(
+// CompareAccountInfo - GCASダッシュボードAPIとGCASAPIのアカウント情報が一致するか確認する
+func (u *Usecase) CompareAccountInfo(
 	gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse,
 	gcasAPIGetAccountsResponse *gcasapi.GetAccountsResponse,
 ) error {
@@ -122,7 +122,7 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 		return nil
 	}
 
-	gcasCSPCosts, err := u.toGCASCSPCost(eventDocID, gcasDashboardAPIGetAccountsResponse)
+	gcasCSPCosts, err := u.ToGCASCSPCost(eventDocID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
 	}
@@ -134,7 +134,7 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventDocID string, gcas
 	return nil
 }
 
-func (u *Usecase) toGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
+func (u *Usecase) ToGCASCSPCost(eventDocID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
 	cspCostInfo, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.createGCASCSPCost: %w", err)
@@ -156,7 +156,7 @@ func (u *Usecase) fetchCostInfo(gcasDashboardAPIGetAccountsResponse *gcasdashboa
 	for csp, accountIDs := range *gcasDashboardAPIGetAccountsResponse {
 		costInfo := make([]*gcasdashboardapi.GetCostResponse, len(accountIDs))
 		for i, accountID := range accountIDs {
-			gcasDashboardAPIGetCostResponse, err := u.deps.GCASDashboardAPI.GetCost(accountID)
+			gcasDashboardAPIGetCostResponse, err := u.deps.GCASDashboardAPI.GetCost(csp, accountID)
 			if err != nil {
 				return nil, usecaseerrors.NewUnknownError(errorcode.ErrorCodeGCASDashboardAPI, "error in billable.fetchCostInfo", err)
 			}
@@ -199,8 +199,8 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventDocID string, cspTotal
 	return result, nil
 }
 
-// toOutputFromGCASAccount - gcasDashboardAPIGetAccountsResponseをOutputに変換する
-func (u *Usecase) toOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) *Output {
+// ToOutputFromGCASAccount - gcasDashboardAPIGetAccountsResponseをOutputに変換する
+func (u *Usecase) ToOutputFromGCASAccount(gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) *Output {
 	outputAccounts := []*OutputAccount{}
 	for csp, accontIDs := range *gcasDashboardAPIGetAccountsResponse {
 		for _, accountID := range accontIDs {
