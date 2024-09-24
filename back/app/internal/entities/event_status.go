@@ -1,5 +1,9 @@
 package entities
 
+import (
+	"fmt"
+)
+
 const (
 	EventStatusStart                  = 1 // 1. 開始
 	EventStatusInvoiceCreationChecked = 2 // 2.請求作成可能確認済
@@ -17,7 +21,6 @@ type EventStatus struct {
 
 // NewEventStatusParam - イベントステータス作成パラメータ
 type NewEventStatusParam struct {
-	ID      string // {event_id}_{status}
 	EventID string // event_id
 	Status  int    // ステータス
 	Meta    *Meta  // メタ
@@ -26,11 +29,16 @@ type NewEventStatusParam struct {
 // NewEventStatus - イベントステータス作成
 func NewEventStatus(param *NewEventStatusParam) *EventStatus {
 	return &EventStatus{
-		id:      param.ID,
+		id:      ToEventStatusID(param),
 		eventID: param.EventID,
 		status:  param.Status,
 		meta:    param.Meta,
 	}
+}
+
+// ToEventStatusID - event_statusのIDを取得する
+func ToEventStatusID(param *NewEventStatusParam) string {
+	return fmt.Sprintf("%s_%d", param.EventID, param.Status)
 }
 
 // ID - ID のゲッター

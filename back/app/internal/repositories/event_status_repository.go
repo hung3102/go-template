@@ -11,7 +11,13 @@ import (
 // EventStatusRepository - event_statusリポジトリ
 type EventStatusRepository interface {
 	// GetByEventIDAndStatus - 指定したevent_id, statusのレコードを取得する
-	GetByEventIDAndStatus(ctx context.Context, eventID string, status int) (*entities.EventStatus, error)
+	GetByEventIDAndStatus(ctx context.Context, param *GetByEventIDAndStatusParam) (*entities.EventStatus, error)
 	// Create - レコードを登録する
 	Create(ctx context.Context, eventStatus *entities.EventStatus) error
+}
+
+// GetByEventIDAndStatusParam - GetByEventIDAndStatusのパラメーター
+type GetByEventIDAndStatusParam struct {
+	EventID string // EventID
+	Status  int    // Status
 }
