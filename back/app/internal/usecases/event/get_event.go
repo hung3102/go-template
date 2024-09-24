@@ -13,7 +13,6 @@ func (u *Usecase) GetEventByID(ctx context.Context, id string) (*Event, error) {
 	return &Event{
 		ID:           event.ID(),
 		BillingMonth: event.BillingMonth(),
-		Status:       event.Status(),
 		CreatedAt:    event.Meta().CreatedAt(),
 	}, nil
 }
