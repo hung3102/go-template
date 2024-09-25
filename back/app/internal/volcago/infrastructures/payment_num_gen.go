@@ -77,10 +77,10 @@ type paymentNumRepository struct {
 // NewPaymentNumRepository - constructor
 func NewPaymentNumRepository(firestoreClient *firestore.Client, middleware ...PaymentNumRepositoryMiddleware) PaymentNumRepository {
 	return &paymentNumRepository{
-		collectionName:   "PaymentNum",
+		collectionName:   "payment_num",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "PaymentNum"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "payment_num"),
 	}
 }
 
@@ -971,114 +971,114 @@ func (repo *paymentNumRepository) searchByParam(v interface{}, param *PaymentNum
 	}
 	if param.EventID != nil {
 		for _, chain := range param.EventID.QueryGroup {
-			query = query.Where("EventID", chain.Operator, chain.Value)
+			query = query.Where("event_id", chain.Operator, chain.Value)
 		}
 		if direction := param.EventID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("EventID", direction)
+			query = query.OrderBy("event_id", direction)
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
 	if param.BillingID != nil {
 		for _, chain := range param.BillingID.QueryGroup {
-			query = query.Where("BillingID", chain.Operator, chain.Value)
+			query = query.Where("billing_id", chain.Operator, chain.Value)
 		}
 		if direction := param.BillingID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("BillingID", direction)
+			query = query.OrderBy("billing_id", direction)
 			query = param.BillingID.BuildCursorQuery(query)
 		}
 	}
 	if param.BillingUnitID != nil {
 		for _, chain := range param.BillingUnitID.QueryGroup {
-			query = query.Where("BillingUnitID", chain.Operator, chain.Value)
+			query = query.Where("billing_unit_id", chain.Operator, chain.Value)
 		}
 		if direction := param.BillingUnitID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("BillingUnitID", direction)
+			query = query.OrderBy("billing_unit_id", direction)
 			query = param.BillingUnitID.BuildCursorQuery(query)
 		}
 	}
 	if param.PaymentNum != nil {
 		for _, chain := range param.PaymentNum.QueryGroup {
-			query = query.Where("PaymentNum", chain.Operator, chain.Value)
+			query = query.Where("payment_num", chain.Operator, chain.Value)
 		}
 		if direction := param.PaymentNum.OrderByDirection; direction > 0 {
-			query = query.OrderBy("PaymentNum", direction)
+			query = query.OrderBy("payment_num", direction)
 			query = param.PaymentNum.BuildCursorQuery(query)
 		}
 	}
 	if param.Cost != nil {
 		for _, chain := range param.Cost.QueryGroup {
-			query = query.Where("Cost", chain.Operator, chain.Value)
+			query = query.Where("cost", chain.Operator, chain.Value)
 		}
 		if direction := param.Cost.OrderByDirection; direction > 0 {
-			query = query.OrderBy("Cost", direction)
+			query = query.OrderBy("cost", direction)
 			query = param.Cost.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
 		for _, chain := range param.CreatedAt.QueryGroup {
-			query = query.Where("CreatedAt", chain.Operator, chain.Value)
+			query = query.Where("created_at", chain.Operator, chain.Value)
 		}
 		if direction := param.CreatedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("CreatedAt", direction)
+			query = query.OrderBy("created_at", direction)
 			query = param.CreatedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedBy != nil {
 		for _, chain := range param.CreatedBy.QueryGroup {
-			query = query.Where("CreatedBy", chain.Operator, chain.Value)
+			query = query.Where("created_by", chain.Operator, chain.Value)
 		}
 		if direction := param.CreatedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("CreatedBy", direction)
+			query = query.OrderBy("created_by", direction)
 			query = param.CreatedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.UpdatedAt != nil {
 		for _, chain := range param.UpdatedAt.QueryGroup {
-			query = query.Where("UpdatedAt", chain.Operator, chain.Value)
+			query = query.Where("updated_at", chain.Operator, chain.Value)
 		}
 		if direction := param.UpdatedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("UpdatedAt", direction)
+			query = query.OrderBy("updated_at", direction)
 			query = param.UpdatedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.UpdatedBy != nil {
 		for _, chain := range param.UpdatedBy.QueryGroup {
-			query = query.Where("UpdatedBy", chain.Operator, chain.Value)
+			query = query.Where("updated_by", chain.Operator, chain.Value)
 		}
 		if direction := param.UpdatedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("UpdatedBy", direction)
+			query = query.OrderBy("updated_by", direction)
 			query = param.UpdatedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.DeletedAt != nil {
 		for _, chain := range param.DeletedAt.QueryGroup {
-			query = query.Where("DeletedAt", chain.Operator, chain.Value)
+			query = query.Where("deleted_at", chain.Operator, chain.Value)
 		}
 		if direction := param.DeletedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("DeletedAt", direction)
+			query = query.OrderBy("deleted_at", direction)
 			query = param.DeletedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.DeletedBy != nil {
 		for _, chain := range param.DeletedBy.QueryGroup {
-			query = query.Where("DeletedBy", chain.Operator, chain.Value)
+			query = query.Where("deleted_by", chain.Operator, chain.Value)
 		}
 		if direction := param.DeletedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("DeletedBy", direction)
+			query = query.OrderBy("deleted_by", direction)
 			query = param.DeletedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.Version != nil {
 		for _, chain := range param.Version.QueryGroup {
-			query = query.Where("Version", chain.Operator, chain.Value)
+			query = query.Where("version", chain.Operator, chain.Value)
 		}
 		if direction := param.Version.OrderByDirection; direction > 0 {
-			query = query.OrderBy("Version", direction)
+			query = query.OrderBy("version", direction)
 			query = param.Version.BuildCursorQuery(query)
 		}
 	}
 	if !param.IncludeSoftDeleted {
-		query = query.Where("DeletedAt", OpTypeEqual, nil)
+		query = query.Where("deleted_at", OpTypeEqual, nil)
 	}
 
 	limit := param.CursorLimit + 1
