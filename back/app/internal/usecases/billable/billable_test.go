@@ -18,7 +18,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func Test_Usecase_Billable_正常系(t *testing.T) {
+func TestUsecaseBillable正常系(t *testing.T) {
 	sut, mock, deferFunc := NewSUT(t)
 	defer deferFunc()
 
@@ -56,7 +56,7 @@ func Test_Usecase_Billable_正常系(t *testing.T) {
 	t.Logf("%v", output)
 }
 
-func Test_Usecase_Billable_請求書開始判定済の場合(t *testing.T) {
+func TestUsecaseBillable請求書開始判定済の場合(t *testing.T) {
 	sut, mock, deferFunc := NewSUT(t)
 	defer deferFunc()
 
@@ -75,7 +75,7 @@ func Test_Usecase_Billable_請求書開始判定済の場合(t *testing.T) {
 	t.Logf("%v", output)
 }
 
-func Test_Usecase_CompareAccountInfo(t *testing.T) {
+func TestUsecaseCompareAccountInfo(t *testing.T) {
 	type args struct {
 		gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse
 		gcasAPIGetAccountsResponse          *gcasapi.GetAccountsResponse
@@ -98,13 +98,13 @@ func Test_Usecase_CompareAccountInfo(t *testing.T) {
 			args: args{
 				gcasDashboardAPIGetAccountsResponse: &gcasdashboardapi.GetAccountsResponse{
 					"aws":   {"1111", "2222", "3333"},
-					"gcp":   {"1111", "4444"},
+					"gcp":   {"4444", "1111"},
 					"azure": {"2222"},
 					"oci":   {},
 				},
 				gcasAPIGetAccountsResponse: &gcasapi.GetAccountsResponse{
 					"gcp":   {"1111", "4444"}, //awsとgcpの順を変えておく
-					"aws":   {"1111", "2222", "3333"},
+					"aws":   {"1111", "3333", "2222"},
 					"azure": {"2222"},
 					"oci":   {},
 				},
@@ -196,7 +196,7 @@ func Test_Usecase_CompareAccountInfo(t *testing.T) {
 	}
 }
 
-func Test_Usecase_ToGCASCSPCost(t *testing.T) {
+func TestUsecaseToGCASCSPCost(t *testing.T) {
 	type args struct {
 		eventID                             string
 		gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse
@@ -285,7 +285,7 @@ func Test_Usecase_ToGCASCSPCost(t *testing.T) {
 	}
 }
 
-func Test_Usecase_ToOutputFromGCASAccount(t *testing.T) {
+func TestUsecaseToOutputFromGCASAccount(t *testing.T) {
 	tests := []struct {
 		name string
 		args *gcasdashboardapi.GetAccountsResponse

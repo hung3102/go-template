@@ -8,7 +8,7 @@ package mail_test
 // 	"github.com/topgate/gcim-temporary/back/pkg/mail"
 // )
 
-// func Test_MailSES_Send(t *testing.T) {
+// func TestMailSESSend(t *testing.T) {
 // 	ctx := context.Background()
 // 	sendParams := &mail.SendParams{
 // 		ToAddress: "to@address\ncom",

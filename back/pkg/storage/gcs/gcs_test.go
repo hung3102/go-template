@@ -13,7 +13,7 @@ package gcs_test
 // 	"google.golang.org/api/option"
 // )
 
-// func Test_Provider(t *testing.T) {
+// func TestProvider(t *testing.T) {
 // 	ctx := context.Background()
 // 	client, err := newClient(ctx)
 // 	if err != nil {
