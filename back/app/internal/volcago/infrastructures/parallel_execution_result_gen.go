@@ -77,10 +77,10 @@ type parallelExecutionResultRepository struct {
 // NewParallelExecutionResultRepository - constructor
 func NewParallelExecutionResultRepository(firestoreClient *firestore.Client, middleware ...ParallelExecutionResultRepositoryMiddleware) ParallelExecutionResultRepository {
 	return &parallelExecutionResultRepository{
-		collectionName:   "ParallelExecutionResult",
+		collectionName:   "parallel_execution_result",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "ParallelExecutionResult"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "parallel_execution_result"),
 	}
 }
 
@@ -967,96 +967,96 @@ func (repo *parallelExecutionResultRepository) searchByParam(v interface{}, para
 	}
 	if param.EventID != nil {
 		for _, chain := range param.EventID.QueryGroup {
-			query = query.Where("EventID", chain.Operator, chain.Value)
+			query = query.Where("event_id", chain.Operator, chain.Value)
 		}
 		if direction := param.EventID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("EventID", direction)
+			query = query.OrderBy("event_id", direction)
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
 	if param.ExecutionType != nil {
 		for _, chain := range param.ExecutionType.QueryGroup {
-			query = query.Where("ExecutionType", chain.Operator, chain.Value)
+			query = query.Where("execution_type", chain.Operator, chain.Value)
 		}
 		if direction := param.ExecutionType.OrderByDirection; direction > 0 {
-			query = query.OrderBy("ExecutionType", direction)
+			query = query.OrderBy("execution_type", direction)
 			query = param.ExecutionType.BuildCursorQuery(query)
 		}
 	}
 	if param.ResultCode != nil {
 		for _, chain := range param.ResultCode.QueryGroup {
-			query = query.Where("ResultCode", chain.Operator, chain.Value)
+			query = query.Where("result_code", chain.Operator, chain.Value)
 		}
 		if direction := param.ResultCode.OrderByDirection; direction > 0 {
-			query = query.OrderBy("ResultCode", direction)
+			query = query.OrderBy("result_code", direction)
 			query = param.ResultCode.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
 		for _, chain := range param.CreatedAt.QueryGroup {
-			query = query.Where("CreatedAt", chain.Operator, chain.Value)
+			query = query.Where("created_at", chain.Operator, chain.Value)
 		}
 		if direction := param.CreatedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("CreatedAt", direction)
+			query = query.OrderBy("created_at", direction)
 			query = param.CreatedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedBy != nil {
 		for _, chain := range param.CreatedBy.QueryGroup {
-			query = query.Where("CreatedBy", chain.Operator, chain.Value)
+			query = query.Where("created_by", chain.Operator, chain.Value)
 		}
 		if direction := param.CreatedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("CreatedBy", direction)
+			query = query.OrderBy("created_by", direction)
 			query = param.CreatedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.UpdatedAt != nil {
 		for _, chain := range param.UpdatedAt.QueryGroup {
-			query = query.Where("UpdatedAt", chain.Operator, chain.Value)
+			query = query.Where("updated_at", chain.Operator, chain.Value)
 		}
 		if direction := param.UpdatedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("UpdatedAt", direction)
+			query = query.OrderBy("updated_at", direction)
 			query = param.UpdatedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.UpdatedBy != nil {
 		for _, chain := range param.UpdatedBy.QueryGroup {
-			query = query.Where("UpdatedBy", chain.Operator, chain.Value)
+			query = query.Where("updated_by", chain.Operator, chain.Value)
 		}
 		if direction := param.UpdatedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("UpdatedBy", direction)
+			query = query.OrderBy("updated_by", direction)
 			query = param.UpdatedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.DeletedAt != nil {
 		for _, chain := range param.DeletedAt.QueryGroup {
-			query = query.Where("DeletedAt", chain.Operator, chain.Value)
+			query = query.Where("deleted_at", chain.Operator, chain.Value)
 		}
 		if direction := param.DeletedAt.OrderByDirection; direction > 0 {
-			query = query.OrderBy("DeletedAt", direction)
+			query = query.OrderBy("deleted_at", direction)
 			query = param.DeletedAt.BuildCursorQuery(query)
 		}
 	}
 	if param.DeletedBy != nil {
 		for _, chain := range param.DeletedBy.QueryGroup {
-			query = query.Where("DeletedBy", chain.Operator, chain.Value)
+			query = query.Where("deleted_by", chain.Operator, chain.Value)
 		}
 		if direction := param.DeletedBy.OrderByDirection; direction > 0 {
-			query = query.OrderBy("DeletedBy", direction)
+			query = query.OrderBy("deleted_by", direction)
 			query = param.DeletedBy.BuildCursorQuery(query)
 		}
 	}
 	if param.Version != nil {
 		for _, chain := range param.Version.QueryGroup {
-			query = query.Where("Version", chain.Operator, chain.Value)
+			query = query.Where("version", chain.Operator, chain.Value)
 		}
 		if direction := param.Version.OrderByDirection; direction > 0 {
-			query = query.OrderBy("Version", direction)
+			query = query.OrderBy("version", direction)
 			query = param.Version.BuildCursorQuery(query)
 		}
 	}
 	if !param.IncludeSoftDeleted {
-		query = query.Where("DeletedAt", OpTypeEqual, nil)
+		query = query.Where("deleted_at", OpTypeEqual, nil)
 	}
 
 	limit := param.CursorLimit + 1
