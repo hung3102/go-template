@@ -35,3 +35,11 @@ Emulator URL: http://localhost:4000/
 $ cd back
 $ make generate
 ``` 
+
+## Pubsub start
+
+1. Start
+
+```bash
+docker compose up general-api pubsub-emulator subscriber
+```

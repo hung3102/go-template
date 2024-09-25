@@ -3,27 +3,34 @@ package pubsub
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/topgate/gcim-temporary/back/pkg/environ"
+	"golang.org/x/xerrors"
 )
 
-// PublishMsg - メッセージをpubsubに送信する
-func PublishMsg(ctx context.Context, topicID string, attr map[string]string, msg string) error {
-	projectID := environ.ProjectID()
+// PubsubPublisher - PubsubPublisherの構造体
+type PubsubPublisher struct {
+	client *pubsub.Client
+}
 
-	client, err := pubsub.NewClient(ctx, projectID)
-	if err != nil {
-		return fmt.Errorf("pubsub.NewClient: %v", err)
-	}
+// NewPubsubPublisher - PubsubPublisherの初期化
+func NewPubsubPublisher(client *pubsub.Client) *PubsubPublisher {
+	return &PubsubPublisher{client: client}
+}
 
+// Publisher - Publisherのインターフェース
+type Publisher interface {
+	PublishMessage(ctx context.Context, topicID string, attr map[string]string, msg string) error
+}
+
+// PublishMessage - メッセージをpubsubに送信する
+func (p *PubsubPublisher) PublishMessage(ctx context.Context, topicID string, attr map[string]string, msg string) error {
 	json, err := json.Marshal(msg)
 	if err != nil {
-		return fmt.Errorf("Input msg error : %v", err)
+		return xerrors.Errorf("PublishMessage - Input msg error : %w", err)
 	}
 
-	t := client.Topic(topicID)
+	t := p.client.Topic(topicID)
 	result := t.Publish(ctx, &pubsub.Message{
 		Data:       []byte(json),
 		Attributes: attr,
@@ -31,7 +38,7 @@ func PublishMsg(ctx context.Context, topicID string, attr map[string]string, msg
 
 	_, err = result.Get(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return xerrors.Errorf("PublishMessage - Get: %w", err)
 	}
 
 	return nil

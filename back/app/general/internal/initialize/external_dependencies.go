@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/pubsub"
 	"cloud.google.com/go/storage"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
@@ -20,6 +21,7 @@ import (
 type ExternalDependencies struct {
 	firestoreClient *firestore.Client
 	storageClient   *storage.Client
+	pubsubClient    *pubsub.Client
 	openapi         *openapi3.T
 	sesService      *sesv2.Client
 }
@@ -85,6 +87,9 @@ func NewExternalDependencies(ctx context.Context, cfg config.Config) (*ExternalD
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize storage client: %w", err)
 		}
+
+		ed.pubsubClient, err = pubsub.NewClient(ctx, projectID)
+
 	}
 
 	return ed, nil
