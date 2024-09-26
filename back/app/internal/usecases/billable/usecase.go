@@ -13,7 +13,8 @@ import (
 
 // Usecase - 請求書作成の開始判定のユースケース
 type Usecase struct {
-	deps Dependencies
+	createdBy string
+	deps      Dependencies
 }
 
 // Dependencies - Usecase が依存するもの
@@ -30,5 +31,8 @@ func NewUsecase(deps Dependencies) *Usecase {
 	if nilFields := structs.GetNilFields(deps); len(nilFields) > 0 {
 		log.Fatalf("%+v in Dependencies is nil", nilFields)
 	}
-	return &Usecase{deps: deps}
+	return &Usecase{
+		createdBy: "billable.Usecase",
+		deps:      deps,
+	}
 }

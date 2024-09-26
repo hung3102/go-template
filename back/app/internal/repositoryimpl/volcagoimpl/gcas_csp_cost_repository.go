@@ -24,9 +24,17 @@ func NewGCASCSPCost(client *firestore.Client) repositories.GCASCSPCostRepository
 
 // CreateMany - 複数レコードを一括登録する
 func (g *gcasCSPCostImpl) CreateMany(ctx context.Context, gcasCSPCosts []*entities.GCASCSPCost) error {
-	volcagoGCASCSPCost := make([]*volcago.GCASCSPCost, len(gcasCSPCosts))
-	for i, gcasCSPCost := range gcasCSPCosts {
-		volcagoGCASCSPCost[i] = &volcago.GCASCSPCost{
+	if len(gcasCSPCosts) == 0 {
+		return nil
+	}
+
+	volcagoGCASCSPCost := make([]*volcago.GCASCSPCost, 0, len(gcasCSPCosts))
+	for _, gcasCSPCost := range gcasCSPCosts {
+		if gcasCSPCost == nil {
+			continue
+		}
+
+		volcagoGCASCSPCost = append(volcagoGCASCSPCost, &volcago.GCASCSPCost{
 			ID:        gcasCSPCost.ID(),
 			EventID:   gcasCSPCost.EventID(),
 			CSP:       gcasCSPCost.CSP(),
@@ -39,24 +47,28 @@ func (g *gcasCSPCostImpl) CreateMany(ctx context.Context, gcasCSPCosts []*entiti
 				DeletedAt: gcasCSPCost.Meta().DeletedAt(),
 				DeletedBy: gcasCSPCost.Meta().DeletedBy(),
 			},
-		}
+		})
 	}
+
+	if len(volcagoGCASCSPCost) == 0 {
+		return nil
+	}
+
 	_, err := g.infra.InsertMulti(ctx, volcagoGCASCSPCost)
 	if err != nil {
 		return repositoryerrors.NewUnknownError("failed to create gcas_csp_cost", err)
 	}
+
 	return nil
 }
 
 // Exists - event_idに紐付くコレクションの存在フラグを取得する
 func (g *gcasCSPCostImpl) Exists(ctx context.Context, eventID string) (bool, error) {
-	chainer := infrastructures.NewQueryChainer
-	param := &infrastructures.GCASCSPCostSearchParam{
-		EventID:     chainer().Filters(eventID, infrastructures.FilterTypeAdd),
-		CursorLimit: 0,
-	}
+	qb := infrastructures.NewQueryBuilder(g.infra.GetCollection()).
+		Equal("event_id", eventID).
+		Limit(1)
 
-	gcasCSPCosts, err := g.infra.Search(ctx, param, nil)
+	gcasCSPCosts, err := g.infra.Search(ctx, nil, qb.Query())
 	if err != nil {
 		return false, repositoryerrors.NewUnknownError("error in gcasCSPCostImpl.Exists", err)
 	}

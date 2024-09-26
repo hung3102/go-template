@@ -53,6 +53,10 @@ func (e *eventStatusImpl) GetByEventIDAndStatus(ctx context.Context, param *repo
 
 // Create - レコードを登録する
 func (e *eventStatusImpl) Create(ctx context.Context, eventStatus *entities.EventStatus) error {
+	if eventStatus == nil {
+		return nil
+	}
+
 	_, err := e.infra.Insert(ctx, &volcago.EventStatus{
 		ID:      eventStatus.ID(),
 		EventID: eventStatus.EventID(),

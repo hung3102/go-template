@@ -7,74 +7,138 @@ import (
 	"testing"
 
 	"cloud.google.com/go/firestore"
+	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
 	"github.com/topgate/gcim-temporary/back/app/internal/testhelper"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
-	"google.golang.org/api/iterator"
 )
 
-const (
-	collectionName = "GCASCSPCost"
-	eventID        = "202409251049"
-	eventIDOther   = "202409251049other"
-)
+func TestGCASCSPCostImplCreateMany(t *testing.T) {
+	eventID := "202409251049"
+	createdBy := "gcas_csp_cost_tester"
 
-// sut.CreateMany(ctx, []*entities.GCASCSPCost{
-// 	entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{
-// 		ID:        "a",
-// 		EventID:   "b",
-// 		CSP:       "c",
-// 		TotalCost: 1,
-// 		Meta:      &entities.Meta{},
-// 	}),
-// })
+	type args struct {
+		gcasCspCosts []*entities.GCASCSPCost
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "正常系：データがない場合",
+			args: args{
+				gcasCspCosts: []*entities.GCASCSPCost{},
+			},
+		},
+		{
+			name: "正常系：データが1件ある場合",
+			args: args{
+				gcasCspCosts: []*entities.GCASCSPCost{
+					entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{
+						ID:        "id1" + eventID,
+						EventID:   eventID,
+						CSP:       "aws",
+						TotalCost: 123,
+						Meta: entities.NewMeta(&entities.NewMetaParam{
+							CreatedBy: createdBy,
+							UpdatedBy: createdBy,
+						}),
+					}),
+				},
+			},
+		},
+		{
+			name: "正常系：データが2件ある場合",
+			args: args{
+				gcasCspCosts: []*entities.GCASCSPCost{
+					entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{
+						ID:        "id1" + eventID,
+						EventID:   eventID,
+						CSP:       "aws",
+						TotalCost: 123,
+						Meta: entities.NewMeta(&entities.NewMetaParam{
+							CreatedBy: createdBy,
+							UpdatedBy: createdBy,
+						}),
+					}),
+					entities.NewGCASCSPCost(&entities.NewGCASCSPCostParam{
+						ID:        "id2" + eventID,
+						EventID:   eventID,
+						CSP:       "gcp",
+						TotalCost: 123,
+						Meta: entities.NewMeta(&entities.NewMetaParam{
+							CreatedBy: createdBy,
+							UpdatedBy: createdBy,
+						}),
+					}),
+				},
+			},
+		},
+		{
+			name: "正常系：データがnilの場合",
+			args: args{
+				gcasCspCosts: []*entities.GCASCSPCost{
+					nil,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testhelper.SetEnv(t)
+			firestoreClient := testhelper.FirestoreClient(t)
+			ctx := context.Background()
 
-// // CreateMany - 複数レコードを一括登録する
-// func (g *gcasCSPCostImpl) CreateMany(ctx context.Context, gcasCSPCosts []*entities.GCASCSPCost) error {
-// 	volcagoGCASCSPCost := make([]*volcago.GCASCSPCost, len(gcasCSPCosts))
-// 	for i, gcasCSPCost := range gcasCSPCosts {
-// 		volcagoGCASCSPCost[i] = &volcago.GCASCSPCost{
-// 			ID:        gcasCSPCost.ID(),
-// 			EventID:   gcasCSPCost.EventID(),
-// 			CSP:       gcasCSPCost.CSP(),
-// 			TotalCost: gcasCSPCost.TotalCost(),
-// 			Meta: volcago.Meta{
-// 				CreatedAt: gcasCSPCost.Meta().CreatedAt(),
-// 				CreatedBy: gcasCSPCost.Meta().CreatedBy(),
-// 				UpdatedAt: gcasCSPCost.Meta().UpdatedAt(),
-// 				UpdatedBy: gcasCSPCost.Meta().UpdatedBy(),
-// 				DeletedAt: gcasCSPCost.Meta().DeletedAt(),
-// 				DeletedBy: gcasCSPCost.Meta().DeletedBy(),
-// 			},
-// 		}
-// 	}
-// 	_, err := g.infra.InsertMulti(ctx, volcagoGCASCSPCost)
-// 	if err != nil {
-// 		return repositoryerrors.NewUnknownError("failed to create gcas_csp_cost", err)
-// 	}
-// 	return nil
-// }
+			deleteGCASCSPCost(t, firestoreClient, eventID)
 
-// // Exists - event_idに紐付くコレクションの存在フラグを取得する
-// func (g *gcasCSPCostImpl) Exists(ctx context.Context, eventID string) (bool, error) {
-// 	chainer := infrastructures.NewQueryChainer
-// 	param := &infrastructures.GCASCSPCostSearchParam{
-// 		EventID:     chainer().Filters(eventID, infrastructures.FilterTypeAdd),
-// 		CursorLimit: 0,
-// 	}
+			before := findGCASCSPCost(t, firestoreClient, eventID)
+			if len(before) != 0 {
+				t.Fatalf("error: len(before) = %d", len(before))
+			}
 
-// 	gcasCSPCosts, err := g.infra.Search(ctx, param, nil)
-// 	if err != nil {
-// 		return false, repositoryerrors.NewUnknownError("error in gcasCSPCostImpl.Exists", err)
-// 	}
+			sut := volcagoimpl.NewGCASCSPCost(firestoreClient)
+			err := sut.CreateMany(ctx, tt.args.gcasCspCosts)
+			if err != nil {
+				t.Fatalf("error :%+v", err)
+			}
 
-// 	return 0 < len(gcasCSPCosts), nil
-// }
+			idGCASCSPCostMap := make(map[string]*entities.GCASCSPCost)
+			for _, gcasCspCost := range tt.args.gcasCspCosts {
+				if gcasCspCost == nil {
+					continue
+				}
+				idGCASCSPCostMap[gcasCspCost.ID()] = gcasCspCost
+			}
+
+			got := findGCASCSPCost(t, firestoreClient, eventID)
+			if len(got) != len(idGCASCSPCostMap) {
+				t.Fatalf("error: len(got) = %d, len(idGCASCSPCostMap) = %d", len(got), len(idGCASCSPCostMap))
+			}
+
+			for i, g := range got {
+				data := g.Data()
+
+				gcasCSPCost, ok := idGCASCSPCostMap[g.Ref.ID]
+				if !ok {
+					t.Fatalf("error: got[%d] = %v, gcasCSPCost = nil", i, data)
+				}
+				if data["event_id"] != gcasCSPCost.EventID() ||
+					data["csp"] != gcasCSPCost.CSP() ||
+					data["total_cost"].(int64) != int64(gcasCSPCost.TotalCost()) ||
+					data["created_by"] != gcasCSPCost.Meta().CreatedBy() ||
+					data["updated_by"] != gcasCSPCost.Meta().UpdatedBy() ||
+					data["deleted_by"] != "" ||
+					data["deleted_at"] != nil {
+					t.Fatalf("error: got[%d] = %v, gcasCSPCost = %v", i, data, *gcasCSPCost)
+				}
+			}
+		})
+	}
+}
 
 func TestGCASCSPCostImplExists(t *testing.T) {
-	testhelper.LoadEnv(t)
-	firestoreClient := testhelper.FirestoreClient(t)
-	ctx := context.Background()
+	eventID := "202409251049"
+	eventIDOther := "202409251049other"
 
 	tests := []struct {
 		name      string
@@ -91,7 +155,7 @@ func TestGCASCSPCostImplExists(t *testing.T) {
 		{
 			name: "正常系：データが1件ある場合",
 			prepareFn: func(t *testing.T, firestoreClient *firestore.Client) {
-				addGCASPost(t, firestoreClient, &volcago.GCASCSPCost{
+				addGCASCSPCost(t, firestoreClient, &volcago.GCASCSPCost{
 					ID:        "id" + eventID,
 					EventID:   eventID,
 					CSP:       "aws",
@@ -105,14 +169,14 @@ func TestGCASCSPCostImplExists(t *testing.T) {
 		{
 			name: "正常系：データが2件ある場合",
 			prepareFn: func(t *testing.T, firestoreClient *firestore.Client) {
-				addGCASPost(t, firestoreClient, &volcago.GCASCSPCost{
+				addGCASCSPCost(t, firestoreClient, &volcago.GCASCSPCost{
 					ID:        "id1" + eventID,
 					EventID:   eventID,
 					CSP:       "aws",
 					TotalCost: 1000,
 					Meta:      volcago.Meta{},
 				})
-				addGCASPost(t, firestoreClient, &volcago.GCASCSPCost{
+				addGCASCSPCost(t, firestoreClient, &volcago.GCASCSPCost{
 					ID:        "id2" + eventID,
 					EventID:   eventID,
 					CSP:       "gcp",
@@ -126,7 +190,7 @@ func TestGCASCSPCostImplExists(t *testing.T) {
 		{
 			name: "別のIDのデータがある場合",
 			prepareFn: func(t *testing.T, firestoreClient *firestore.Client) {
-				addGCASPost(t, firestoreClient, &volcago.GCASCSPCost{
+				addGCASCSPCost(t, firestoreClient, &volcago.GCASCSPCost{
 					ID:        "id" + eventIDOther,
 					EventID:   eventIDOther,
 					CSP:       "aws",
@@ -137,12 +201,15 @@ func TestGCASCSPCostImplExists(t *testing.T) {
 			want:    false,
 			wantErr: false,
 		},
-		// TODO 異常系：エラーが発生した場合
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			deleteGCASPost(t, firestoreClient, eventID)
-			deleteGCASPost(t, firestoreClient, eventIDOther)
+			testhelper.SetEnv(t)
+			firestoreClient := testhelper.FirestoreClient(t)
+			ctx := context.Background()
+
+			deleteGCASCSPCost(t, firestoreClient, eventID)
+			deleteGCASCSPCost(t, firestoreClient, eventIDOther)
 
 			tt.prepareFn(t, firestoreClient)
 
@@ -160,42 +227,20 @@ func TestGCASCSPCostImplExists(t *testing.T) {
 	}
 }
 
-func deleteGCASPost(t *testing.T, firestoreClient *firestore.Client, eventID string) {
+func deleteGCASCSPCost(t *testing.T, firestoreClient *firestore.Client, eventID string) {
 	t.Helper()
-	findGCASPost(t, firestoreClient, eventID, func(doc *firestore.DocumentSnapshot) {
-		ctx := context.Background()
-		doc.Ref.Delete(ctx)
-	})
+	collectionName := "gcas_csp_cost"
+	testhelper.DeleteDocsByEventID(t, firestoreClient, collectionName, eventID)
 }
 
-func findGCASPost(t *testing.T, firestoreClient *firestore.Client, eventID string, callback func(doc *firestore.DocumentSnapshot)) {
+func findGCASCSPCost(t *testing.T, firestoreClient *firestore.Client, eventID string) []*firestore.DocumentSnapshot {
 	t.Helper()
-
-	ctx := context.Background()
-	iter := firestoreClient.
-		Collection(collectionName).
-		Where("EventID", "==", eventID).
-		Documents(ctx)
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			t.Fatalf("error: %v", err)
-		}
-		callback(doc)
-	}
+	collectionName := "gcas_csp_cost"
+	return testhelper.FindDocsByEventID(t, firestoreClient, collectionName, eventID)
 }
 
-func addGCASPost(t *testing.T, firestoreClient *firestore.Client, gcasCSPCost *volcago.GCASCSPCost) {
+func addGCASCSPCost(t *testing.T, firestoreClient *firestore.Client, gcasCost *volcago.GCASCSPCost) {
 	t.Helper()
-	ctx := context.Background()
-	_, err := firestoreClient.
-		Collection(collectionName).
-		Doc(gcasCSPCost.ID).
-		Set(ctx, gcasCSPCost)
-	if err != nil {
-		t.Fatalf("error: %v", err)
-	}
+	collectionName := "gcas_csp_cost"
+	testhelper.Add(t, firestoreClient, collectionName, gcasCost.ID, gcasCost)
 }
