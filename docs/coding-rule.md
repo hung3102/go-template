@@ -28,6 +28,13 @@
 
 - 値オブジェクトで行う
 
+### 返すエラーはxerrorsを使う
+- `return fmt.Errorf()` を使わない
+- `return xerrors.Errorf("...%w", err)` を使う。
+
+## ディレクトリ名は_や-などを入れない
+- `gcim-temporary/gcim_temporary.go` -> `gcimtemporary/gcim_temporary.go`
+
 ### 略称は大文字にする
 - 例
   - `id` は `ID`
