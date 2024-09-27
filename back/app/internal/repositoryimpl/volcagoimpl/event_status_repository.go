@@ -34,7 +34,7 @@ func (e *eventStatusImpl) GetByEventIDAndStatus(ctx context.Context, param *repo
 		if errors.Is(err, infrastructures.ErrNotFound) {
 			return nil, repositoryerrors.NewNotFoundError(err)
 		}
-		return nil, repositoryerrors.NewUnknownError("failed to get event", err)
+		return nil, repositoryerrors.NewUnknownError("failed to get event_status", err)
 	}
 
 	return entities.NewEventStatus(&entities.NewEventStatusParam{

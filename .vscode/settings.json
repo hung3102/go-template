@@ -2,6 +2,5 @@
     "files.insertFinalNewline": true,
     "go.toolsEnvVars": {
         "FIRESTORE_EMULATOR_HOST": "localhost:8080",
-        "FIREBASE_STORAGE_EMULATOR_HOST": "localhost:9199",
     }
 }
