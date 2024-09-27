@@ -1,6 +1,3 @@
 {
     "files.insertFinalNewline": true,
-    "go.toolsEnvVars": {
-        "FIRESTORE_EMULATOR_HOST": "localhost:8080",
-    }
 }

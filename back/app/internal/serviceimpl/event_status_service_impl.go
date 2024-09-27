@@ -22,7 +22,7 @@ type NewEventStatusServiceParam struct {
 
 func NewEventStatusService(param *NewEventStatusServiceParam) services.EventStatusService {
 	return &eventStatusServiceImpl{
-		createdBy:             "serviceimpl.eventStatusServiceImpl",
+		createdBy:             "serviceimpl.eventStatusServiceImpl", // TODO CreatedByの値要検討
 		eventStatusRepository: param.EventStatusRepository,
 	}
 }

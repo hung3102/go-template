@@ -32,7 +32,7 @@ func NewUsecase(deps Dependencies) *Usecase {
 		log.Fatalf("%+v in Dependencies is nil", nilFields)
 	}
 	return &Usecase{
-		createdBy: "billable.Usecase",
+		createdBy: "billable.Usecase", // TODO CreatedByの値要検討
 		deps:      deps,
 	}
 }
