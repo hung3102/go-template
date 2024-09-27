@@ -11,8 +11,6 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var _ services.EventStatusService = (*eventStatusServiceImpl)(nil)
-
 type eventStatusServiceImpl struct {
 	createdBy             string
 	eventStatusRepository repositories.EventStatusRepository

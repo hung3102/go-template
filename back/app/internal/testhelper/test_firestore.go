@@ -55,7 +55,7 @@ func FindDocsByEventID(t *testing.T, firestoreClient *firestore.Client, collecti
 }
 
 // AddDoc - DBにデータを登録する
-func Add[T any](t *testing.T, firestoreClient *firestore.Client, collectionName string, id string, data T) {
+func AddDoc[T any](t *testing.T, firestoreClient *firestore.Client, collectionName string, id string, data T) {
 	t.Helper()
 	ctx := context.Background()
 	_, err := firestoreClient.

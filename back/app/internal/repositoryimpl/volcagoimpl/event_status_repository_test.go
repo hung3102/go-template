@@ -235,5 +235,5 @@ func findEventStatus(t *testing.T, firestoreClient *firestore.Client, eventID st
 func addEventStatus(t *testing.T, firestoreClient *firestore.Client, data *volcago.EventStatus) {
 	t.Helper()
 	collectionName := "event_status"
-	testhelper.Add(t, firestoreClient, collectionName, data.ID, data)
+	testhelper.AddDoc(t, firestoreClient, collectionName, data.ID, data)
 }

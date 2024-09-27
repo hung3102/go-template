@@ -242,5 +242,5 @@ func findGCASCSPCost(t *testing.T, firestoreClient *firestore.Client, eventID st
 func addGCASCSPCost(t *testing.T, firestoreClient *firestore.Client, gcasCost *volcago.GCASCSPCost) {
 	t.Helper()
 	collectionName := "gcas_csp_cost"
-	testhelper.Add(t, firestoreClient, collectionName, gcasCost.ID, gcasCost)
+	testhelper.AddDoc(t, firestoreClient, collectionName, gcasCost.ID, gcasCost)
 }
