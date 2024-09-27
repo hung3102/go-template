@@ -41,9 +41,10 @@ jobs:
         working-directory: back
 
       - name: Run pkg tests
-        run: go test -v ./...
+        run: go test -v ./... -tags=standalone
         working-directory: back/pkg
 
       - name: Run app tests
-        run: go test -v ./...
+        run: go test -v ./... -tags=standalone
+
         working-directory: back/app

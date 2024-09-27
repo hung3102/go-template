@@ -193,6 +193,10 @@ func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventID string, cspTotalCos
 				EventID:   eventID,
 				CSP:       csp,
 				TotalCost: totalCost,
+				Meta: entities.NewMeta(&entities.NewMetaParam{
+					CreatedBy: u.createdBy,
+					UpdatedBy: u.createdBy,
+				}),
 			},
 		))
 	}
