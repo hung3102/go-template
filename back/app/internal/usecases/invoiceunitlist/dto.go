@@ -4,3 +4,9 @@ package invoiceunitlist
 type Input struct {
 	EventID string
 }
+
+type Output struct {
+	IsPaymentAgent bool   // 支払代行
+	Subject        string // 団体か事業者
+	CSP            string // csp
+}

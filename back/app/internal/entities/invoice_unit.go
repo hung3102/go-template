@@ -24,16 +24,16 @@ func NewInvoiceUnit(param *NewInvoiceUnitParam) *InvoiceUnit {
 }
 
 // IsPaymentAgent - IsPaymentAgent Getter
-func (i *InvoiceUnit) IsPaymentAgent() bool {
-	return i.isPaymentAgent
+func (e *InvoiceUnit) IsPaymentAgent() bool {
+	return e.isPaymentAgent
 }
 
 // Subject - Subject Getter
-func (i *InvoiceUnit) Subject() string {
-	return i.subject
+func (e *InvoiceUnit) Subject() string {
+	return e.subject
 }
 
 // CSP - CSP Getter
-func (i *InvoiceUnit) CSP() string {
-	return i.csp
+func (e *InvoiceUnit) CSP() string {
+	return e.csp
 }
