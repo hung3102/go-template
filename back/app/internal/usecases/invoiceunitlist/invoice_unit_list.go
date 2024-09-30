@@ -13,13 +13,13 @@ func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 		return nil, xerrors.Errorf("error in List: %w", err)
 	}
 
-	output := make([]*Output, 0)
-	for _, v := range invoiceUnits {
-		output = append(output, &Output{
+	output := make([]*Output, len(invoiceUnits))
+	for i, v := range invoiceUnits {
+		output[i] = &Output{
 			IsPaymentAgent: v.IsPaymentAgent(),
 			Subject:        v.Subject(),
 			CSP:            v.CSP(),
-		})
+		}
 	}
 
 	return output, nil
