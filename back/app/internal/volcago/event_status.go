@@ -5,7 +5,7 @@ package volcago
 // EventStatus - イベントステータス
 type EventStatus struct {
 	ID      string `firestore:"-" firestore_key:""` // {event_id}_{status}
-	EventID string `firestore:"event_id"`           // event_id
+	EventID string `firestore:"event_id"`           // イベントID
 	Status  int    `firestore:"status"`             // ステータス
 	Meta
 }

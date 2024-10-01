@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/org_csp_account_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/reps_auth_gen.go
 
-// OrgCSPAccountRepository - Repository of OrgCSPAccount
-type OrgCSPAccountRepository interface {
+// REPSAuthRepository - Repository of REPSAuth
+type REPSAuthRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccount, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error)
-	Insert(ctx context.Context, subject *model.OrgCSPAccount) (_ string, err error)
-	Update(ctx context.Context, subject *model.OrgCSPAccount) (err error)
-	StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.REPSAuth, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error)
+	Insert(ctx context.Context, subject *model.REPSAuth) (_ string, err error)
+	Update(ctx context.Context, subject *model.REPSAuth) (err error)
+	StrictUpdate(ctx context.Context, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error)
-	InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.REPSAuth, error)
+	InsertMulti(ctx context.Context, subjects []*model.REPSAuth) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.REPSAuth) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.REPSAuth, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccount, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.REPSAuth, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.REPSAuth, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error)
-	SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error)
-	SearchByParam(ctx context.Context, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error)
+	Search(ctx context.Context, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error)
+	SearchWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error)
+	SearchByParam(ctx context.Context, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type OrgCSPAccountRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// OrgCSPAccountRepositoryMiddleware - middleware of OrgCSPAccountRepository
-type OrgCSPAccountRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.OrgCSPAccount) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccount) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (bool, error)
+// REPSAuthRepositoryMiddleware - middleware of REPSAuthRepository
+type REPSAuthRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.REPSAuth) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.REPSAuth) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type orgCspaccountRepository struct {
+type repsauthRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []OrgCSPAccountRepositoryMiddleware
+	middleware       []REPSAuthRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewOrgCSPAccountRepository - constructor
-func NewOrgCSPAccountRepository(firestoreClient *firestore.Client, middleware ...OrgCSPAccountRepositoryMiddleware) OrgCSPAccountRepository {
-	return &orgCspaccountRepository{
-		collectionName:   "org_csp_account",
+// NewREPSAuthRepository - constructor
+func NewREPSAuthRepository(firestoreClient *firestore.Client, middleware ...REPSAuthRepositoryMiddleware) REPSAuthRepository {
+	return &repsauthRepository{
+		collectionName:   "reps_auth",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "org_csp_account"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "reps_auth"),
 	}
 }
 
-func (repo *orgCspaccountRepository) setMeta(subject *model.OrgCSPAccount, isInsert bool) {
+func (repo *repsauthRepository) setMeta(subject *model.REPSAuth, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *orgCspaccountRepository) setMeta(subject *model.OrgCSPAccount, isIns
 	subject.Version++
 }
 
-func (repo *orgCspaccountRepository) setMetaWithStrictUpdate(param *OrgCSPAccountUpdateParam) {
+func (repo *repsauthRepository) setMetaWithStrictUpdate(param *REPSAuthUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *orgCspaccountRepository) beforeInsert(ctx context.Context, subject *model.OrgCSPAccount) error {
+func (repo *repsauthRepository) beforeInsert(ctx context.Context, subject *model.REPSAuth) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *orgCspaccountRepository) beforeInsert(ctx context.Context, subject *
 	return nil
 }
 
-func (repo *orgCspaccountRepository) beforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccount) error {
+func (repo *repsauthRepository) beforeUpdate(ctx context.Context, old, subject *model.REPSAuth) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *orgCspaccountRepository) beforeUpdate(ctx context.Context, old, subj
 	return nil
 }
 
-func (repo *orgCspaccountRepository) beforeDelete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) error {
+func (repo *repsauthRepository) beforeDelete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,92 +189,82 @@ func (repo *orgCspaccountRepository) beforeDelete(ctx context.Context, subject *
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *orgCspaccountRepository) GetCollection() *firestore.CollectionRef {
+func (repo *repsauthRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *orgCspaccountRepository) GetCollectionName() string {
+func (repo *repsauthRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *orgCspaccountRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *repsauthRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *orgCspaccountRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *repsauthRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// OrgCSPAccountSearchParam - params for search
-type OrgCSPAccountSearchParam struct {
-	ID                   *QueryChainer
-	EventID              *QueryChainer
-	GCASProportionCostID *QueryChainer
-	GCASAccountCostID    *QueryChainer
-	Organization         *QueryChainer
-	CSP                  *QueryChainer
-	AccountID            *QueryChainer
-	Cost                 *QueryChainer
-	BillingUnitID        *QueryChainer
-	CreatedAt            *QueryChainer
-	CreatedBy            *QueryChainer
-	UpdatedAt            *QueryChainer
-	UpdatedBy            *QueryChainer
-	DeletedAt            *QueryChainer
-	DeletedBy            *QueryChainer
-	Version              *QueryChainer
+// REPSAuthSearchParam - params for search
+type REPSAuthSearchParam struct {
+	ID           *QueryChainer
+	EventID      *QueryChainer
+	AccessToken  *QueryChainer
+	RefreshToken *QueryChainer
+	CreatedAt    *QueryChainer
+	CreatedBy    *QueryChainer
+	UpdatedAt    *QueryChainer
+	UpdatedBy    *QueryChainer
+	DeletedAt    *QueryChainer
+	DeletedBy    *QueryChainer
+	Version      *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
 	CursorLimit        int
 }
 
-// OrgCSPAccountUpdateParam - params for strict updates
-type OrgCSPAccountUpdateParam struct {
-	EventID              interface{}
-	GCASProportionCostID interface{}
-	GCASAccountCostID    interface{}
-	Organization         interface{}
-	CSP                  interface{}
-	AccountID            interface{}
-	Cost                 interface{}
-	BillingUnitID        interface{}
-	CreatedAt            interface{}
-	CreatedBy            interface{}
-	UpdatedAt            interface{}
-	UpdatedBy            interface{}
-	DeletedAt            interface{}
-	DeletedBy            interface{}
-	Version              interface{}
+// REPSAuthUpdateParam - params for strict updates
+type REPSAuthUpdateParam struct {
+	EventID      interface{}
+	AccessToken  interface{}
+	RefreshToken interface{}
+	CreatedAt    interface{}
+	CreatedBy    interface{}
+	UpdatedAt    interface{}
+	UpdatedBy    interface{}
+	DeletedAt    interface{}
+	DeletedBy    interface{}
+	Version      interface{}
 }
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *orgCspaccountRepository) Search(ctx context.Context, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) Search(ctx context.Context, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *orgCspaccountRepository) SearchByParam(ctx context.Context, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
+func (repo *repsauthRepository) SearchByParam(ctx context.Context, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `OrgCSPAccount` by `OrgCSPAccount.ID`
-func (repo *orgCspaccountRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccount, error) {
+// Get - get `REPSAuth` by `REPSAuth.ID`
+func (repo *repsauthRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.REPSAuth, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `OrgCSPAccount` by *firestore.DocumentRef
-func (repo *orgCspaccountRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
+// GetWithDoc - get `REPSAuth` by *firestore.DocumentRef
+func (repo *repsauthRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) Insert(ctx context.Context, subject *model.OrgCSPAccount) (_ string, err error) {
+// Insert - insert of `REPSAuth`
+func (repo *repsauthRepository) Insert(ctx context.Context, subject *model.REPSAuth) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -282,8 +272,8 @@ func (repo *orgCspaccountRepository) Insert(ctx context.Context, subject *model.
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) Update(ctx context.Context, subject *model.OrgCSPAccount) (err error) {
+// Update - update of `REPSAuth`
+func (repo *repsauthRepository) Update(ctx context.Context, subject *model.REPSAuth) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -301,13 +291,13 @@ func (repo *orgCspaccountRepository) Update(ctx context.Context, subject *model.
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `REPSAuth`
+func (repo *repsauthRepository) StrictUpdate(ctx context.Context, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) Delete(ctx context.Context, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error) {
+// Delete - delete of `REPSAuth`
+func (repo *repsauthRepository) Delete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -324,8 +314,8 @@ func (repo *orgCspaccountRepository) Delete(ctx context.Context, subject *model.
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `OrgCSPAccount` by `OrgCSPAccount.ID`
-func (repo *orgCspaccountRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `REPSAuth` by `REPSAuth.ID`
+func (repo *repsauthRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -347,13 +337,13 @@ func (repo *orgCspaccountRepository) DeleteByID(ctx context.Context, id string, 
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID`
-func (repo *orgCspaccountRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
+// GetMulti - get `REPSAuth` in bulk by array of `REPSAuth.ID`
+func (repo *repsauthRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (_ []string, er error) {
+// InsertMulti - bulk insert of `REPSAuth`
+func (repo *repsauthRepository) InsertMulti(ctx context.Context, subjects []*model.REPSAuth) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -395,8 +385,8 @@ func (repo *orgCspaccountRepository) InsertMulti(ctx context.Context, subjects [
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccount) (er error) {
+// UpdateMulti - bulk update of `REPSAuth`
+func (repo *repsauthRepository) UpdateMulti(ctx context.Context, subjects []*model.REPSAuth) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -412,7 +402,7 @@ func (repo *orgCspaccountRepository) UpdateMulti(ctx context.Context, subjects [
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.OrgCSPAccount)
+		old := new(model.REPSAuth)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -439,8 +429,8 @@ func (repo *orgCspaccountRepository) UpdateMulti(ctx context.Context, subjects [
 	return nil
 }
 
-// DeleteMulti - bulk delete of `OrgCSPAccount`
-func (repo *orgCspaccountRepository) DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `REPSAuth`
+func (repo *repsauthRepository) DeleteMulti(ctx context.Context, subjects []*model.REPSAuth, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -484,9 +474,9 @@ func (repo *orgCspaccountRepository) DeleteMulti(ctx context.Context, subjects [
 	return nil
 }
 
-// DeleteMultiByIDs - delete `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID`
-func (repo *orgCspaccountRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.OrgCSPAccount, len(ids))
+// DeleteMultiByIDs - delete `REPSAuth` in bulk by array of `REPSAuth.ID`
+func (repo *repsauthRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.REPSAuth, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -504,28 +494,28 @@ func (repo *orgCspaccountRepository) DeleteMultiByIDs(ctx context.Context, ids [
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *orgCspaccountRepository) SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) SearchWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *orgCspaccountRepository) SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
+func (repo *repsauthRepository) SearchByParamWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `OrgCSPAccount` by `OrgCSPAccount.ID` in transaction
-func (repo *orgCspaccountRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccount, error) {
+// GetWithTx - get `REPSAuth` by `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.REPSAuth, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `OrgCSPAccount` by *firestore.DocumentRef in transaction
-func (repo *orgCspaccountRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
+// GetWithDocWithTx - get `REPSAuth` by *firestore.DocumentRef in transaction
+func (repo *repsauthRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (_ string, err error) {
+// InsertWithTx - insert of `REPSAuth` in transaction
+func (repo *repsauthRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -533,8 +523,8 @@ func (repo *orgCspaccountRepository) InsertWithTx(ctx context.Context, tx *fires
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount) (err error) {
+// UpdateWithTx - update of `REPSAuth` in transaction
+func (repo *repsauthRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -542,13 +532,13 @@ func (repo *orgCspaccountRepository) UpdateWithTx(ctx context.Context, tx *fires
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `REPSAuth` in transaction
+func (repo *repsauthRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccount, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `REPSAuth` in transaction
+func (repo *repsauthRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -565,8 +555,8 @@ func (repo *orgCspaccountRepository) DeleteWithTx(ctx context.Context, tx *fires
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `OrgCSPAccount` by `OrgCSPAccount.ID` in transaction
-func (repo *orgCspaccountRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `REPSAuth` by `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -588,13 +578,13 @@ func (repo *orgCspaccountRepository) DeleteByIDWithTx(ctx context.Context, tx *f
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID` in transaction
-func (repo *orgCspaccountRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
+// GetMultiWithTx - get `REPSAuth` in bulk by array of `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `REPSAuth` in transaction
+func (repo *repsauthRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -619,8 +609,8 @@ func (repo *orgCspaccountRepository) InsertMultiWithTx(ctx context.Context, tx *
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount) (er error) {
+// UpdateMultiWithTx - bulk update of `REPSAuth` in transaction
+func (repo *repsauthRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -638,8 +628,8 @@ func (repo *orgCspaccountRepository) UpdateMultiWithTx(ctx context.Context, tx *
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `OrgCSPAccount` in transaction
-func (repo *orgCspaccountRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccount, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `REPSAuth` in transaction
+func (repo *repsauthRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -683,8 +673,8 @@ func (repo *orgCspaccountRepository) DeleteMultiWithTx(ctx context.Context, tx *
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `OrgCSPAccount` in bulk by array of `OrgCSPAccount.ID` in transaction
-func (repo *orgCspaccountRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `REPSAuth` in bulk by array of `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -722,7 +712,7 @@ func (repo *orgCspaccountRepository) DeleteMultiByIDsWithTx(ctx context.Context,
 	return nil
 }
 
-func (repo *orgCspaccountRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -744,7 +734,7 @@ func (repo *orgCspaccountRepository) get(v interface{}, doc *firestore.DocumentR
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.OrgCSPAccount)
+	subject := new(model.REPSAuth)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -759,7 +749,7 @@ func (repo *orgCspaccountRepository) get(v interface{}, doc *firestore.DocumentR
 	return subject, nil
 }
 
-func (repo *orgCspaccountRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -785,7 +775,7 @@ func (repo *orgCspaccountRepository) getMulti(v interface{}, ids []string, opts 
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.OrgCSPAccount, 0, len(ids))
+	subjects := make([]*model.REPSAuth, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -793,7 +783,7 @@ func (repo *orgCspaccountRepository) getMulti(v interface{}, ids []string, opts 
 			continue
 		}
 
-		subject := new(model.OrgCSPAccount)
+		subject := new(model.REPSAuth)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -815,7 +805,7 @@ func (repo *orgCspaccountRepository) getMulti(v interface{}, ids []string, opts 
 	return subjects, mErr
 }
 
-func (repo *orgCspaccountRepository) insert(v interface{}, subject *model.OrgCSPAccount) (string, error) {
+func (repo *repsauthRepository) insert(v interface{}, subject *model.REPSAuth) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -842,7 +832,7 @@ func (repo *orgCspaccountRepository) insert(v interface{}, subject *model.OrgCSP
 	return dr.ID, nil
 }
 
-func (repo *orgCspaccountRepository) update(v interface{}, subject *model.OrgCSPAccount) error {
+func (repo *repsauthRepository) update(v interface{}, subject *model.REPSAuth) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -864,7 +854,7 @@ func (repo *orgCspaccountRepository) update(v interface{}, subject *model.OrgCSP
 	return nil
 }
 
-func (repo *orgCspaccountRepository) strictUpdate(v interface{}, id string, param *OrgCSPAccountUpdateParam, opts ...firestore.Precondition) error {
+func (repo *repsauthRepository) strictUpdate(v interface{}, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -872,7 +862,7 @@ func (repo *orgCspaccountRepository) strictUpdate(v interface{}, id string, para
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.OrgCSPAccount{}, param)
+	updates := updater(model.REPSAuth{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -890,7 +880,7 @@ func (repo *orgCspaccountRepository) strictUpdate(v interface{}, id string, para
 	return nil
 }
 
-func (repo *orgCspaccountRepository) deleteByID(v interface{}, id string) error {
+func (repo *repsauthRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -910,7 +900,7 @@ func (repo *orgCspaccountRepository) deleteByID(v interface{}, id string) error 
 	return nil
 }
 
-func (repo *orgCspaccountRepository) runQuery(v interface{}, query firestore.Query) ([]*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) runQuery(v interface{}, query firestore.Query) ([]*model.REPSAuth, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -924,7 +914,7 @@ func (repo *orgCspaccountRepository) runQuery(v interface{}, query firestore.Que
 
 	defer iter.Stop()
 
-	subjects := make([]*model.OrgCSPAccount, 0)
+	subjects := make([]*model.REPSAuth, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -935,7 +925,7 @@ func (repo *orgCspaccountRepository) runQuery(v interface{}, query firestore.Que
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.OrgCSPAccount)
+		subject := new(model.REPSAuth)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -949,7 +939,7 @@ func (repo *orgCspaccountRepository) runQuery(v interface{}, query firestore.Que
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *orgCspaccountRepository) searchByParam(v interface{}, param *OrgCSPAccountSearchParam) ([]*model.OrgCSPAccount, *PagingResult, error) {
+func (repo *repsauthRepository) searchByParam(v interface{}, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -984,67 +974,22 @@ func (repo *orgCspaccountRepository) searchByParam(v interface{}, param *OrgCSPA
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
-	if param.GCASProportionCostID != nil {
-		for _, chain := range param.GCASProportionCostID.QueryGroup {
-			query = query.Where("gcas_proportion_cost_id", chain.Operator, chain.Value)
+	if param.AccessToken != nil {
+		for _, chain := range param.AccessToken.QueryGroup {
+			query = query.Where("access_token", chain.Operator, chain.Value)
 		}
-		if direction := param.GCASProportionCostID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("gcas_proportion_cost_id", direction)
-			query = param.GCASProportionCostID.BuildCursorQuery(query)
-		}
-	}
-	if param.GCASAccountCostID != nil {
-		for _, chain := range param.GCASAccountCostID.QueryGroup {
-			query = query.Where("gcas_account_cost_id", chain.Operator, chain.Value)
-		}
-		if direction := param.GCASAccountCostID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("gcas_account_cost_id", direction)
-			query = param.GCASAccountCostID.BuildCursorQuery(query)
+		if direction := param.AccessToken.OrderByDirection; direction > 0 {
+			query = query.OrderBy("access_token", direction)
+			query = param.AccessToken.BuildCursorQuery(query)
 		}
 	}
-	if param.Organization != nil {
-		for _, chain := range param.Organization.QueryGroup {
-			query = query.Where("organization", chain.Operator, chain.Value)
+	if param.RefreshToken != nil {
+		for _, chain := range param.RefreshToken.QueryGroup {
+			query = query.Where("refresh_token", chain.Operator, chain.Value)
 		}
-		if direction := param.Organization.OrderByDirection; direction > 0 {
-			query = query.OrderBy("organization", direction)
-			query = param.Organization.BuildCursorQuery(query)
-		}
-	}
-	if param.CSP != nil {
-		for _, chain := range param.CSP.QueryGroup {
-			query = query.Where("csp", chain.Operator, chain.Value)
-		}
-		if direction := param.CSP.OrderByDirection; direction > 0 {
-			query = query.OrderBy("csp", direction)
-			query = param.CSP.BuildCursorQuery(query)
-		}
-	}
-	if param.AccountID != nil {
-		for _, chain := range param.AccountID.QueryGroup {
-			query = query.Where("account_id", chain.Operator, chain.Value)
-		}
-		if direction := param.AccountID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("account_id", direction)
-			query = param.AccountID.BuildCursorQuery(query)
-		}
-	}
-	if param.Cost != nil {
-		for _, chain := range param.Cost.QueryGroup {
-			query = query.Where("cost", chain.Operator, chain.Value)
-		}
-		if direction := param.Cost.OrderByDirection; direction > 0 {
-			query = query.OrderBy("cost", direction)
-			query = param.Cost.BuildCursorQuery(query)
-		}
-	}
-	if param.BillingUnitID != nil {
-		for _, chain := range param.BillingUnitID.QueryGroup {
-			query = query.Where("billing_unit_id", chain.Operator, chain.Value)
-		}
-		if direction := param.BillingUnitID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("billing_unit_id", direction)
-			query = param.BillingUnitID.BuildCursorQuery(query)
+		if direction := param.RefreshToken.OrderByDirection; direction > 0 {
+			query = query.OrderBy("refresh_token", direction)
+			query = param.RefreshToken.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
@@ -1160,7 +1105,7 @@ func (repo *orgCspaccountRepository) searchByParam(v interface{}, param *OrgCSPA
 	return subjects, pagingResult, nil
 }
 
-func (repo *orgCspaccountRepository) search(v interface{}, param *OrgCSPAccountSearchParam, q *firestore.Query) ([]*model.OrgCSPAccount, error) {
+func (repo *repsauthRepository) search(v interface{}, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}

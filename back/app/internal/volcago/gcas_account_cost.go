@@ -4,8 +4,9 @@ package volcago
 
 // GCASAccountCost - GCAS Dashboardから貰ったコスト情報
 type GCASAccountCost struct {
-	ID      string               `firestore:"-" firestore_key:""` // id
-	EventID string               `firestore:"event_id"`           // event_id
-	Data    *GCASAccountCostData `firestore:"data"`               // もらったデータ
+	ID        string               `firestore:"-" firestore_key:""` // ID
+	EventID   string               `firestore:"event_id"`           // イベントID
+	AccountID string               `firestore:"account_id"`         // アカウントID
+	Data      *GCASAccountCostData `firestore:"data"`               // もらったデータ
 	Meta
 }

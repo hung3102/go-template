@@ -24,8 +24,8 @@ docker compose up general-api
 docker compose up batch-api
 ```
 
-Web API URL: http://localhost:27001/api/health
-Batch API URL: http://localhost:27002/api/health
+Web API URL: http://localhost:27001/api/health  
+Batch API URL: http://localhost:27002/api/health  
 Emulator URL: http://localhost:4000/
 
 ## How to
@@ -35,3 +35,11 @@ Emulator URL: http://localhost:4000/
 $ cd back
 $ make generate
 ``` 
+
+## Pubsub start
+
+1. Start
+
+```bash
+docker compose up general-api pubsub-emulator subscriber
+```

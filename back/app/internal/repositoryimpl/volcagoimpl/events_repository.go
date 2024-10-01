@@ -8,6 +8,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
 )
@@ -24,7 +25,7 @@ func NewEvent(client *firestore.Client) repositories.BaseRepository[entities.Eve
 // Create - イベントを作成
 func (e *eventImpl) Create(ctx context.Context, event *entities.Event) error {
 	_, err := e.infra.Insert(ctx, &volcago.Event{
-		ID:           event.ID(),
+		ID:           event.ID().String(),
 		BillingMonth: event.BillingMonth(),
 		Meta: volcago.Meta{
 			CreatedAt: event.Meta().CreatedAt(),
@@ -52,8 +53,12 @@ func (e *eventImpl) GetByID(ctx context.Context, id string) (*entities.Event, er
 		return nil, repositoryerrors.NewUnknownError("failed to get event", err)
 	}
 
+	eventID, err := valueobjects.NewEventIDFromString(event.ID)
+	if err != nil {
+		return nil, repositoryerrors.NewUnknownError("failed to get event", err)
+	}
 	return entities.NewEvent(&entities.NewEventParam{
-		ID:           event.ID,
+		ID:           eventID,
 		BillingMonth: event.BillingMonth,
 		Meta: entities.NewMeta(&entities.NewMetaParam{
 			CreatedAt: event.CreatedAt,

@@ -7,7 +7,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/mail"
 )
 
-func Test_Message(t *testing.T) {
+func TestMessage(t *testing.T) {
 	sendParams := &mail.SendParams{
 		ToAddress: "to@address\ncom",
 		Subject:   "メールの\nタイトル",

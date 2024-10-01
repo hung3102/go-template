@@ -4,9 +4,9 @@ package volcago
 
 // GCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト
 type GCASCSPCost struct {
-	ID        string `firestore:"-" firestore_key:""` // id
-	EventID   string `firestore:"event_id"`           // event_id
-	CSP       string `firestore:"csp"`                // AWSなど
-	TotalCost int    `firestore:"total_cost"`         //
+	ID        string `firestore:"-" firestore_key:""` // ID
+	EventID   string `firestore:"event_id"`           // イベントID
+	CSP       string `firestore:"csp"`                // CSP
+	TotalCost int    `firestore:"total_cost"`         // 合計金額
 	Meta
 }

@@ -8,46 +8,62 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
 	"github.com/topgate/gcim-temporary/back/app/internal/services"
-	"github.com/topgate/gcim-temporary/back/pkg/uuid"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"golang.org/x/xerrors"
 )
 
-var _ services.EventStatusService = (*EventStatusServiceImpl)(nil)
+type eventStatusServiceImpl struct {
+	createdBy             string
+	eventStatusRepository repositories.EventStatusRepository
+}
 
-type EventStatusServiceImpl struct {
+type NewEventStatusServiceParam struct {
 	EventStatusRepository repositories.EventStatusRepository
-	uuid                  uuid.UUID
+}
+
+func NewEventStatusService(param *NewEventStatusServiceParam) services.EventStatusService {
+	return &eventStatusServiceImpl{
+		createdBy:             "serviceimpl.eventStatusServiceImpl", // TODO CreatedByの値要検討
+		eventStatusRepository: param.EventStatusRepository,
+	}
 }
 
 // IsInvoiceCreatable - 請求書の作成ができる状態か判定する
-func (i *EventStatusServiceImpl) IsInvoiceCreatable(ctx context.Context, eventID string) (bool, error) {
-	if _, err := i.EventStatusRepository.GetByEventIDAndStatus(ctx, eventID, entities.EventStatusStart); err != nil {
+func (i *eventStatusServiceImpl) IsInvoiceCreatable(ctx context.Context, eventID valueobjects.EventID) (bool, error) {
+	_, err := i.eventStatusRepository.GetByEventIDAndStatus(ctx, &repositories.GetByEventIDAndStatusParam{
+		EventID: eventID,
+		Status:  entities.EventStatusStart,
+	})
+	if err != nil {
 		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
 		if errors.As(err, &rerr) {
 			return false, nil
 		}
-		return false, xerrors.Errorf("error in EventStatusServiceImpl.ShouldcreateInvoice: %w", err)
+		return false, xerrors.Errorf("error in EventStatusServiceImpl.IsInvoiceCreatable: %w", err)
 	}
-	if _, err := i.EventStatusRepository.GetByEventIDAndStatus(ctx, eventID, entities.EventStatusInvoiceCreationChecked); err != nil {
+	_, err = i.eventStatusRepository.GetByEventIDAndStatus(ctx, &repositories.GetByEventIDAndStatusParam{
+		EventID: eventID,
+		Status:  entities.EventStatusInvoiceCreationChecked,
+	})
+	if err != nil {
 		var rerr repositoryerrors.RepositoryError[repositoryerrors.NotFoundError]
 		if errors.As(err, &rerr) {
 			return true, nil
 		}
-		return false, xerrors.Errorf("error in EventStatusServiceImpl.ShouldcreateInvoice: %w", err)
+		return false, xerrors.Errorf("error in EventStatusServiceImpl.IsInvoiceCreatable: %w", err)
 	}
 	return false, nil
 }
 
 // SetBillable - 請求書開始判定済にする
-func (i *EventStatusServiceImpl) SetBillable(ctx context.Context, eventID string) error {
-	uuid, err := i.uuid.GetUUID()
-	if err != nil {
-		return xerrors.Errorf("error in EventStatusServiceImpl.SetBillable: %w", err)
-	}
-	err = i.EventStatusRepository.Create(ctx, entities.NewEventStatus(&entities.NewEventStatusParam{
-		ID:      uuid,
+func (i *eventStatusServiceImpl) SetBillable(ctx context.Context, eventID valueobjects.EventID) error {
+	err := i.eventStatusRepository.Create(ctx, entities.NewEventStatus(&entities.NewEventStatusParam{
 		EventID: eventID,
 		Status:  entities.EventStatusInvoiceCreationChecked,
+		Meta: entities.NewMeta(&entities.NewMetaParam{
+			CreatedBy: i.createdBy,
+			UpdatedBy: i.createdBy,
+		}),
 	}))
 	if err != nil {
 		return xerrors.Errorf("error in EventStatusServiceImpl.SetBillable: %w", err)

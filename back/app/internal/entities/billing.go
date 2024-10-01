@@ -1,59 +1,65 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // Billing - 請求
 type Billing struct {
-	id                string   // id
-	eventID           string   // event_id
-	organization      string   //
-	csp               string   //
-	email             string   //
-	address           string   //
-	cost              int      //
-	orgCSPAccountsIDs []string //
-	creatorID         string   //
-	billingType       int      //
-	meta              *Meta    // メタ
+	id                   valueobjects.BillingID             // ID
+	eventID              valueobjects.EventID               // イベントID
+	organization         string                             // 組織名
+	csp                  string                             // CSP
+	email                string                             // メールアドレス
+	address              string                             // 住所
+	cost                 int                                // コスト
+	orgCSPAccountCostIDs []valueobjects.OrgCSPAccountCostID // アカウントID
+	creatorID            valueobjects.CreatorID             // 請求書の発行元情報ID
+	billingType          int                                // 支払い種別
+	meta                 *Meta                              // メタ
 }
 
 // NewBillingParam - 請求作成パラメータ
 type NewBillingParam struct {
-	ID                string   // id
-	EventID           string   // event_id
-	Organization      string   //
-	CSP               string   //
-	Email             string   //
-	Address           string   //
-	Cost              int      //
-	OrgCSPAccountsIDs []string //
-	CreatorID         string   //
-	BillingType       int      //
-	Meta              *Meta    // メタ
+	ID                   valueobjects.BillingID             // ID
+	EventID              valueobjects.EventID               // イベントID
+	Organization         string                             // 組織名
+	CSP                  string                             // CSP
+	Email                string                             // メールアドレス
+	Address              string                             // 住所
+	Cost                 int                                // コスト
+	OrgCSPAccountCostIDs []valueobjects.OrgCSPAccountCostID // アカウントID
+	CreatorID            valueobjects.CreatorID             // 請求書の発行元情報ID
+	BillingType          int                                // 支払い種別
+	Meta                 *Meta                              // メタ
 }
 
 // NewBilling - 請求作成
 func NewBilling(param *NewBillingParam) *Billing {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewBillingID()
+	}
 	return &Billing{
-		id:                param.ID,
-		eventID:           param.EventID,
-		organization:      param.Organization,
-		csp:               param.CSP,
-		email:             param.Email,
-		address:           param.Address,
-		cost:              param.Cost,
-		orgCSPAccountsIDs: param.OrgCSPAccountsIDs,
-		creatorID:         param.CreatorID,
-		billingType:       param.BillingType,
-		meta:              param.Meta,
+		id:                   id,
+		eventID:              param.EventID,
+		organization:         param.Organization,
+		csp:                  param.CSP,
+		email:                param.Email,
+		address:              param.Address,
+		cost:                 param.Cost,
+		orgCSPAccountCostIDs: param.OrgCSPAccountCostIDs,
+		creatorID:            param.CreatorID,
+		billingType:          param.BillingType,
+		meta:                 param.Meta,
 	}
 }
 
 // ID - ID のゲッター
-func (e *Billing) ID() string {
+func (e *Billing) ID() valueobjects.BillingID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *Billing) EventID() string {
+func (e *Billing) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
@@ -82,13 +88,13 @@ func (e *Billing) Cost() int {
 	return e.cost
 }
 
-// OrgCSPAccountsIDs - OrgCSPAccountsIDs のゲッター
-func (e *Billing) OrgCSPAccountsIDs() []string {
-	return e.orgCSPAccountsIDs
+// OrgCSPAccountCostIDs - OrgCSPAccountCostIDs のゲッター
+func (e *Billing) OrgCSPAccountCostIDs() []valueobjects.OrgCSPAccountCostID {
+	return e.orgCSPAccountCostIDs
 }
 
 // CreatorID - CreatorID のゲッター
-func (e *Billing) CreatorID() string {
+func (e *Billing) CreatorID() valueobjects.CreatorID {
 	return e.creatorID
 }
 

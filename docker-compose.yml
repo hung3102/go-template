@@ -69,5 +69,41 @@ services:
     networks:
       - database
 
+  pubsub-emulator:
+    container_name: pubsub-emulator
+    build:
+      context: ./docker/pubsub
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - PUBSUB_PROJECT_ID=test-project
+      - PUBSUB_TOPIC_ID=test-topic
+      - PUBSUB_SUBSCRIPTION_ID=test-subscription
+      - PUBSUB_EMULATOR_HOST=0.0.0.0:8085
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./docker/pubsub:/code
+    command: 
+      ./pubsub/entrypoint.sh
+    ports:
+      - 8085:8085
+    networks:
+      - database
+
+  subscriber:
+    container_name: subscriber
+    build:
+      context: ./docker/subscriber
+      dockerfile: Dockerfile
+    environment:
+      - PUBSUB_EMULATOR_HOST=pubsub-emulator:8085
+      - PUBSUB_PROJECT_ID=test-project
+      - PUBSUB_SUBSCRIPTION_ID=test-subscription
+    working_dir: /app
+    command: python subscriber.py
+    networks:
+      - database
+
 networks:
   database:

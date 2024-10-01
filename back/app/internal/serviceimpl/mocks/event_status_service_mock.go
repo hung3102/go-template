@@ -13,6 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
+	valueobjects "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -40,7 +41,7 @@ func (m *MockEventStatusService) EXPECT() *MockEventStatusServiceMockRecorder {
 }
 
 // IsInvoiceCreatable mocks base method.
-func (m *MockEventStatusService) IsInvoiceCreatable(ctx context.Context, eventID string) (bool, error) {
+func (m *MockEventStatusService) IsInvoiceCreatable(ctx context.Context, eventID valueobjects.EventID) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsInvoiceCreatable", ctx, eventID)
 	ret0, _ := ret[0].(bool)
@@ -55,7 +56,7 @@ func (mr *MockEventStatusServiceMockRecorder) IsInvoiceCreatable(ctx, eventID an
 }
 
 // SetBillable mocks base method.
-func (m *MockEventStatusService) SetBillable(ctx context.Context, eventID string) error {
+func (m *MockEventStatusService) SetBillable(ctx context.Context, eventID valueobjects.EventID) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetBillable", ctx, eventID)
 	ret0, _ := ret[0].(error)

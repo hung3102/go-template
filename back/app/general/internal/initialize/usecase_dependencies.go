@@ -10,19 +10,19 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
 	"github.com/topgate/gcim-temporary/back/pkg/environ"
 	"github.com/topgate/gcim-temporary/back/pkg/mail"
+	"github.com/topgate/gcim-temporary/back/pkg/pubsub"
 	"github.com/topgate/gcim-temporary/back/pkg/storage"
 	"github.com/topgate/gcim-temporary/back/pkg/storage/gcs"
-	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
 // UseCaseDependencies - 初期化されたユースケースの依存の集合体
 type UseCaseDependencies struct {
 	EventRepository       repositories.BaseRepository[entities.Event]
 	SessionRepository     repositories.BaseRepository[entities.UserSession]
+	PubsubPublisher       pubsub.Publisher
 	AuthenticationService authentication.Provider
 	MailService           mail.Mail
 	StorageService        storage.Provider
-	UUID                  uuid.UUID
 }
 
 // NewUseCaseDependencies - ユースケースに依存するものの初期化
@@ -43,6 +43,7 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		SesService:  externalDeps.sesService,
 		FromAddress: cfg.FromEmailAddress,
 	})
+	pubsubPublisher := pubsub.NewPubsubPublisher(externalDeps.pubsubClient)
 
 	storageService := gcs.NewProvider(&gcs.NewProviderParams{
 		Client:     externalDeps.storageClient,
@@ -50,14 +51,12 @@ func NewUseCaseDependencies(cfg config.Config, externalDeps ExternalDependencies
 		IsLocal:    environ.IsLocal(),
 	})
 
-	uuid := uuid.UUID{}
-
 	return &UseCaseDependencies{
 		EventRepository:       eventRepository,
 		SessionRepository:     sessionRepository,
+		PubsubPublisher:       pubsubPublisher,
 		AuthenticationService: authenticationService,
 		MailService:           mailService,
 		StorageService:        storageService,
-		UUID:                  uuid,
 	}
 }

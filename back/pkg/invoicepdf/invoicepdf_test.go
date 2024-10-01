@@ -7,7 +7,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/pkg/invoicepdf"
 )
 
-func Test_CreateInvoicePDF(t *testing.T) {
+func TestCreateInvoicePDF(t *testing.T) {
 	pdf, err := invoicepdf.CreateInvoicePDF(&invoicepdf.CreateInvoicePDFParam{
 		OrgName: "団体名12345団体名12345団体名12345",
 	})
