@@ -1,29 +1,35 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // ParallelExecutionResult - 並列実行結果
 type ParallelExecutionResult struct {
-	id            string                               // id
-	eventID       string                               // event_id
-	executionType int                                  // 費用按分計算請求データ
-	resultCode    int                                  // 実行結果 成功 or 失敗
-	errorMessage  *ParallelExecutionResultErrorMessage // error object
-	meta          *Meta                                // メタ
+	id            valueobjects.ParallelExecutionResultID // id
+	eventID       valueobjects.EventID                   // event_id
+	executionType int                                    // 費用按分計算請求データ
+	resultCode    int                                    // 実行結果 成功 or 失敗
+	errorMessage  *ParallelExecutionResultErrorMessage   // error object
+	meta          *Meta                                  // メタ
 }
 
 // NewParallelExecutionResultParam - 並列実行結果作成パラメータ
 type NewParallelExecutionResultParam struct {
-	ID            string                               // id
-	EventID       string                               // event_id
-	ExecutionType int                                  // 費用按分計算請求データ
-	ResultCode    int                                  // 実行結果 成功 or 失敗
-	ErrorMessage  *ParallelExecutionResultErrorMessage // error object
-	Meta          *Meta                                // メタ
+	ID            valueobjects.ParallelExecutionResultID // id
+	EventID       valueobjects.EventID                   // event_id
+	ExecutionType int                                    // 費用按分計算請求データ
+	ResultCode    int                                    // 実行結果 成功 or 失敗
+	ErrorMessage  *ParallelExecutionResultErrorMessage   // error object
+	Meta          *Meta                                  // メタ
 }
 
 // NewParallelExecutionResult - 並列実行結果作成
 func NewParallelExecutionResult(param *NewParallelExecutionResultParam) *ParallelExecutionResult {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewParallelExecutionResultID()
+	}
 	return &ParallelExecutionResult{
-		id:            param.ID,
+		id:            id,
 		eventID:       param.EventID,
 		executionType: param.ExecutionType,
 		resultCode:    param.ResultCode,
@@ -33,12 +39,12 @@ func NewParallelExecutionResult(param *NewParallelExecutionResultParam) *Paralle
 }
 
 // ID - ID のゲッター
-func (e *ParallelExecutionResult) ID() string {
+func (e *ParallelExecutionResult) ID() valueobjects.ParallelExecutionResultID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *ParallelExecutionResult) EventID() string {
+func (e *ParallelExecutionResult) EventID() valueobjects.EventID {
 	return e.eventID
 }
 

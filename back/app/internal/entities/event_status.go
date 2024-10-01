@@ -2,6 +2,8 @@ package entities
 
 import (
 	"fmt"
+
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 )
 
 const (
@@ -13,17 +15,17 @@ const (
 
 // EventStatus - イベントステータス
 type EventStatus struct {
-	id      string // {event_id}_{status}
-	eventID string // event_id
-	status  int    // ステータス
-	meta    *Meta  // メタ
+	id      string               // {event_id}_{status}
+	eventID valueobjects.EventID // event_id
+	status  int                  // ステータス
+	meta    *Meta                // メタ
 }
 
 // NewEventStatusParam - イベントステータス作成パラメータ
 type NewEventStatusParam struct {
-	EventID string // event_id
-	Status  int    // ステータス
-	Meta    *Meta  // メタ
+	EventID valueobjects.EventID // event_id
+	Status  int                  // ステータス
+	Meta    *Meta                // メタ
 }
 
 // NewEventStatus - イベントステータス作成
@@ -47,7 +49,7 @@ func (e *EventStatus) ID() string {
 }
 
 // EventID - EventID のゲッター
-func (e *EventStatus) EventID() string {
+func (e *EventStatus) EventID() valueobjects.EventID {
 	return e.eventID
 }
 

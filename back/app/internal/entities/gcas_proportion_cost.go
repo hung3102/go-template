@@ -1,39 +1,53 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // GCASProportionCost - GCASから貰った費用按分情報
 type GCASProportionCost struct {
-	id      string                  // id
-	eventID string                  // event_id
-	data    *GCASProportionCostData // もらったデータ
-	meta    *Meta                   // メタ
+	id        valueobjects.GCASProportionCostID //
+	eventID   valueobjects.EventID              //
+	accountID string                            //
+	data      *GCASProportionCostData           // GCAS費用按分情報APIから取得
+	meta      *Meta                             // メタ
 }
 
 // NewGCASProportionCostParam - GCASから貰った費用按分情報作成パラメータ
 type NewGCASProportionCostParam struct {
-	ID      string                  // id
-	EventID string                  // event_id
-	Data    *GCASProportionCostData // もらったデータ
-	Meta    *Meta                   // メタ
+	ID        valueobjects.GCASProportionCostID //
+	EventID   valueobjects.EventID              //
+	AccountID string                            //
+	Data      *GCASProportionCostData           // GCAS費用按分情報APIから取得
+	Meta      *Meta                             // メタ
 }
 
 // NewGCASProportionCost - GCASから貰った費用按分情報作成
 func NewGCASProportionCost(param *NewGCASProportionCostParam) *GCASProportionCost {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewGCASProportionCostID()
+	}
 	return &GCASProportionCost{
-		id:      param.ID,
-		eventID: param.EventID,
-		data:    param.Data,
-		meta:    param.Meta,
+		id:        id,
+		eventID:   param.EventID,
+		accountID: param.AccountID,
+		data:      param.Data,
+		meta:      param.Meta,
 	}
 }
 
 // ID - ID のゲッター
-func (e *GCASProportionCost) ID() string {
+func (e *GCASProportionCost) ID() valueobjects.GCASProportionCostID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *GCASProportionCost) EventID() string {
+func (e *GCASProportionCost) EventID() valueobjects.EventID {
 	return e.eventID
+}
+
+// AccountID - AccountID のゲッター
+func (e *GCASProportionCost) AccountID() string {
+	return e.accountID
 }
 
 // Data - Data のゲッター

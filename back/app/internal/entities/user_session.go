@@ -1,49 +1,57 @@
 package entities
 
-import "time"
+import (
+	"time"
 
-// UserSession - ユーザセッション
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+)
+
+// UserSession - ユーザーセッション
 type UserSession struct {
-	id        string    // id
-	userID    string    // ユーザID
-	expiresAt time.Time // 有効期限
-	meta      *Meta     // メタ
+	id        valueobjects.UserSessionID // ID
+	userID    string                     // ユーザーID
+	expiresAt time.Time                  // 有効期限
+	meta      *Meta                      // メタ
 }
 
-// NewUserSessionParam - NewUserSession のパラメータ
+// NewUserSessionParam - ユーザーセッション作成パラメータ
 type NewUserSessionParam struct {
-	ID        string    // id
-	UserID    string    // ユーザID
-	ExpiresAt time.Time // 有効期限
-	Meta      *Meta     // Meta
+	ID        valueobjects.UserSessionID // ID
+	UserID    string                     // ユーザーID
+	ExpiresAt time.Time                  // 有効期限
+	Meta      *Meta                      // メタ
 }
 
-// NewUserSession - UserSession のコンストラクタ
+// NewUserSession - ユーザーセッション作成
 func NewUserSession(param *NewUserSessionParam) *UserSession {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewUserSessionID()
+	}
 	return &UserSession{
-		id:        param.ID,
+		id:        id,
 		userID:    param.UserID,
 		expiresAt: param.ExpiresAt,
 		meta:      param.Meta,
 	}
 }
 
-// ID - id のゲッター
-func (u *UserSession) ID() string {
-	return u.id
+// ID - ID のゲッター
+func (e *UserSession) ID() valueobjects.UserSessionID {
+	return e.id
 }
 
-// UserID - userID のゲッター
-func (u *UserSession) UserID() string {
-	return u.userID
+// UserID - UserID のゲッター
+func (e *UserSession) UserID() string {
+	return e.userID
 }
 
-// ExpiresAt - expiresAt のゲッター
-func (u *UserSession) ExpiresAt() time.Time {
-	return u.expiresAt
+// ExpiresAt - ExpiresAt のゲッター
+func (e *UserSession) ExpiresAt() time.Time {
+	return e.expiresAt
 }
 
-// Meta - meta のゲッター
-func (u *UserSession) Meta() *Meta {
-	return u.meta
+// Meta - Meta のゲッター
+func (e *UserSession) Meta() *Meta {
+	return e.meta
 }

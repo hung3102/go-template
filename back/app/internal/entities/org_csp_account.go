@@ -1,37 +1,43 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // OrgCSPAccount - 団体ごとのCSPごとのアカウントごと
 type OrgCSPAccount struct {
-	id                   string // id
-	eventID              string // event_id
-	gcasProportionCostID string // gcas_proportion_cost_id
-	gcasAccountCostID    string // gcas_account_cost_id
-	organization         string // 団体名
-	csp                  string // CSP
-	accountID            string // アカウントID
-	cost                 int    // 費用按分類
-	billingUnitID        string // 支払い区分ID
-	meta                 *Meta  // メタ
+	id                   valueobjects.OrgCSPAccountID      // ID
+	eventID              valueobjects.EventID              // イベントID
+	gcasProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
+	gcasAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
+	organization         string                            // 団体名
+	csp                  string                            // CSP
+	accountID            string                            // アカウントID
+	cost                 int                               // 費用按分類
+	billingUnitID        string                            // 支払い区分ID
+	meta                 *Meta                             // メタ
 }
 
 // NewOrgCSPAccountParam - 団体ごとのCSPごとのアカウントごと作成パラメータ
 type NewOrgCSPAccountParam struct {
-	ID                   string // id
-	EventID              string // event_id
-	GCASProportionCostID string // gcas_proportion_cost_id
-	GCASAccountCostID    string // gcas_account_cost_id
-	Organization         string // 団体名
-	CSP                  string // CSP
-	AccountID            string // アカウントID
-	Cost                 int    // 費用按分類
-	BillingUnitID        string // 支払い区分ID
-	Meta                 *Meta  // メタ
+	ID                   valueobjects.OrgCSPAccountID      // ID
+	EventID              valueobjects.EventID              // イベントID
+	GCASProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
+	GCASAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
+	Organization         string                            // 団体名
+	CSP                  string                            // CSP
+	AccountID            string                            // アカウントID
+	Cost                 int                               // 費用按分類
+	BillingUnitID        string                            // 支払い区分ID
+	Meta                 *Meta                             // メタ
 }
 
 // NewOrgCSPAccount - 団体ごとのCSPごとのアカウントごと作成
 func NewOrgCSPAccount(param *NewOrgCSPAccountParam) *OrgCSPAccount {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewOrgCSPAccountID()
+	}
 	return &OrgCSPAccount{
-		id:                   param.ID,
+		id:                   id,
 		eventID:              param.EventID,
 		gcasProportionCostID: param.GCASProportionCostID,
 		gcasAccountCostID:    param.GCASAccountCostID,
@@ -45,22 +51,22 @@ func NewOrgCSPAccount(param *NewOrgCSPAccountParam) *OrgCSPAccount {
 }
 
 // ID - ID のゲッター
-func (e *OrgCSPAccount) ID() string {
+func (e *OrgCSPAccount) ID() valueobjects.OrgCSPAccountID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *OrgCSPAccount) EventID() string {
+func (e *OrgCSPAccount) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
 // GCASProportionCostID - GCASProportionCostID のゲッター
-func (e *OrgCSPAccount) GCASProportionCostID() string {
+func (e *OrgCSPAccount) GCASProportionCostID() valueobjects.GCASProportionCostID {
 	return e.gcasProportionCostID
 }
 
 // GCASAccountCostID - GCASAccountCostID のゲッター
-func (e *OrgCSPAccount) GCASAccountCostID() string {
+func (e *OrgCSPAccount) GCASAccountCostID() valueobjects.GCASAccountCostID {
 	return e.gcasAccountCostID
 }
 

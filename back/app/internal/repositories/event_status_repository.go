@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 )
 
 //go:generate ../../../../bin/mockgen -source=$GOFILE -destination=../repositoryimpl/mocks/event_status_repository_mock.go -package=mockrepositories
@@ -18,6 +19,6 @@ type EventStatusRepository interface {
 
 // GetByEventIDAndStatusParam - GetByEventIDAndStatusのパラメーター
 type GetByEventIDAndStatusParam struct {
-	EventID string // EventID
-	Status  int    // Status
+	EventID valueobjects.EventID // EventID
+	Status  int                  // Status
 }

@@ -1,39 +1,53 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // GCASAccountCost - GCAS Dashboardから貰ったコスト情報
 type GCASAccountCost struct {
-	id      string               // id
-	eventID string               // event_id
-	data    *GCASAccountCostData // もらったデータ
-	meta    *Meta                // メタ
+	id        valueobjects.GCASAccountCostID // id
+	eventID   valueobjects.EventID           // event_id
+	accountId string                         // アカウントID
+	data      *GCASAccountCostData           // もらったデータ
+	meta      *Meta                          // メタ
 }
 
 // NewGCASAccountCostParam - GCAS Dashboardから貰ったコスト情報作成パラメータ
 type NewGCASAccountCostParam struct {
-	ID      string               // id
-	EventID string               // event_id
-	Data    *GCASAccountCostData // もらったデータ
-	Meta    *Meta                // メタ
+	ID        valueobjects.GCASAccountCostID // id
+	EventID   valueobjects.EventID           // event_id
+	AccountId string                         // アカウントID
+	Data      *GCASAccountCostData           // もらったデータ
+	Meta      *Meta                          // メタ
 }
 
 // NewGCASAccountCost - GCAS Dashboardから貰ったコスト情報作成
 func NewGCASAccountCost(param *NewGCASAccountCostParam) *GCASAccountCost {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewGCASAccountCostID()
+	}
 	return &GCASAccountCost{
-		id:      param.ID,
-		eventID: param.EventID,
-		data:    param.Data,
-		meta:    param.Meta,
+		id:        id,
+		eventID:   param.EventID,
+		accountId: param.AccountId,
+		data:      param.Data,
+		meta:      param.Meta,
 	}
 }
 
 // ID - ID のゲッター
-func (e *GCASAccountCost) ID() string {
+func (e *GCASAccountCost) ID() valueobjects.GCASAccountCostID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *GCASAccountCost) EventID() string {
+func (e *GCASAccountCost) EventID() valueobjects.EventID {
 	return e.eventID
+}
+
+// AccountId - AccountId のゲッター
+func (e *GCASAccountCost) AccountId() string {
+	return e.accountId
 }
 
 // Data - Data のゲッター

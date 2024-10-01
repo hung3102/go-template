@@ -1,31 +1,37 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // PaymentNum - 収納番号
 type PaymentNum struct {
-	id            string // id
-	eventID       string // event_id
-	billingID     string //
-	billingUnitID string //
-	paymentNum    string // 収納番号
-	cost          int    // この収納番号で請求している金額
-	meta          *Meta  // メタ
+	id            valueobjects.PaymentNumID // id
+	eventID       valueobjects.EventID      // event_id
+	billingID     valueobjects.BillingID    //
+	billingUnitID string                    // 支払い区分ID
+	paymentNum    string                    // 収納番号
+	cost          int                       // この収納番号で請求している金額
+	meta          *Meta                     // メタ
 }
 
 // NewPaymentNumParam - 収納番号作成パラメータ
 type NewPaymentNumParam struct {
-	ID            string // id
-	EventID       string // event_id
-	BillingID     string //
-	BillingUnitID string //
-	PaymentNum    string // 収納番号
-	Cost          int    // この収納番号で請求している金額
-	Meta          *Meta  // メタ
+	ID            valueobjects.PaymentNumID // id
+	EventID       valueobjects.EventID      // event_id
+	BillingID     valueobjects.BillingID    //
+	BillingUnitID string                    // 支払い区分ID
+	PaymentNum    string                    // 収納番号
+	Cost          int                       // この収納番号で請求している金額
+	Meta          *Meta                     // メタ
 }
 
 // NewPaymentNum - 収納番号作成
 func NewPaymentNum(param *NewPaymentNumParam) *PaymentNum {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewPaymentNumID()
+	}
 	return &PaymentNum{
-		id:            param.ID,
+		id:            id,
 		eventID:       param.EventID,
 		billingID:     param.BillingID,
 		billingUnitID: param.BillingUnitID,
@@ -36,17 +42,17 @@ func NewPaymentNum(param *NewPaymentNumParam) *PaymentNum {
 }
 
 // ID - ID のゲッター
-func (e *PaymentNum) ID() string {
+func (e *PaymentNum) ID() valueobjects.PaymentNumID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *PaymentNum) EventID() string {
+func (e *PaymentNum) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
 // BillingID - BillingID のゲッター
-func (e *PaymentNum) BillingID() string {
+func (e *PaymentNum) BillingID() valueobjects.BillingID {
 	return e.billingID
 }
 

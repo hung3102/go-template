@@ -7,6 +7,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
 )
@@ -35,8 +36,8 @@ func (g *gcasCSPCostImpl) CreateMany(ctx context.Context, gcasCSPCosts []*entiti
 		}
 
 		volcagoGCASCSPCost = append(volcagoGCASCSPCost, &volcago.GCASCSPCost{
-			ID:        gcasCSPCost.ID(),
-			EventID:   gcasCSPCost.EventID(),
+			ID:        gcasCSPCost.ID().String(),
+			EventID:   gcasCSPCost.EventID().String(),
 			CSP:       gcasCSPCost.CSP(),
 			TotalCost: gcasCSPCost.TotalCost(),
 			Meta: volcago.Meta{
@@ -63,9 +64,9 @@ func (g *gcasCSPCostImpl) CreateMany(ctx context.Context, gcasCSPCosts []*entiti
 }
 
 // Exists - event_idに紐付くコレクションの存在フラグを取得する
-func (g *gcasCSPCostImpl) Exists(ctx context.Context, eventID string) (bool, error) {
+func (g *gcasCSPCostImpl) Exists(ctx context.Context, eventID valueobjects.EventID) (bool, error) {
 	qb := infrastructures.NewQueryBuilder(g.infra.GetCollection()).
-		Equal("event_id", eventID).
+		Equal("event_id", eventID.String()).
 		Limit(1)
 
 	gcasCSPCosts, err := g.infra.Search(ctx, nil, qb.Query())

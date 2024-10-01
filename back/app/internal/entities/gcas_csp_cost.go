@@ -1,27 +1,33 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // GCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト
 type GCASCSPCost struct {
-	id        string // id
-	eventID   string // event_id
-	csp       string // AWSなど
-	totalCost int    //
-	meta      *Meta  // メタ
+	id        valueobjects.GCASCSPCostID // id
+	eventID   valueobjects.EventID       // event_id
+	csp       string                     // AWSなど
+	totalCost int                        //
+	meta      *Meta                      // メタ
 }
 
 // NewGCASCSPCostParam - GCAS Dashboardから貰ったCSPのトータルコスト作成パラメータ
 type NewGCASCSPCostParam struct {
-	ID        string // id
-	EventID   string // event_id
-	CSP       string // AWSなど
-	TotalCost int    //
-	Meta      *Meta  // メタ
+	ID        valueobjects.GCASCSPCostID // id
+	EventID   valueobjects.EventID       // event_id
+	CSP       string                     // AWSなど
+	TotalCost int                        //
+	Meta      *Meta                      // メタ
 }
 
 // NewGCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト作成
 func NewGCASCSPCost(param *NewGCASCSPCostParam) *GCASCSPCost {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewGCASCSPCostID()
+	}
 	return &GCASCSPCost{
-		id:        param.ID,
+		id:        id,
 		eventID:   param.EventID,
 		csp:       param.CSP,
 		totalCost: param.TotalCost,
@@ -30,12 +36,12 @@ func NewGCASCSPCost(param *NewGCASCSPCostParam) *GCASCSPCost {
 }
 
 // ID - ID のゲッター
-func (e *GCASCSPCost) ID() string {
+func (e *GCASCSPCost) ID() valueobjects.GCASCSPCostID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *GCASCSPCost) EventID() string {
+func (e *GCASCSPCost) EventID() valueobjects.EventID {
 	return e.eventID
 }
 

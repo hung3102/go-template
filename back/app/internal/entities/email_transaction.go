@@ -1,25 +1,31 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // EmailTransaction - email_transaction
 type EmailTransaction struct {
-	id        string // id
-	eventID   string // event_id
-	billingID string // billing_id
-	meta      *Meta  // メタ
+	id        valueobjects.EmailTransactionID // id
+	eventID   valueobjects.EventID            // event_id
+	billingID valueobjects.BillingID          // billing_id
+	meta      *Meta                           // メタ
 }
 
 // NewEmailTransactionParam - email_transaction作成パラメータ
 type NewEmailTransactionParam struct {
-	ID        string // id
-	EventID   string // event_id
-	BillingID string // billing_id
-	Meta      *Meta  // メタ
+	ID        valueobjects.EmailTransactionID // id
+	EventID   valueobjects.EventID            // event_id
+	BillingID valueobjects.BillingID          // billing_id
+	Meta      *Meta                           // メタ
 }
 
 // NewEmailTransaction - email_transaction作成
 func NewEmailTransaction(param *NewEmailTransactionParam) *EmailTransaction {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewEmailTransactionID()
+	}
 	return &EmailTransaction{
-		id:        param.ID,
+		id:        id,
 		eventID:   param.EventID,
 		billingID: param.BillingID,
 		meta:      param.Meta,
@@ -27,17 +33,17 @@ func NewEmailTransaction(param *NewEmailTransactionParam) *EmailTransaction {
 }
 
 // ID - ID のゲッター
-func (e *EmailTransaction) ID() string {
+func (e *EmailTransaction) ID() valueobjects.EmailTransactionID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *EmailTransaction) EventID() string {
+func (e *EmailTransaction) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
 // BillingID - BillingID のゲッター
-func (e *EmailTransaction) BillingID() string {
+func (e *EmailTransaction) BillingID() valueobjects.BillingID {
 	return e.billingID
 }
 

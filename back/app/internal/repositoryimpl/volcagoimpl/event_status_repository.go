@@ -8,6 +8,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
 )
@@ -37,8 +38,13 @@ func (e *eventStatusImpl) GetByEventIDAndStatus(ctx context.Context, param *repo
 		return nil, repositoryerrors.NewUnknownError("failed to get event_status", err)
 	}
 
+	eventID, err := valueobjects.NewEventIDFromString(eventStatus.EventID)
+	if err != nil {
+		return nil, repositoryerrors.NewUnknownError("failed to get event_status", err)
+	}
+
 	return entities.NewEventStatus(&entities.NewEventStatusParam{
-		EventID: eventStatus.EventID,
+		EventID: eventID,
 		Status:  eventStatus.Status,
 		Meta: entities.NewMeta(&entities.NewMetaParam{
 			CreatedAt: eventStatus.CreatedAt,
@@ -59,7 +65,7 @@ func (e *eventStatusImpl) Create(ctx context.Context, eventStatus *entities.Even
 
 	_, err := e.infra.Insert(ctx, &volcago.EventStatus{
 		ID:      eventStatus.ID(),
-		EventID: eventStatus.EventID(),
+		EventID: eventStatus.EventID().String(),
 		Status:  eventStatus.Status(),
 		Meta: volcago.Meta{
 			CreatedAt: eventStatus.Meta().CreatedAt(),

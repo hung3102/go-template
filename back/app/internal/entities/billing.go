@@ -1,39 +1,45 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // Billing - 請求
 type Billing struct {
-	id                string   // id
-	eventID           string   // event_id
-	organization      string   //
-	csp               string   //
-	email             string   //
-	address           string   //
-	cost              int      //
-	orgCSPAccountsIDs []string //
-	creatorID         string   //
-	billingType       int      //
-	meta              *Meta    // メタ
+	id                valueobjects.BillingID         // id
+	eventID           valueobjects.EventID           // event_id
+	organization      string                         //
+	csp               string                         //
+	email             string                         //
+	address           string                         //
+	cost              int                            //
+	orgCSPAccountsIDs []valueobjects.OrgCSPAccountID //
+	creatorID         valueobjects.CreatorID         //
+	billingType       int                            //
+	meta              *Meta                          // メタ
 }
 
 // NewBillingParam - 請求作成パラメータ
 type NewBillingParam struct {
-	ID                string   // id
-	EventID           string   // event_id
-	Organization      string   //
-	CSP               string   //
-	Email             string   //
-	Address           string   //
-	Cost              int      //
-	OrgCSPAccountsIDs []string //
-	CreatorID         string   //
-	BillingType       int      //
-	Meta              *Meta    // メタ
+	ID                valueobjects.BillingID         // id
+	EventID           valueobjects.EventID           // event_id
+	Organization      string                         //
+	CSP               string                         //
+	Email             string                         //
+	Address           string                         //
+	Cost              int                            //
+	OrgCSPAccountsIDs []valueobjects.OrgCSPAccountID //
+	CreatorID         valueobjects.CreatorID         //
+	BillingType       int                            //
+	Meta              *Meta                          // メタ
 }
 
 // NewBilling - 請求作成
 func NewBilling(param *NewBillingParam) *Billing {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewBillingID()
+	}
 	return &Billing{
-		id:                param.ID,
+		id:                id,
 		eventID:           param.EventID,
 		organization:      param.Organization,
 		csp:               param.CSP,
@@ -48,12 +54,12 @@ func NewBilling(param *NewBillingParam) *Billing {
 }
 
 // ID - ID のゲッター
-func (e *Billing) ID() string {
+func (e *Billing) ID() valueobjects.BillingID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *Billing) EventID() string {
+func (e *Billing) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
@@ -83,12 +89,12 @@ func (e *Billing) Cost() int {
 }
 
 // OrgCSPAccountsIDs - OrgCSPAccountsIDs のゲッター
-func (e *Billing) OrgCSPAccountsIDs() []string {
+func (e *Billing) OrgCSPAccountsIDs() []valueobjects.OrgCSPAccountID {
 	return e.orgCSPAccountsIDs
 }
 
 // CreatorID - CreatorID のゲッター
-func (e *Billing) CreatorID() string {
+func (e *Billing) CreatorID() valueobjects.CreatorID {
 	return e.creatorID
 }
 

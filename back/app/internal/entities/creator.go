@@ -1,29 +1,35 @@
 package entities
 
+import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
+
 // Creator - 請求書の発行元情報
 type Creator struct {
-	id           string // id
-	eventID      string // event_id
-	organization string // 団体名
-	address      string // 住所
-	personName   string // person_name
-	meta         *Meta  // メタ
+	id           valueobjects.CreatorID // id
+	eventID      valueobjects.EventID   // event_id
+	organization string                 // 団体名
+	address      string                 // 住所
+	personName   string                 // person_name
+	meta         *Meta                  // メタ
 }
 
 // NewCreatorParam - 請求書の発行元情報作成パラメータ
 type NewCreatorParam struct {
-	ID           string // id
-	EventID      string // event_id
-	Organization string // 団体名
-	Address      string // 住所
-	PersonName   string // person_name
-	Meta         *Meta  // メタ
+	ID           valueobjects.CreatorID // id
+	EventID      valueobjects.EventID   // event_id
+	Organization string                 // 団体名
+	Address      string                 // 住所
+	PersonName   string                 // person_name
+	Meta         *Meta                  // メタ
 }
 
 // NewCreator - 請求書の発行元情報作成
 func NewCreator(param *NewCreatorParam) *Creator {
+	id := param.ID
+	if id.IsNil() {
+		id = valueobjects.NewCreatorID()
+	}
 	return &Creator{
-		id:           param.ID,
+		id:           id,
 		eventID:      param.EventID,
 		organization: param.Organization,
 		address:      param.Address,
@@ -33,12 +39,12 @@ func NewCreator(param *NewCreatorParam) *Creator {
 }
 
 // ID - ID のゲッター
-func (e *Creator) ID() string {
+func (e *Creator) ID() valueobjects.CreatorID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *Creator) EventID() string {
+func (e *Creator) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
