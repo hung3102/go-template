@@ -8,6 +8,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
 )
@@ -24,7 +25,7 @@ func NewUserSession(client *firestore.Client) repositories.BaseRepository[entiti
 // Create - イベントを作成
 func (u *userSessionImpl) Create(ctx context.Context, entity *entities.UserSession) error {
 	_, err := u.infra.Insert(ctx, &volcago.UserSession{
-		ID:        entity.ID(),
+		ID:        entity.ID().String(),
 		UserID:    entity.UserID(),
 		ExpiresAt: entity.ExpiresAt(),
 		Meta: volcago.Meta{
@@ -53,8 +54,13 @@ func (u *userSessionImpl) GetByID(ctx context.Context, id string) (*entities.Use
 		return nil, repositoryerrors.NewUnknownError("failed to get entity", err)
 	}
 
+	userSessionID, err := valueobjects.NewUserSessionIDFromString(entity.ID)
+	if err != nil {
+		return nil, repositoryerrors.NewUnknownError("failed to get entity", err)
+	}
+
 	return entities.NewUserSession(&entities.NewUserSessionParam{
-		ID:        entity.ID,
+		ID:        userSessionID,
 		UserID:    entity.UserID,
 		ExpiresAt: entity.ExpiresAt,
 		Meta: entities.NewMeta(&entities.NewMetaParam{

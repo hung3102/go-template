@@ -210,23 +210,23 @@ func (repo *billingRepository) RunInTransaction() func(ctx context.Context, f fu
 
 // BillingSearchParam - params for search
 type BillingSearchParam struct {
-	ID                *QueryChainer
-	EventID           *QueryChainer
-	Organization      *QueryChainer
-	CSP               *QueryChainer
-	Email             *QueryChainer
-	Address           *QueryChainer
-	Cost              *QueryChainer
-	OrgCSPAccountsIDs *QueryChainer
-	CreatorID         *QueryChainer
-	BillingType       *QueryChainer
-	CreatedAt         *QueryChainer
-	CreatedBy         *QueryChainer
-	UpdatedAt         *QueryChainer
-	UpdatedBy         *QueryChainer
-	DeletedAt         *QueryChainer
-	DeletedBy         *QueryChainer
-	Version           *QueryChainer
+	ID                   *QueryChainer
+	EventID              *QueryChainer
+	Organization         *QueryChainer
+	CSP                  *QueryChainer
+	Email                *QueryChainer
+	Address              *QueryChainer
+	Cost                 *QueryChainer
+	OrgCSPAccountCostIDs *QueryChainer
+	CreatorID            *QueryChainer
+	BillingType          *QueryChainer
+	CreatedAt            *QueryChainer
+	CreatedBy            *QueryChainer
+	UpdatedAt            *QueryChainer
+	UpdatedBy            *QueryChainer
+	DeletedAt            *QueryChainer
+	DeletedBy            *QueryChainer
+	Version              *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
@@ -235,22 +235,22 @@ type BillingSearchParam struct {
 
 // BillingUpdateParam - params for strict updates
 type BillingUpdateParam struct {
-	EventID           interface{}
-	Organization      interface{}
-	CSP               interface{}
-	Email             interface{}
-	Address           interface{}
-	Cost              interface{}
-	OrgCSPAccountsIDs interface{}
-	CreatorID         interface{}
-	BillingType       interface{}
-	CreatedAt         interface{}
-	CreatedBy         interface{}
-	UpdatedAt         interface{}
-	UpdatedBy         interface{}
-	DeletedAt         interface{}
-	DeletedBy         interface{}
-	Version           interface{}
+	EventID              interface{}
+	Organization         interface{}
+	CSP                  interface{}
+	Email                interface{}
+	Address              interface{}
+	Cost                 interface{}
+	OrgCSPAccountCostIDs interface{}
+	CreatorID            interface{}
+	BillingType          interface{}
+	CreatedAt            interface{}
+	CreatedBy            interface{}
+	UpdatedAt            interface{}
+	UpdatedBy            interface{}
+	DeletedAt            interface{}
+	DeletedBy            interface{}
+	Version              interface{}
 }
 
 // Search - search documents
@@ -1031,13 +1031,13 @@ func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearch
 			query = param.Cost.BuildCursorQuery(query)
 		}
 	}
-	if param.OrgCSPAccountsIDs != nil {
-		for _, chain := range param.OrgCSPAccountsIDs.QueryGroup {
-			query = query.Where("org_csp_accounts_ids", chain.Operator, chain.Value)
+	if param.OrgCSPAccountCostIDs != nil {
+		for _, chain := range param.OrgCSPAccountCostIDs.QueryGroup {
+			query = query.Where("org_csp_accounts_cost_ids", chain.Operator, chain.Value)
 		}
-		if direction := param.OrgCSPAccountsIDs.OrderByDirection; direction > 0 {
-			query = query.OrderBy("org_csp_accounts_ids", direction)
-			query = param.OrgCSPAccountsIDs.BuildCursorQuery(query)
+		if direction := param.OrgCSPAccountCostIDs.OrderByDirection; direction > 0 {
+			query = query.OrderBy("org_csp_accounts_cost_ids", direction)
+			query = param.OrgCSPAccountCostIDs.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatorID != nil {

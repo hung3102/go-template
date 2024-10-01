@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 )
 
 //go:generate ../../../../bin/mockgen -source=$GOFILE -destination=../repositoryimpl/mocks/gcas_csp_cost_repository_mock.go -package=mockrepositories
@@ -13,5 +14,5 @@ type GCASCSPCostRepository interface {
 	// CreateMany - 複数レコードを一括登録する
 	CreateMany(ctx context.Context, gcasCSPCosts []*entities.GCASCSPCost) error
 	// Exists - event_idに紐付くコレクションの存在フラグを取得する
-	Exists(ctx context.Context, eventID string) (bool, error)
+	Exists(ctx context.Context, eventID valueobjects.EventID) (bool, error)
 }

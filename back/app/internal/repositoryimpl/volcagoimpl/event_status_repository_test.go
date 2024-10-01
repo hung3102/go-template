@@ -14,12 +14,16 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryerrors"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
 	"github.com/topgate/gcim-temporary/back/app/internal/testhelper"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
 func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
-	eventID := "202409251049"
-	eventIDOther := "202409251049other"
+	testhelper.SetEnv(t)
+	firestoreClient := testhelper.FirestoreClient(t)
+
+	eventID := valueobjects.NewEventID()
+	eventIDOther := valueobjects.NewEventID()
 	createdBy := "event_status_tester"
 
 	type args struct {
@@ -38,7 +42,7 @@ func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
 			prepareMockFn: func(t *testing.T, firestoreClient *firestore.Client) {
 				addEventStatus(t, firestoreClient, &volcago.EventStatus{
 					ID:      fmt.Sprintf("%s_%d", eventID, 9),
-					EventID: eventID,
+					EventID: eventID.String(),
 					Status:  9,
 					Meta: volcago.Meta{
 						CreatedBy: createdBy,
@@ -68,7 +72,7 @@ func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
 			prepareMockFn: func(t *testing.T, firestoreClient *firestore.Client) {
 				addEventStatus(t, firestoreClient, &volcago.EventStatus{
 					ID:      fmt.Sprintf("%s_%d", eventIDOther, 9),
-					EventID: eventIDOther, // event_idが異なる
+					EventID: eventIDOther.String(), // event_idが異なる
 					Status:  9,
 					Meta: volcago.Meta{
 						CreatedBy: createdBy,
@@ -77,7 +81,7 @@ func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
 				})
 				addEventStatus(t, firestoreClient, &volcago.EventStatus{
 					ID:      fmt.Sprintf("%s_%d", eventID, 8),
-					EventID: eventID,
+					EventID: eventID.String(),
 					Status:  8, // statusが異なる
 					Meta: volcago.Meta{
 						CreatedBy: createdBy,
@@ -104,12 +108,10 @@ func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetEnv(t)
-			firestoreClient := testhelper.FirestoreClient(t)
 			ctx := context.Background()
 
-			deleteEventStatus(t, firestoreClient, eventID)
-			deleteEventStatus(t, firestoreClient, eventIDOther)
+			deleteEventStatus(t, firestoreClient, eventID.String())
+			deleteEventStatus(t, firestoreClient, eventIDOther.String())
 
 			tt.prepareMockFn(t, firestoreClient)
 
@@ -140,10 +142,15 @@ func TestEventStatusImplGetByEventIDAndStatus(t *testing.T) {
 			}
 		})
 	}
+	deleteEventStatus(t, firestoreClient, eventID.String())
+	deleteEventStatus(t, firestoreClient, eventIDOther.String())
 }
 
 func TestEventStatusImplCreate(t *testing.T) {
-	eventID := "202409251049"
+	testhelper.SetEnv(t)
+	firestoreClient := testhelper.FirestoreClient(t)
+
+	eventID := valueobjects.NewEventID()
 	createdBy := "event_status_tester"
 
 	type args struct {
@@ -175,13 +182,11 @@ func TestEventStatusImplCreate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testhelper.SetEnv(t)
-			firestoreClient := testhelper.FirestoreClient(t)
 			ctx := context.Background()
 
-			deleteEventStatus(t, firestoreClient, eventID)
+			deleteEventStatus(t, firestoreClient, eventID.String())
 
-			before := findEventStatus(t, firestoreClient, eventID)
+			before := findEventStatus(t, firestoreClient, eventID.String())
 			if len(before) != 0 {
 				t.Fatalf("error: len(before) = %d", len(before))
 			}
@@ -192,7 +197,7 @@ func TestEventStatusImplCreate(t *testing.T) {
 				t.Fatalf("error :%+v", err)
 			}
 
-			got := findEventStatus(t, firestoreClient, eventID)
+			got := findEventStatus(t, firestoreClient, eventID.String())
 
 			if tt.args.eventStatus == nil {
 				if len(got) > 0 {
@@ -207,8 +212,8 @@ func TestEventStatusImplCreate(t *testing.T) {
 
 			data := got[0].Data()
 			want := tt.args.eventStatus
-			if got[0].Ref.ID != fmt.Sprintf("%s_%d", want.EventID(), want.Status()) ||
-				data["event_id"] != want.EventID() ||
+			if got[0].Ref.ID != fmt.Sprintf("%s_%d", want.EventID().String(), want.Status()) ||
+				data["event_id"] != want.EventID().String() ||
 				data["status"].(int64) != int64(want.Status()) ||
 				data["created_by"] != want.Meta().CreatedBy() ||
 				data["updated_by"] != want.Meta().UpdatedBy() ||
@@ -218,6 +223,7 @@ func TestEventStatusImplCreate(t *testing.T) {
 			}
 		})
 	}
+	deleteEventStatus(t, firestoreClient, eventID.String())
 }
 
 func deleteEventStatus(t *testing.T, firestoreClient *firestore.Client, eventID string) {

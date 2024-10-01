@@ -7,6 +7,10 @@ const (
 	GCASProportionCostIndexLabelEventIDLike     = "e3" // like-match of EventID
 	GCASProportionCostIndexLabelEventIDPrefix   = "e1" // prefix-match of EventID
 	GCASProportionCostIndexLabelEventIDSuffix   = "e2" // suffix-match of EventID
+	GCASProportionCostIndexLabelAccountIDEqual  = "a4" // perfect-match of AccountID
+	GCASProportionCostIndexLabelAccountIDLike   = "a3" // like-match of AccountID
+	GCASProportionCostIndexLabelAccountIDPrefix = "a1" // prefix-match of AccountID
+	GCASProportionCostIndexLabelAccountIDSuffix = "a2" // suffix-match of AccountID
 	GCASProportionCostIndexLabelCreatedAtPrefix = "c1" // prefix-match of CreatedAt
 	GCASProportionCostIndexLabelCreatedAtSuffix = "c2" // suffix-match of CreatedAt
 	GCASProportionCostIndexLabelCreatedAtLike   = "c3" // like-match of CreatedAt

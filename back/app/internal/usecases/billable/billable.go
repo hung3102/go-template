@@ -9,12 +9,18 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
 	"github.com/topgate/gcim-temporary/back/app/internal/errorcode"
 	"github.com/topgate/gcim-temporary/back/app/internal/usecaseerrors"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"golang.org/x/xerrors"
 )
 
 // Billable - 請求書作成の開始判定をする
 func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
-	shouldcreateInvoice, err := u.deps.EventStatusService.IsInvoiceCreatable(ctx, input.EventID)
+	eventID, err := valueobjects.NewEventIDFromString(input.EventID)
+	if err != nil {
+		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
+	}
+
+	shouldcreateInvoice, err := u.deps.EventStatusService.IsInvoiceCreatable(ctx, eventID)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
@@ -22,12 +28,12 @@ func (u *Usecase) Billable(ctx context.Context, input *Input) (*Output, error) {
 		return u.emptyOutput(), nil
 	}
 
-	result, err := u.billableMain(ctx, input)
+	result, err := u.billableMain(ctx, eventID)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 
-	if err := u.deps.EventStatusService.SetBillable(ctx, input.EventID); err != nil {
+	if err := u.deps.EventStatusService.SetBillable(ctx, eventID); err != nil {
 		return nil, xerrors.Errorf("error in billable.Billable: %w", err)
 	}
 	return result, nil
@@ -41,13 +47,13 @@ func (u *Usecase) emptyOutput() *Output {
 }
 
 // billableMain - 請求書作成の開始判定のメイン処理
-func (u *Usecase) billableMain(ctx context.Context, input *Input) (*Output, error) {
+func (u *Usecase) billableMain(ctx context.Context, eventID valueobjects.EventID) (*Output, error) {
 	gcasDashboardAPIGetAccountsResponse, err := u.fetchAccountInfo()
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.billableMain: %w", err)
 	}
 
-	err = u.createGCASCSPCost(ctx, input.EventID, gcasDashboardAPIGetAccountsResponse)
+	err = u.createGCASCSPCost(ctx, eventID, gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.billableMain: %w", err)
 	}
@@ -113,7 +119,7 @@ func (u *Usecase) CompareAccountInfo(
 }
 
 // createGCASCSPCost - GCASCSPCostを登録する
-func (u *Usecase) createGCASCSPCost(ctx context.Context, eventID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
+func (u *Usecase) createGCASCSPCost(ctx context.Context, eventID valueobjects.EventID, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) error {
 	gcapCSPCostExists, err := u.deps.GCASCSPCostRepository.Exists(ctx, eventID)
 	if err != nil {
 		return usecaseerrors.NewUnknownError(errorcode.ErrorCodeDBAccess, "error in billable.createGCASCSPCost", err)
@@ -134,7 +140,7 @@ func (u *Usecase) createGCASCSPCost(ctx context.Context, eventID string, gcasDas
 	return nil
 }
 
-func (u *Usecase) ToGCASCSPCost(eventID string, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
+func (u *Usecase) ToGCASCSPCost(eventID valueobjects.EventID, gcasDashboardAPIGetAccountsResponse *gcasdashboardapi.GetAccountsResponse) ([]*entities.GCASCSPCost, error) {
 	cspCostInfo, err := u.fetchCostInfo(gcasDashboardAPIGetAccountsResponse)
 	if err != nil {
 		return nil, xerrors.Errorf("error in billable.ToGCASCSPCost: %w", err)
@@ -180,16 +186,11 @@ func (u *Usecase) toCSPTotalCostMapFromCspAccountIDCostInfoMap(cspCostInfo map[s
 }
 
 // toGCAPCSPCostsFromCostTotalCostMap - コスト情報をGCASCSPCostに変換する
-func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventID string, cspTotalCostMap map[string]int) ([]*entities.GCASCSPCost, error) {
+func (u *Usecase) toGCAPCSPCostsFromCostTotalCostMap(eventID valueobjects.EventID, cspTotalCostMap map[string]int) ([]*entities.GCASCSPCost, error) {
 	result := []*entities.GCASCSPCost{}
 	for csp, totalCost := range cspTotalCostMap {
-		uuid, err := u.deps.UUID.GetUUID()
-		if err != nil {
-			return nil, xerrors.Errorf("error in billable.toGCAPCSPCostsFromCostTotalCostMap: %w", err)
-		}
 		result = append(result, entities.NewGCASCSPCost(
 			&entities.NewGCASCSPCostParam{
-				ID:        uuid,
 				EventID:   eventID,
 				CSP:       csp,
 				TotalCost: totalCost,

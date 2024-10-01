@@ -14,6 +14,7 @@ import (
 	reflect "reflect"
 
 	entities "github.com/topgate/gcim-temporary/back/app/internal/entities"
+	valueobjects "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -55,7 +56,7 @@ func (mr *MockGCASCSPCostRepositoryMockRecorder) CreateMany(ctx, gcasCSPCosts an
 }
 
 // Exists mocks base method.
-func (m *MockGCASCSPCostRepository) Exists(ctx context.Context, eventID string) (bool, error) {
+func (m *MockGCASCSPCostRepository) Exists(ctx context.Context, eventID valueobjects.EventID) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Exists", ctx, eventID)
 	ret0, _ := ret[0].(bool)

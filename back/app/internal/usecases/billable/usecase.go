@@ -8,7 +8,6 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/api/gcasdashboardapi"
 	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	"github.com/topgate/gcim-temporary/back/app/internal/services"
-	"github.com/topgate/gcim-temporary/back/pkg/uuid"
 )
 
 // Usecase - 請求書作成の開始判定のユースケース
@@ -23,7 +22,6 @@ type Dependencies struct {
 	GCASAPI               gcasapi.GCASAPI
 	EventStatusService    services.EventStatusService
 	GCASCSPCostRepository repositories.GCASCSPCostRepository
-	UUID                  uuid.UUID
 }
 
 // NewUsecase - Usecase のコンストラクタ

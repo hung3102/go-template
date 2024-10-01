@@ -212,6 +212,7 @@ func (repo *gcasproportionCostRepository) RunInTransaction() func(ctx context.Co
 type GCASProportionCostSearchParam struct {
 	ID        *QueryChainer
 	EventID   *QueryChainer
+	AccountID *QueryChainer
 	CreatedAt *QueryChainer
 	CreatedBy *QueryChainer
 	UpdatedAt *QueryChainer
@@ -228,6 +229,7 @@ type GCASProportionCostSearchParam struct {
 // GCASProportionCostUpdateParam - params for strict updates
 type GCASProportionCostUpdateParam struct {
 	EventID   interface{}
+	AccountID interface{}
 	CreatedAt interface{}
 	CreatedBy interface{}
 	UpdatedAt interface{}
@@ -968,6 +970,15 @@ func (repo *gcasproportionCostRepository) searchByParam(v interface{}, param *GC
 		if direction := param.EventID.OrderByDirection; direction > 0 {
 			query = query.OrderBy("event_id", direction)
 			query = param.EventID.BuildCursorQuery(query)
+		}
+	}
+	if param.AccountID != nil {
+		for _, chain := range param.AccountID.QueryGroup {
+			query = query.Where("account_id", chain.Operator, chain.Value)
+		}
+		if direction := param.AccountID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("account_id", direction)
+			query = param.AccountID.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {

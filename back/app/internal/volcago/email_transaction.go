@@ -4,8 +4,8 @@ package volcago
 
 // EmailTransaction - email_transaction
 type EmailTransaction struct {
-	ID        string `firestore:"-" firestore_key:""` // id
-	EventID   string `firestore:"event_id"`           // event_id
-	BillingID string `firestore:"billing_id"`         // billing_id
+	ID        string `firestore:"-" firestore_key:""` // ID
+	EventID   string `firestore:"event_id"`           // イベントID
+	BillingID string `firestore:"billing_id"`         // 請求ID
 	Meta
 }

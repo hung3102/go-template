@@ -11,6 +11,7 @@ import (
 	"github.com/topgate/gcim-temporary/back/app/internal/repositoryimpl/volcagoimpl"
 	"github.com/topgate/gcim-temporary/back/app/internal/serviceimpl"
 	"github.com/topgate/gcim-temporary/back/app/internal/testhelper"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
@@ -20,14 +21,14 @@ func TestEventStatusImpl(t *testing.T) {
 
 	ctx := context.Background()
 	collectionName := "event_status"
-	eventID := "202409271004"
+	eventID := valueobjects.NewEventID()
 
 	sut := serviceimpl.NewEventStatusService(&serviceimpl.NewEventStatusServiceParam{
 		EventStatusRepository: volcagoimpl.NewEventStatus(firestoreClient),
 	})
 
 	// いったんイベントのデータ削除
-	testhelper.DeleteDocsByEventID(t, firestoreClient, collectionName, eventID)
+	testhelper.DeleteDocsByEventID(t, firestoreClient, collectionName, eventID.String())
 
 	// イベントがない場合は請求書の作成ができない
 	got, err := sut.IsInvoiceCreatable(ctx, eventID)
@@ -41,7 +42,7 @@ func TestEventStatusImpl(t *testing.T) {
 	// 請求書作成イベントを登録
 	eventStatusStart := volcago.EventStatus{
 		ID:      fmt.Sprintf("%s_%d", eventID, entities.EventStatusStart),
-		EventID: eventID,
+		EventID: eventID.String(),
 		Status:  entities.EventStatusStart,
 		Meta:    volcago.Meta{},
 	}
@@ -71,7 +72,7 @@ func TestEventStatusImpl(t *testing.T) {
 	}
 
 	data := snapshot.Data()
-	if data["event_id"] != eventID || data["status"].(int64) != int64(entities.EventStatusInvoiceCreationChecked) {
+	if data["event_id"] != eventID.String() || data["status"].(int64) != int64(entities.EventStatusInvoiceCreationChecked) {
 		t.Fatalf("error data = %v", data)
 	}
 
@@ -83,4 +84,7 @@ func TestEventStatusImpl(t *testing.T) {
 	if got != false {
 		t.Fatalf("error sut.IsInvoiceCreatable: got = %t", got)
 	}
+
+	// テストに使用したデータを削除
+	testhelper.DeleteDocsByEventID(t, firestoreClient, collectionName, eventID.String())
 }

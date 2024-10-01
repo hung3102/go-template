@@ -4,11 +4,11 @@ package volcago
 
 // PaymentNum - 収納番号
 type PaymentNum struct {
-	ID            string `firestore:"-" firestore_key:""` // id
-	EventID       string `firestore:"event_id"`           // event_id
-	BillingID     string `firestore:"billing_id"`         //
-	BillingUnitID string `firestore:"billing_unit_id"`    //
+	ID            string `firestore:"-" firestore_key:""` // ID
+	EventID       string `firestore:"event_id"`           // イベントID
+	BillingID     string `firestore:"billing_id"`         // 請求ID
+	BillingUnitID string `firestore:"billing_unit_id"`    // 支払い区分ID
 	PaymentNum    string `firestore:"payment_num"`        // 収納番号
-	Cost          int    `firestore:"cost"`               // この収納番号で請求している金額
+	Cost          int    `firestore:"cost"`               // 金額
 	Meta
 }

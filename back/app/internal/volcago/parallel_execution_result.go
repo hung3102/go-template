@@ -4,10 +4,10 @@ package volcago
 
 // ParallelExecutionResult - 並列実行結果
 type ParallelExecutionResult struct {
-	ID            string                               `firestore:"-" firestore_key:""` // id
-	EventID       string                               `firestore:"event_id"`           // event_id
-	ExecutionType int                                  `firestore:"execution_type"`     // 費用按分計算請求データ
-	ResultCode    int                                  `firestore:"result_code"`        // 実行結果 成功 or 失敗
-	ErrorMessage  *ParallelExecutionResultErrorMessage `firestore:"error_message"`      // error object
+	ID           string                               `firestore:"-" firestore_key:""` // ID
+	EventID      string                               `firestore:"event_id"`           // イベントID
+	Kind         string                               `firestore:"kind"`               // 処理種別
+	ResultCode   int                                  `firestore:"result_code"`        // 実行結果
+	ErrorMessage *ParallelExecutionResultErrorMessage `firestore:"error_message"`      // エラー情報
 	Meta
 }
