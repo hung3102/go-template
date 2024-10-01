@@ -9,17 +9,17 @@ import (
 // UserSession - ユーザーセッション
 type UserSession struct {
 	id        valueobjects.UserSessionID // ID
-	userID    string                     // ユーザーID
+	userID    string                     // イベントID
 	expiresAt time.Time                  // 有効期限
-	meta      *Meta                      // メタ
+	meta      *Meta                      // ID
 }
 
 // NewUserSessionParam - ユーザーセッション作成パラメータ
 type NewUserSessionParam struct {
 	ID        valueobjects.UserSessionID // ID
-	UserID    string                     // ユーザーID
+	UserID    string                     // イベントID
 	ExpiresAt time.Time                  // 有効期限
-	Meta      *Meta                      // メタ
+	Meta      *Meta                      // ID
 }
 
 // NewUserSession - ユーザーセッション作成

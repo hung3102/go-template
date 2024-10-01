@@ -4,17 +4,17 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // EmailTransaction - email_transaction
 type EmailTransaction struct {
-	id        valueobjects.EmailTransactionID // id
-	eventID   valueobjects.EventID            // event_id
-	billingID valueobjects.BillingID          // billing_id
+	id        valueobjects.EmailTransactionID // ID
+	eventID   valueobjects.EventID            // イベントID
+	billingID valueobjects.BillingID          // 請求ID
 	meta      *Meta                           // メタ
 }
 
 // NewEmailTransactionParam - email_transaction作成パラメータ
 type NewEmailTransactionParam struct {
-	ID        valueobjects.EmailTransactionID // id
-	EventID   valueobjects.EventID            // event_id
-	BillingID valueobjects.BillingID          // billing_id
+	ID        valueobjects.EmailTransactionID // ID
+	EventID   valueobjects.EventID            // イベントID
+	BillingID valueobjects.BillingID          // 請求ID
 	Meta      *Meta                           // メタ
 }
 

@@ -210,17 +210,17 @@ func (repo *parallelExecutionResultRepository) RunInTransaction() func(ctx conte
 
 // ParallelExecutionResultSearchParam - params for search
 type ParallelExecutionResultSearchParam struct {
-	ID            *QueryChainer
-	EventID       *QueryChainer
-	ExecutionType *QueryChainer
-	ResultCode    *QueryChainer
-	CreatedAt     *QueryChainer
-	CreatedBy     *QueryChainer
-	UpdatedAt     *QueryChainer
-	UpdatedBy     *QueryChainer
-	DeletedAt     *QueryChainer
-	DeletedBy     *QueryChainer
-	Version       *QueryChainer
+	ID         *QueryChainer
+	EventID    *QueryChainer
+	Kind       *QueryChainer
+	ResultCode *QueryChainer
+	CreatedAt  *QueryChainer
+	CreatedBy  *QueryChainer
+	UpdatedAt  *QueryChainer
+	UpdatedBy  *QueryChainer
+	DeletedAt  *QueryChainer
+	DeletedBy  *QueryChainer
+	Version    *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
@@ -229,16 +229,16 @@ type ParallelExecutionResultSearchParam struct {
 
 // ParallelExecutionResultUpdateParam - params for strict updates
 type ParallelExecutionResultUpdateParam struct {
-	EventID       interface{}
-	ExecutionType interface{}
-	ResultCode    interface{}
-	CreatedAt     interface{}
-	CreatedBy     interface{}
-	UpdatedAt     interface{}
-	UpdatedBy     interface{}
-	DeletedAt     interface{}
-	DeletedBy     interface{}
-	Version       interface{}
+	EventID    interface{}
+	Kind       interface{}
+	ResultCode interface{}
+	CreatedAt  interface{}
+	CreatedBy  interface{}
+	UpdatedAt  interface{}
+	UpdatedBy  interface{}
+	DeletedAt  interface{}
+	DeletedBy  interface{}
+	Version    interface{}
 }
 
 // Search - search documents
@@ -974,13 +974,13 @@ func (repo *parallelExecutionResultRepository) searchByParam(v interface{}, para
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
-	if param.ExecutionType != nil {
-		for _, chain := range param.ExecutionType.QueryGroup {
-			query = query.Where("execution_type", chain.Operator, chain.Value)
+	if param.Kind != nil {
+		for _, chain := range param.Kind.QueryGroup {
+			query = query.Where("kind", chain.Operator, chain.Value)
 		}
-		if direction := param.ExecutionType.OrderByDirection; direction > 0 {
-			query = query.OrderBy("execution_type", direction)
-			query = param.ExecutionType.BuildCursorQuery(query)
+		if direction := param.Kind.OrderByDirection; direction > 0 {
+			query = query.OrderBy("kind", direction)
+			query = param.Kind.BuildCursorQuery(query)
 		}
 	}
 	if param.ResultCode != nil {

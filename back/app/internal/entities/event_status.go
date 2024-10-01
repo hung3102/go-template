@@ -16,14 +16,14 @@ const (
 // EventStatus - イベントステータス
 type EventStatus struct {
 	id      string               // {event_id}_{status}
-	eventID valueobjects.EventID // event_id
+	eventID valueobjects.EventID // イベントID
 	status  int                  // ステータス
 	meta    *Meta                // メタ
 }
 
 // NewEventStatusParam - イベントステータス作成パラメータ
 type NewEventStatusParam struct {
-	EventID valueobjects.EventID // event_id
+	EventID valueobjects.EventID // イベントID
 	Status  int                  // ステータス
 	Meta    *Meta                // メタ
 }

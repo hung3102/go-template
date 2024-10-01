@@ -7,7 +7,7 @@ import "time"
 // UserSession - ユーザーセッション
 type UserSession struct {
 	ID        string    `firestore:"-" firestore_key:""` // ID
-	UserID    string    `firestore:"user_id"`            // ユーザーID
+	UserID    string    `firestore:"user_id"`            // イベントID
 	ExpiresAt time.Time `firestore:"expires_at"`         // 有効期限
 	Meta
 }

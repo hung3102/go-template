@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/billing_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/org_csp_account_cost_gen.go
 
-// BillingRepository - Repository of Billing
-type BillingRepository interface {
+// OrgCSPAccountCostRepository - Repository of OrgCSPAccountCost
+type OrgCSPAccountCostRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.Billing, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Billing, error)
-	Insert(ctx context.Context, subject *model.Billing) (_ string, err error)
-	Update(ctx context.Context, subject *model.Billing) (err error)
-	StrictUpdate(ctx context.Context, id string, param *BillingUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.Billing, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccountCost, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccountCost, error)
+	Insert(ctx context.Context, subject *model.OrgCSPAccountCost) (_ string, err error)
+	Update(ctx context.Context, subject *model.OrgCSPAccountCost) (err error)
+	StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountCostUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.OrgCSPAccountCost, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Billing, error)
-	InsertMulti(ctx context.Context, subjects []*model.Billing) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.Billing) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.Billing, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccountCost, error)
+	InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Billing, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Billing, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *BillingUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccountCost, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccountCost, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountCostUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Billing, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccountCost, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *BillingSearchParam, q *firestore.Query) ([]*model.Billing, error)
-	SearchWithTx(tx *firestore.Transaction, param *BillingSearchParam, q *firestore.Query) ([]*model.Billing, error)
-	SearchByParam(ctx context.Context, param *BillingSearchParam) ([]*model.Billing, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *BillingSearchParam) ([]*model.Billing, *PagingResult, error)
+	Search(ctx context.Context, param *OrgCSPAccountCostSearchParam, q *firestore.Query) ([]*model.OrgCSPAccountCost, error)
+	SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountCostSearchParam, q *firestore.Query) ([]*model.OrgCSPAccountCost, error)
+	SearchByParam(ctx context.Context, param *OrgCSPAccountCostSearchParam) ([]*model.OrgCSPAccountCost, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountCostSearchParam) ([]*model.OrgCSPAccountCost, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type BillingRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// BillingRepositoryMiddleware - middleware of BillingRepository
-type BillingRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.Billing) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.Billing) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.Billing, opts ...DeleteOption) (bool, error)
+// OrgCSPAccountCostRepositoryMiddleware - middleware of OrgCSPAccountCostRepository
+type OrgCSPAccountCostRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.OrgCSPAccountCost) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccountCost) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.OrgCSPAccountCost, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type billingRepository struct {
+type orgCspaccountCostRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []BillingRepositoryMiddleware
+	middleware       []OrgCSPAccountCostRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewBillingRepository - constructor
-func NewBillingRepository(firestoreClient *firestore.Client, middleware ...BillingRepositoryMiddleware) BillingRepository {
-	return &billingRepository{
-		collectionName:   "billing",
+// NewOrgCSPAccountCostRepository - constructor
+func NewOrgCSPAccountCostRepository(firestoreClient *firestore.Client, middleware ...OrgCSPAccountCostRepositoryMiddleware) OrgCSPAccountCostRepository {
+	return &orgCspaccountCostRepository{
+		collectionName:   "org_csp_account_cost",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "billing"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "org_csp_account_cost"),
 	}
 }
 
-func (repo *billingRepository) setMeta(subject *model.Billing, isInsert bool) {
+func (repo *orgCspaccountCostRepository) setMeta(subject *model.OrgCSPAccountCost, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *billingRepository) setMeta(subject *model.Billing, isInsert bool) {
 	subject.Version++
 }
 
-func (repo *billingRepository) setMetaWithStrictUpdate(param *BillingUpdateParam) {
+func (repo *orgCspaccountCostRepository) setMetaWithStrictUpdate(param *OrgCSPAccountCostUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *billingRepository) beforeInsert(ctx context.Context, subject *model.Billing) error {
+func (repo *orgCspaccountCostRepository) beforeInsert(ctx context.Context, subject *model.OrgCSPAccountCost) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *billingRepository) beforeInsert(ctx context.Context, subject *model.
 	return nil
 }
 
-func (repo *billingRepository) beforeUpdate(ctx context.Context, old, subject *model.Billing) error {
+func (repo *orgCspaccountCostRepository) beforeUpdate(ctx context.Context, old, subject *model.OrgCSPAccountCost) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *billingRepository) beforeUpdate(ctx context.Context, old, subject *m
 	return nil
 }
 
-func (repo *billingRepository) beforeDelete(ctx context.Context, subject *model.Billing, opts ...DeleteOption) error {
+func (repo *orgCspaccountCostRepository) beforeDelete(ctx context.Context, subject *model.OrgCSPAccountCost, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,37 +189,36 @@ func (repo *billingRepository) beforeDelete(ctx context.Context, subject *model.
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *billingRepository) GetCollection() *firestore.CollectionRef {
+func (repo *orgCspaccountCostRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *billingRepository) GetCollectionName() string {
+func (repo *orgCspaccountCostRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *billingRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *orgCspaccountCostRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *billingRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *orgCspaccountCostRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// BillingSearchParam - params for search
-type BillingSearchParam struct {
+// OrgCSPAccountCostSearchParam - params for search
+type OrgCSPAccountCostSearchParam struct {
 	ID                   *QueryChainer
 	EventID              *QueryChainer
+	GCASProportionCostID *QueryChainer
+	GCASAccountCostID    *QueryChainer
 	Organization         *QueryChainer
 	CSP                  *QueryChainer
-	Email                *QueryChainer
-	Address              *QueryChainer
+	AccountID            *QueryChainer
 	Cost                 *QueryChainer
-	OrgCSPAccountCostIDs *QueryChainer
-	CreatorID            *QueryChainer
-	BillingType          *QueryChainer
+	BillingUnitID        *QueryChainer
 	CreatedAt            *QueryChainer
 	CreatedBy            *QueryChainer
 	UpdatedAt            *QueryChainer
@@ -233,17 +232,16 @@ type BillingSearchParam struct {
 	CursorLimit        int
 }
 
-// BillingUpdateParam - params for strict updates
-type BillingUpdateParam struct {
+// OrgCSPAccountCostUpdateParam - params for strict updates
+type OrgCSPAccountCostUpdateParam struct {
 	EventID              interface{}
+	GCASProportionCostID interface{}
+	GCASAccountCostID    interface{}
 	Organization         interface{}
 	CSP                  interface{}
-	Email                interface{}
-	Address              interface{}
+	AccountID            interface{}
 	Cost                 interface{}
-	OrgCSPAccountCostIDs interface{}
-	CreatorID            interface{}
-	BillingType          interface{}
+	BillingUnitID        interface{}
 	CreatedAt            interface{}
 	CreatedBy            interface{}
 	UpdatedAt            interface{}
@@ -255,28 +253,28 @@ type BillingUpdateParam struct {
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *billingRepository) Search(ctx context.Context, param *BillingSearchParam, q *firestore.Query) ([]*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) Search(ctx context.Context, param *OrgCSPAccountCostSearchParam, q *firestore.Query) ([]*model.OrgCSPAccountCost, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *billingRepository) SearchByParam(ctx context.Context, param *BillingSearchParam) ([]*model.Billing, *PagingResult, error) {
+func (repo *orgCspaccountCostRepository) SearchByParam(ctx context.Context, param *OrgCSPAccountCostSearchParam) ([]*model.OrgCSPAccountCost, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `Billing` by `Billing.ID`
-func (repo *billingRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.Billing, error) {
+// Get - get `OrgCSPAccountCost` by `OrgCSPAccountCost.ID`
+func (repo *orgCspaccountCostRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.OrgCSPAccountCost, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `Billing` by *firestore.DocumentRef
-func (repo *billingRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Billing, error) {
+// GetWithDoc - get `OrgCSPAccountCost` by *firestore.DocumentRef
+func (repo *orgCspaccountCostRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccountCost, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `Billing`
-func (repo *billingRepository) Insert(ctx context.Context, subject *model.Billing) (_ string, err error) {
+// Insert - insert of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) Insert(ctx context.Context, subject *model.OrgCSPAccountCost) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -284,8 +282,8 @@ func (repo *billingRepository) Insert(ctx context.Context, subject *model.Billin
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `Billing`
-func (repo *billingRepository) Update(ctx context.Context, subject *model.Billing) (err error) {
+// Update - update of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) Update(ctx context.Context, subject *model.OrgCSPAccountCost) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -303,13 +301,13 @@ func (repo *billingRepository) Update(ctx context.Context, subject *model.Billin
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `Billing`
-func (repo *billingRepository) StrictUpdate(ctx context.Context, id string, param *BillingUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) StrictUpdate(ctx context.Context, id string, param *OrgCSPAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `Billing`
-func (repo *billingRepository) Delete(ctx context.Context, subject *model.Billing, opts ...DeleteOption) (err error) {
+// Delete - delete of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) Delete(ctx context.Context, subject *model.OrgCSPAccountCost, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -326,8 +324,8 @@ func (repo *billingRepository) Delete(ctx context.Context, subject *model.Billin
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `Billing` by `Billing.ID`
-func (repo *billingRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `OrgCSPAccountCost` by `OrgCSPAccountCost.ID`
+func (repo *orgCspaccountCostRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -349,13 +347,13 @@ func (repo *billingRepository) DeleteByID(ctx context.Context, id string, opts .
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `Billing` in bulk by array of `Billing.ID`
-func (repo *billingRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Billing, error) {
+// GetMulti - get `OrgCSPAccountCost` in bulk by array of `OrgCSPAccountCost.ID`
+func (repo *orgCspaccountCostRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.OrgCSPAccountCost, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `Billing`
-func (repo *billingRepository) InsertMulti(ctx context.Context, subjects []*model.Billing) (_ []string, er error) {
+// InsertMulti - bulk insert of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) InsertMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -397,8 +395,8 @@ func (repo *billingRepository) InsertMulti(ctx context.Context, subjects []*mode
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `Billing`
-func (repo *billingRepository) UpdateMulti(ctx context.Context, subjects []*model.Billing) (er error) {
+// UpdateMulti - bulk update of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) UpdateMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -414,7 +412,7 @@ func (repo *billingRepository) UpdateMulti(ctx context.Context, subjects []*mode
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.Billing)
+		old := new(model.OrgCSPAccountCost)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -441,8 +439,8 @@ func (repo *billingRepository) UpdateMulti(ctx context.Context, subjects []*mode
 	return nil
 }
 
-// DeleteMulti - bulk delete of `Billing`
-func (repo *billingRepository) DeleteMulti(ctx context.Context, subjects []*model.Billing, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `OrgCSPAccountCost`
+func (repo *orgCspaccountCostRepository) DeleteMulti(ctx context.Context, subjects []*model.OrgCSPAccountCost, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -486,9 +484,9 @@ func (repo *billingRepository) DeleteMulti(ctx context.Context, subjects []*mode
 	return nil
 }
 
-// DeleteMultiByIDs - delete `Billing` in bulk by array of `Billing.ID`
-func (repo *billingRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.Billing, len(ids))
+// DeleteMultiByIDs - delete `OrgCSPAccountCost` in bulk by array of `OrgCSPAccountCost.ID`
+func (repo *orgCspaccountCostRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.OrgCSPAccountCost, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -506,28 +504,28 @@ func (repo *billingRepository) DeleteMultiByIDs(ctx context.Context, ids []strin
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *billingRepository) SearchWithTx(tx *firestore.Transaction, param *BillingSearchParam, q *firestore.Query) ([]*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) SearchWithTx(tx *firestore.Transaction, param *OrgCSPAccountCostSearchParam, q *firestore.Query) ([]*model.OrgCSPAccountCost, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *billingRepository) SearchByParamWithTx(tx *firestore.Transaction, param *BillingSearchParam) ([]*model.Billing, *PagingResult, error) {
+func (repo *orgCspaccountCostRepository) SearchByParamWithTx(tx *firestore.Transaction, param *OrgCSPAccountCostSearchParam) ([]*model.OrgCSPAccountCost, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `Billing` by `Billing.ID` in transaction
-func (repo *billingRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Billing, error) {
+// GetWithTx - get `OrgCSPAccountCost` by `OrgCSPAccountCost.ID` in transaction
+func (repo *orgCspaccountCostRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.OrgCSPAccountCost, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `Billing` by *firestore.DocumentRef in transaction
-func (repo *billingRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Billing, error) {
+// GetWithDocWithTx - get `OrgCSPAccountCost` by *firestore.DocumentRef in transaction
+func (repo *orgCspaccountCostRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccountCost, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `Billing` in transaction
-func (repo *billingRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing) (_ string, err error) {
+// InsertWithTx - insert of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -535,8 +533,8 @@ func (repo *billingRepository) InsertWithTx(ctx context.Context, tx *firestore.T
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `Billing` in transaction
-func (repo *billingRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing) (err error) {
+// UpdateWithTx - update of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -544,13 +542,13 @@ func (repo *billingRepository) UpdateWithTx(ctx context.Context, tx *firestore.T
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `Billing` in transaction
-func (repo *billingRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *BillingUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *OrgCSPAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `Billing` in transaction
-func (repo *billingRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Billing, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.OrgCSPAccountCost, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -567,8 +565,8 @@ func (repo *billingRepository) DeleteWithTx(ctx context.Context, tx *firestore.T
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `Billing` by `Billing.ID` in transaction
-func (repo *billingRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `OrgCSPAccountCost` by `OrgCSPAccountCost.ID` in transaction
+func (repo *orgCspaccountCostRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -590,13 +588,13 @@ func (repo *billingRepository) DeleteByIDWithTx(ctx context.Context, tx *firesto
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `Billing` in bulk by array of `Billing.ID` in transaction
-func (repo *billingRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Billing, error) {
+// GetMultiWithTx - get `OrgCSPAccountCost` in bulk by array of `OrgCSPAccountCost.ID` in transaction
+func (repo *orgCspaccountCostRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.OrgCSPAccountCost, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `Billing` in transaction
-func (repo *billingRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -621,8 +619,8 @@ func (repo *billingRepository) InsertMultiWithTx(ctx context.Context, tx *firest
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `Billing` in transaction
-func (repo *billingRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing) (er error) {
+// UpdateMultiWithTx - bulk update of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -640,8 +638,8 @@ func (repo *billingRepository) UpdateMultiWithTx(ctx context.Context, tx *firest
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `Billing` in transaction
-func (repo *billingRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Billing, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `OrgCSPAccountCost` in transaction
+func (repo *orgCspaccountCostRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.OrgCSPAccountCost, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -685,8 +683,8 @@ func (repo *billingRepository) DeleteMultiWithTx(ctx context.Context, tx *firest
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `Billing` in bulk by array of `Billing.ID` in transaction
-func (repo *billingRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `OrgCSPAccountCost` in bulk by array of `OrgCSPAccountCost.ID` in transaction
+func (repo *orgCspaccountCostRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -724,7 +722,7 @@ func (repo *billingRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *f
 	return nil
 }
 
-func (repo *billingRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.OrgCSPAccountCost, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -746,7 +744,7 @@ func (repo *billingRepository) get(v interface{}, doc *firestore.DocumentRef, op
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.Billing)
+	subject := new(model.OrgCSPAccountCost)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -761,7 +759,7 @@ func (repo *billingRepository) get(v interface{}, doc *firestore.DocumentRef, op
 	return subject, nil
 }
 
-func (repo *billingRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.OrgCSPAccountCost, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -787,7 +785,7 @@ func (repo *billingRepository) getMulti(v interface{}, ids []string, opts ...Get
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.Billing, 0, len(ids))
+	subjects := make([]*model.OrgCSPAccountCost, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -795,7 +793,7 @@ func (repo *billingRepository) getMulti(v interface{}, ids []string, opts ...Get
 			continue
 		}
 
-		subject := new(model.Billing)
+		subject := new(model.OrgCSPAccountCost)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -817,7 +815,7 @@ func (repo *billingRepository) getMulti(v interface{}, ids []string, opts ...Get
 	return subjects, mErr
 }
 
-func (repo *billingRepository) insert(v interface{}, subject *model.Billing) (string, error) {
+func (repo *orgCspaccountCostRepository) insert(v interface{}, subject *model.OrgCSPAccountCost) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -844,7 +842,7 @@ func (repo *billingRepository) insert(v interface{}, subject *model.Billing) (st
 	return dr.ID, nil
 }
 
-func (repo *billingRepository) update(v interface{}, subject *model.Billing) error {
+func (repo *orgCspaccountCostRepository) update(v interface{}, subject *model.OrgCSPAccountCost) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -866,7 +864,7 @@ func (repo *billingRepository) update(v interface{}, subject *model.Billing) err
 	return nil
 }
 
-func (repo *billingRepository) strictUpdate(v interface{}, id string, param *BillingUpdateParam, opts ...firestore.Precondition) error {
+func (repo *orgCspaccountCostRepository) strictUpdate(v interface{}, id string, param *OrgCSPAccountCostUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -874,7 +872,7 @@ func (repo *billingRepository) strictUpdate(v interface{}, id string, param *Bil
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.Billing{}, param)
+	updates := updater(model.OrgCSPAccountCost{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -892,7 +890,7 @@ func (repo *billingRepository) strictUpdate(v interface{}, id string, param *Bil
 	return nil
 }
 
-func (repo *billingRepository) deleteByID(v interface{}, id string) error {
+func (repo *orgCspaccountCostRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -912,7 +910,7 @@ func (repo *billingRepository) deleteByID(v interface{}, id string) error {
 	return nil
 }
 
-func (repo *billingRepository) runQuery(v interface{}, query firestore.Query) ([]*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) runQuery(v interface{}, query firestore.Query) ([]*model.OrgCSPAccountCost, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -926,7 +924,7 @@ func (repo *billingRepository) runQuery(v interface{}, query firestore.Query) ([
 
 	defer iter.Stop()
 
-	subjects := make([]*model.Billing, 0)
+	subjects := make([]*model.OrgCSPAccountCost, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -937,7 +935,7 @@ func (repo *billingRepository) runQuery(v interface{}, query firestore.Query) ([
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.Billing)
+		subject := new(model.OrgCSPAccountCost)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -951,7 +949,7 @@ func (repo *billingRepository) runQuery(v interface{}, query firestore.Query) ([
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearchParam) ([]*model.Billing, *PagingResult, error) {
+func (repo *orgCspaccountCostRepository) searchByParam(v interface{}, param *OrgCSPAccountCostSearchParam) ([]*model.OrgCSPAccountCost, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -986,6 +984,24 @@ func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearch
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
+	if param.GCASProportionCostID != nil {
+		for _, chain := range param.GCASProportionCostID.QueryGroup {
+			query = query.Where("gcas_proportion_cost_id", chain.Operator, chain.Value)
+		}
+		if direction := param.GCASProportionCostID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("gcas_proportion_cost_id", direction)
+			query = param.GCASProportionCostID.BuildCursorQuery(query)
+		}
+	}
+	if param.GCASAccountCostID != nil {
+		for _, chain := range param.GCASAccountCostID.QueryGroup {
+			query = query.Where("gcas_account_cost_id", chain.Operator, chain.Value)
+		}
+		if direction := param.GCASAccountCostID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("gcas_account_cost_id", direction)
+			query = param.GCASAccountCostID.BuildCursorQuery(query)
+		}
+	}
 	if param.Organization != nil {
 		for _, chain := range param.Organization.QueryGroup {
 			query = query.Where("organization", chain.Operator, chain.Value)
@@ -1004,22 +1020,13 @@ func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearch
 			query = param.CSP.BuildCursorQuery(query)
 		}
 	}
-	if param.Email != nil {
-		for _, chain := range param.Email.QueryGroup {
-			query = query.Where("email", chain.Operator, chain.Value)
+	if param.AccountID != nil {
+		for _, chain := range param.AccountID.QueryGroup {
+			query = query.Where("account_id", chain.Operator, chain.Value)
 		}
-		if direction := param.Email.OrderByDirection; direction > 0 {
-			query = query.OrderBy("email", direction)
-			query = param.Email.BuildCursorQuery(query)
-		}
-	}
-	if param.Address != nil {
-		for _, chain := range param.Address.QueryGroup {
-			query = query.Where("address", chain.Operator, chain.Value)
-		}
-		if direction := param.Address.OrderByDirection; direction > 0 {
-			query = query.OrderBy("address", direction)
-			query = param.Address.BuildCursorQuery(query)
+		if direction := param.AccountID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("account_id", direction)
+			query = param.AccountID.BuildCursorQuery(query)
 		}
 	}
 	if param.Cost != nil {
@@ -1031,31 +1038,13 @@ func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearch
 			query = param.Cost.BuildCursorQuery(query)
 		}
 	}
-	if param.OrgCSPAccountCostIDs != nil {
-		for _, chain := range param.OrgCSPAccountCostIDs.QueryGroup {
-			query = query.Where("org_csp_accounts_cost_ids", chain.Operator, chain.Value)
+	if param.BillingUnitID != nil {
+		for _, chain := range param.BillingUnitID.QueryGroup {
+			query = query.Where("billing_unit_id", chain.Operator, chain.Value)
 		}
-		if direction := param.OrgCSPAccountCostIDs.OrderByDirection; direction > 0 {
-			query = query.OrderBy("org_csp_accounts_cost_ids", direction)
-			query = param.OrgCSPAccountCostIDs.BuildCursorQuery(query)
-		}
-	}
-	if param.CreatorID != nil {
-		for _, chain := range param.CreatorID.QueryGroup {
-			query = query.Where("creator_id", chain.Operator, chain.Value)
-		}
-		if direction := param.CreatorID.OrderByDirection; direction > 0 {
-			query = query.OrderBy("creator_id", direction)
-			query = param.CreatorID.BuildCursorQuery(query)
-		}
-	}
-	if param.BillingType != nil {
-		for _, chain := range param.BillingType.QueryGroup {
-			query = query.Where("billing_type", chain.Operator, chain.Value)
-		}
-		if direction := param.BillingType.OrderByDirection; direction > 0 {
-			query = query.OrderBy("billing_type", direction)
-			query = param.BillingType.BuildCursorQuery(query)
+		if direction := param.BillingUnitID.OrderByDirection; direction > 0 {
+			query = query.OrderBy("billing_unit_id", direction)
+			query = param.BillingUnitID.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
@@ -1171,7 +1160,7 @@ func (repo *billingRepository) searchByParam(v interface{}, param *BillingSearch
 	return subjects, pagingResult, nil
 }
 
-func (repo *billingRepository) search(v interface{}, param *BillingSearchParam, q *firestore.Query) ([]*model.Billing, error) {
+func (repo *orgCspaccountCostRepository) search(v interface{}, param *OrgCSPAccountCostSearchParam, q *firestore.Query) ([]*model.OrgCSPAccountCost, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}

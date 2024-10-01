@@ -2,41 +2,43 @@ package entities
 
 import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
-// OrgCSPAccount - 団体ごとのCSPごとのアカウントごと
-type OrgCSPAccount struct {
-	id                   valueobjects.OrgCSPAccountID      // ID
+// OrgCSPAccountCost - 団体ごとのCSPごとのアカウントごと
+type OrgCSPAccountCost struct {
+	id                   valueobjects.OrgCSPAccountCostID  // ID
 	eventID              valueobjects.EventID              // イベントID
 	gcasProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
 	gcasAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
 	organization         string                            // 団体名
 	csp                  string                            // CSP
 	accountID            string                            // アカウントID
-	cost                 int                               // 費用按分類
+	cost                 int                               // 金額
 	billingUnitID        string                            // 支払い区分ID
+	paymentAgency        *OrgCSPAccountCostPaymentAgency   // 支払い代行者情報
 	meta                 *Meta                             // メタ
 }
 
-// NewOrgCSPAccountParam - 団体ごとのCSPごとのアカウントごと作成パラメータ
-type NewOrgCSPAccountParam struct {
-	ID                   valueobjects.OrgCSPAccountID      // ID
+// NewOrgCSPAccountCostParam - 団体ごとのCSPごとのアカウントごと作成パラメータ
+type NewOrgCSPAccountCostParam struct {
+	ID                   valueobjects.OrgCSPAccountCostID  // ID
 	EventID              valueobjects.EventID              // イベントID
 	GCASProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
 	GCASAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
 	Organization         string                            // 団体名
 	CSP                  string                            // CSP
 	AccountID            string                            // アカウントID
-	Cost                 int                               // 費用按分類
+	Cost                 int                               // 金額
 	BillingUnitID        string                            // 支払い区分ID
+	PaymentAgency        *OrgCSPAccountCostPaymentAgency   // 支払い代行者情報
 	Meta                 *Meta                             // メタ
 }
 
-// NewOrgCSPAccount - 団体ごとのCSPごとのアカウントごと作成
-func NewOrgCSPAccount(param *NewOrgCSPAccountParam) *OrgCSPAccount {
+// NewOrgCSPAccountCost - 団体ごとのCSPごとのアカウントごと作成
+func NewOrgCSPAccountCost(param *NewOrgCSPAccountCostParam) *OrgCSPAccountCost {
 	id := param.ID
 	if id.IsNil() {
-		id = valueobjects.NewOrgCSPAccountID()
+		id = valueobjects.NewOrgCSPAccountCostID()
 	}
-	return &OrgCSPAccount{
+	return &OrgCSPAccountCost{
 		id:                   id,
 		eventID:              param.EventID,
 		gcasProportionCostID: param.GCASProportionCostID,
@@ -46,56 +48,62 @@ func NewOrgCSPAccount(param *NewOrgCSPAccountParam) *OrgCSPAccount {
 		accountID:            param.AccountID,
 		cost:                 param.Cost,
 		billingUnitID:        param.BillingUnitID,
+		paymentAgency:        param.PaymentAgency,
 		meta:                 param.Meta,
 	}
 }
 
 // ID - ID のゲッター
-func (e *OrgCSPAccount) ID() valueobjects.OrgCSPAccountID {
+func (e *OrgCSPAccountCost) ID() valueobjects.OrgCSPAccountCostID {
 	return e.id
 }
 
 // EventID - EventID のゲッター
-func (e *OrgCSPAccount) EventID() valueobjects.EventID {
+func (e *OrgCSPAccountCost) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
 // GCASProportionCostID - GCASProportionCostID のゲッター
-func (e *OrgCSPAccount) GCASProportionCostID() valueobjects.GCASProportionCostID {
+func (e *OrgCSPAccountCost) GCASProportionCostID() valueobjects.GCASProportionCostID {
 	return e.gcasProportionCostID
 }
 
 // GCASAccountCostID - GCASAccountCostID のゲッター
-func (e *OrgCSPAccount) GCASAccountCostID() valueobjects.GCASAccountCostID {
+func (e *OrgCSPAccountCost) GCASAccountCostID() valueobjects.GCASAccountCostID {
 	return e.gcasAccountCostID
 }
 
 // Organization - Organization のゲッター
-func (e *OrgCSPAccount) Organization() string {
+func (e *OrgCSPAccountCost) Organization() string {
 	return e.organization
 }
 
 // CSP - CSP のゲッター
-func (e *OrgCSPAccount) CSP() string {
+func (e *OrgCSPAccountCost) CSP() string {
 	return e.csp
 }
 
 // AccountID - AccountID のゲッター
-func (e *OrgCSPAccount) AccountID() string {
+func (e *OrgCSPAccountCost) AccountID() string {
 	return e.accountID
 }
 
 // Cost - Cost のゲッター
-func (e *OrgCSPAccount) Cost() int {
+func (e *OrgCSPAccountCost) Cost() int {
 	return e.cost
 }
 
 // BillingUnitID - BillingUnitID のゲッター
-func (e *OrgCSPAccount) BillingUnitID() string {
+func (e *OrgCSPAccountCost) BillingUnitID() string {
 	return e.billingUnitID
 }
 
+// PaymentAgency - PaymentAgency のゲッター
+func (e *OrgCSPAccountCost) PaymentAgency() *OrgCSPAccountCostPaymentAgency {
+	return e.paymentAgency
+}
+
 // Meta - Meta のゲッター
-func (e *OrgCSPAccount) Meta() *Meta {
+func (e *OrgCSPAccountCost) Meta() *Meta {
 	return e.meta
 }

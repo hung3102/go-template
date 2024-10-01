@@ -4,8 +4,8 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // GCASAccountCost - GCAS Dashboardから貰ったコスト情報
 type GCASAccountCost struct {
-	id        valueobjects.GCASAccountCostID // id
-	eventID   valueobjects.EventID           // event_id
+	id        valueobjects.GCASAccountCostID // ID
+	eventID   valueobjects.EventID           // イベントID
 	accountId string                         // アカウントID
 	data      *GCASAccountCostData           // もらったデータ
 	meta      *Meta                          // メタ
@@ -13,8 +13,8 @@ type GCASAccountCost struct {
 
 // NewGCASAccountCostParam - GCAS Dashboardから貰ったコスト情報作成パラメータ
 type NewGCASAccountCostParam struct {
-	ID        valueobjects.GCASAccountCostID // id
-	EventID   valueobjects.EventID           // event_id
+	ID        valueobjects.GCASAccountCostID // ID
+	EventID   valueobjects.EventID           // イベントID
 	AccountId string                         // アカウントID
 	Data      *GCASAccountCostData           // もらったデータ
 	Meta      *Meta                          // メタ

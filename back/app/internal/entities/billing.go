@@ -4,32 +4,32 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // Billing - 請求
 type Billing struct {
-	id                valueobjects.BillingID         // id
-	eventID           valueobjects.EventID           // event_id
-	organization      string                         //
-	csp               string                         //
-	email             string                         //
-	address           string                         //
-	cost              int                            //
-	orgCSPAccountsIDs []valueobjects.OrgCSPAccountID //
-	creatorID         valueobjects.CreatorID         //
-	billingType       int                            //
-	meta              *Meta                          // メタ
+	id                   valueobjects.BillingID             // ID
+	eventID              valueobjects.EventID               // イベントID
+	organization         string                             // 組織名
+	csp                  string                             // CSP
+	email                string                             // メールアドレス
+	address              string                             // 住所
+	cost                 int                                // コスト
+	orgCSPAccountCostIDs []valueobjects.OrgCSPAccountCostID // アカウントID
+	creatorID            valueobjects.CreatorID             // 請求書の発行元情報ID
+	billingType          int                                // 支払い種別
+	meta                 *Meta                              // メタ
 }
 
 // NewBillingParam - 請求作成パラメータ
 type NewBillingParam struct {
-	ID                valueobjects.BillingID         // id
-	EventID           valueobjects.EventID           // event_id
-	Organization      string                         //
-	CSP               string                         //
-	Email             string                         //
-	Address           string                         //
-	Cost              int                            //
-	OrgCSPAccountsIDs []valueobjects.OrgCSPAccountID //
-	CreatorID         valueobjects.CreatorID         //
-	BillingType       int                            //
-	Meta              *Meta                          // メタ
+	ID                   valueobjects.BillingID             // ID
+	EventID              valueobjects.EventID               // イベントID
+	Organization         string                             // 組織名
+	CSP                  string                             // CSP
+	Email                string                             // メールアドレス
+	Address              string                             // 住所
+	Cost                 int                                // コスト
+	OrgCSPAccountCostIDs []valueobjects.OrgCSPAccountCostID // アカウントID
+	CreatorID            valueobjects.CreatorID             // 請求書の発行元情報ID
+	BillingType          int                                // 支払い種別
+	Meta                 *Meta                              // メタ
 }
 
 // NewBilling - 請求作成
@@ -39,17 +39,17 @@ func NewBilling(param *NewBillingParam) *Billing {
 		id = valueobjects.NewBillingID()
 	}
 	return &Billing{
-		id:                id,
-		eventID:           param.EventID,
-		organization:      param.Organization,
-		csp:               param.CSP,
-		email:             param.Email,
-		address:           param.Address,
-		cost:              param.Cost,
-		orgCSPAccountsIDs: param.OrgCSPAccountsIDs,
-		creatorID:         param.CreatorID,
-		billingType:       param.BillingType,
-		meta:              param.Meta,
+		id:                   id,
+		eventID:              param.EventID,
+		organization:         param.Organization,
+		csp:                  param.CSP,
+		email:                param.Email,
+		address:              param.Address,
+		cost:                 param.Cost,
+		orgCSPAccountCostIDs: param.OrgCSPAccountCostIDs,
+		creatorID:            param.CreatorID,
+		billingType:          param.BillingType,
+		meta:                 param.Meta,
 	}
 }
 
@@ -88,9 +88,9 @@ func (e *Billing) Cost() int {
 	return e.cost
 }
 
-// OrgCSPAccountsIDs - OrgCSPAccountsIDs のゲッター
-func (e *Billing) OrgCSPAccountsIDs() []valueobjects.OrgCSPAccountID {
-	return e.orgCSPAccountsIDs
+// OrgCSPAccountCostIDs - OrgCSPAccountCostIDs のゲッター
+func (e *Billing) OrgCSPAccountCostIDs() []valueobjects.OrgCSPAccountCostID {
+	return e.orgCSPAccountCostIDs
 }
 
 // CreatorID - CreatorID のゲッター

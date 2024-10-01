@@ -4,19 +4,19 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // GCASCSPCost - GCAS Dashboardから貰ったCSPのトータルコスト
 type GCASCSPCost struct {
-	id        valueobjects.GCASCSPCostID // id
-	eventID   valueobjects.EventID       // event_id
-	csp       string                     // AWSなど
-	totalCost int                        //
+	id        valueobjects.GCASCSPCostID // ID
+	eventID   valueobjects.EventID       // イベントID
+	csp       string                     // CSP
+	totalCost int                        // 合計金額
 	meta      *Meta                      // メタ
 }
 
 // NewGCASCSPCostParam - GCAS Dashboardから貰ったCSPのトータルコスト作成パラメータ
 type NewGCASCSPCostParam struct {
-	ID        valueobjects.GCASCSPCostID // id
-	EventID   valueobjects.EventID       // event_id
-	CSP       string                     // AWSなど
-	TotalCost int                        //
+	ID        valueobjects.GCASCSPCostID // ID
+	EventID   valueobjects.EventID       // イベントID
+	CSP       string                     // CSP
+	TotalCost int                        // 合計金額
 	Meta      *Meta                      // メタ
 }
 

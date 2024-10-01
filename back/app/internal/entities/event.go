@@ -4,17 +4,17 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // Event - イベント
 type Event struct {
-	id             valueobjects.EventID // id
-	billingMonth   string               // 請求月 (例：202408)
-	executionCount int                  // 何回目の実行か
+	id             valueobjects.EventID // ID
+	billingMonth   string               // 請求月
+	executionCount int                  // 実行回数
 	meta           *Meta                // メタ
 }
 
 // NewEventParam - イベント作成パラメータ
 type NewEventParam struct {
-	ID             valueobjects.EventID // id
-	BillingMonth   string               // 請求月 (例：202408)
-	ExecutionCount int                  // 何回目の実行か
+	ID             valueobjects.EventID // ID
+	BillingMonth   string               // 請求月
+	ExecutionCount int                  // 実行回数
 	Meta           *Meta                // メタ
 }
 

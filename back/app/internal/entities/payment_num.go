@@ -4,23 +4,23 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // PaymentNum - 収納番号
 type PaymentNum struct {
-	id            valueobjects.PaymentNumID // id
-	eventID       valueobjects.EventID      // event_id
-	billingID     valueobjects.BillingID    //
+	id            valueobjects.PaymentNumID // ID
+	eventID       valueobjects.EventID      // イベントID
+	billingID     valueobjects.BillingID    // 請求ID
 	billingUnitID string                    // 支払い区分ID
 	paymentNum    string                    // 収納番号
-	cost          int                       // この収納番号で請求している金額
+	cost          int                       // 金額
 	meta          *Meta                     // メタ
 }
 
 // NewPaymentNumParam - 収納番号作成パラメータ
 type NewPaymentNumParam struct {
-	ID            valueobjects.PaymentNumID // id
-	EventID       valueobjects.EventID      // event_id
-	BillingID     valueobjects.BillingID    //
+	ID            valueobjects.PaymentNumID // ID
+	EventID       valueobjects.EventID      // イベントID
+	BillingID     valueobjects.BillingID    // 請求ID
 	BillingUnitID string                    // 支払い区分ID
 	PaymentNum    string                    // 収納番号
-	Cost          int                       // この収納番号で請求している金額
+	Cost          int                       // 金額
 	Meta          *Meta                     // メタ
 }
 

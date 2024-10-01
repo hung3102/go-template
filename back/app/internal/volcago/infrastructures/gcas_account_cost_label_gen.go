@@ -7,6 +7,10 @@ const (
 	GCASAccountCostIndexLabelEventIDLike     = "e3" // like-match of EventID
 	GCASAccountCostIndexLabelEventIDPrefix   = "e1" // prefix-match of EventID
 	GCASAccountCostIndexLabelEventIDSuffix   = "e2" // suffix-match of EventID
+	GCASAccountCostIndexLabelAccountIdEqual  = "a4" // perfect-match of AccountId
+	GCASAccountCostIndexLabelAccountIdLike   = "a3" // like-match of AccountId
+	GCASAccountCostIndexLabelAccountIdPrefix = "a1" // prefix-match of AccountId
+	GCASAccountCostIndexLabelAccountIdSuffix = "a2" // suffix-match of AccountId
 	GCASAccountCostIndexLabelCreatedAtPrefix = "c1" // prefix-match of CreatedAt
 	GCASAccountCostIndexLabelCreatedAtSuffix = "c2" // suffix-match of CreatedAt
 	GCASAccountCostIndexLabelCreatedAtLike   = "c3" // like-match of CreatedAt

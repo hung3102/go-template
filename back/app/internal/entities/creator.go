@@ -4,21 +4,21 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // Creator - 請求書の発行元情報
 type Creator struct {
-	id           valueobjects.CreatorID // id
-	eventID      valueobjects.EventID   // event_id
+	id           valueobjects.CreatorID // ID
+	eventID      valueobjects.EventID   // イベントID
 	organization string                 // 団体名
 	address      string                 // 住所
-	personName   string                 // person_name
+	personName   string                 // 氏名
 	meta         *Meta                  // メタ
 }
 
 // NewCreatorParam - 請求書の発行元情報作成パラメータ
 type NewCreatorParam struct {
-	ID           valueobjects.CreatorID // id
-	EventID      valueobjects.EventID   // event_id
+	ID           valueobjects.CreatorID // ID
+	EventID      valueobjects.EventID   // イベントID
 	Organization string                 // 団体名
 	Address      string                 // 住所
-	PersonName   string                 // person_name
+	PersonName   string                 // 氏名
 	Meta         *Meta                  // メタ
 }
 

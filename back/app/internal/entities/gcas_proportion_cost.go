@@ -4,19 +4,19 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // GCASProportionCost - GCASから貰った費用按分情報
 type GCASProportionCost struct {
-	id        valueobjects.GCASProportionCostID //
-	eventID   valueobjects.EventID              //
-	accountID string                            //
-	data      *GCASProportionCostData           // GCAS費用按分情報APIから取得
+	id        valueobjects.GCASProportionCostID // ID
+	eventID   valueobjects.EventID              // イベントID
+	accountID string                            // アカウントID
+	data      *GCASProportionCostData           // GCAS費用按分情報
 	meta      *Meta                             // メタ
 }
 
 // NewGCASProportionCostParam - GCASから貰った費用按分情報作成パラメータ
 type NewGCASProportionCostParam struct {
-	ID        valueobjects.GCASProportionCostID //
-	EventID   valueobjects.EventID              //
-	AccountID string                            //
-	Data      *GCASProportionCostData           // GCAS費用按分情報APIから取得
+	ID        valueobjects.GCASProportionCostID // ID
+	EventID   valueobjects.EventID              // イベントID
+	AccountID string                            // アカウントID
+	Data      *GCASProportionCostData           // GCAS費用按分情報
 	Meta      *Meta                             // メタ
 }
 
