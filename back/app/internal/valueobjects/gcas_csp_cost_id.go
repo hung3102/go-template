@@ -25,7 +25,7 @@ func (v GCASCSPCostID) String() string {
 	return x.String()
 }
 
-// IsNil - GCASCSPCostIDを文字列に変換する
+// IsNil - GCASCSPCostIDの値がnilか判定する
 func (v GCASCSPCostID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

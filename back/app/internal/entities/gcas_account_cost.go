@@ -6,7 +6,7 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 type GCASAccountCost struct {
 	id        valueobjects.GCASAccountCostID // ID
 	eventID   valueobjects.EventID           // イベントID
-	accountId string                         // アカウントID
+	accountID string                         // アカウントID
 	data      *GCASAccountCostData           // もらったデータ
 	meta      *Meta                          // メタ
 }
@@ -15,7 +15,7 @@ type GCASAccountCost struct {
 type NewGCASAccountCostParam struct {
 	ID        valueobjects.GCASAccountCostID // ID
 	EventID   valueobjects.EventID           // イベントID
-	AccountId string                         // アカウントID
+	AccountID string                         // アカウントID
 	Data      *GCASAccountCostData           // もらったデータ
 	Meta      *Meta                          // メタ
 }
@@ -29,7 +29,7 @@ func NewGCASAccountCost(param *NewGCASAccountCostParam) *GCASAccountCost {
 	return &GCASAccountCost{
 		id:        id,
 		eventID:   param.EventID,
-		accountId: param.AccountId,
+		accountID: param.AccountID,
 		data:      param.Data,
 		meta:      param.Meta,
 	}
@@ -45,9 +45,9 @@ func (e *GCASAccountCost) EventID() valueobjects.EventID {
 	return e.eventID
 }
 
-// AccountId - AccountId のゲッター
-func (e *GCASAccountCost) AccountId() string {
-	return e.accountId
+// AccountID - AccountID のゲッター
+func (e *GCASAccountCost) AccountID() string {
+	return e.accountID
 }
 
 // Data - Data のゲッター

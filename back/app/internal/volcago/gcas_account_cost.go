@@ -6,7 +6,7 @@ package volcago
 type GCASAccountCost struct {
 	ID        string               `firestore:"-" firestore_key:""` // ID
 	EventID   string               `firestore:"event_id"`           // イベントID
-	AccountId string               `firestore:"account_id"`         // アカウントID
+	AccountID string               `firestore:"account_id"`         // アカウントID
 	Data      *GCASAccountCostData `firestore:"data"`               // もらったデータ
 	Meta
 }

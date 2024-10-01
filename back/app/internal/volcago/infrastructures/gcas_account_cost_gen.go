@@ -212,7 +212,7 @@ func (repo *gcasaccountCostRepository) RunInTransaction() func(ctx context.Conte
 type GCASAccountCostSearchParam struct {
 	ID        *QueryChainer
 	EventID   *QueryChainer
-	AccountId *QueryChainer
+	AccountID *QueryChainer
 	CreatedAt *QueryChainer
 	CreatedBy *QueryChainer
 	UpdatedAt *QueryChainer
@@ -229,7 +229,7 @@ type GCASAccountCostSearchParam struct {
 // GCASAccountCostUpdateParam - params for strict updates
 type GCASAccountCostUpdateParam struct {
 	EventID   interface{}
-	AccountId interface{}
+	AccountID interface{}
 	CreatedAt interface{}
 	CreatedBy interface{}
 	UpdatedAt interface{}
@@ -972,13 +972,13 @@ func (repo *gcasaccountCostRepository) searchByParam(v interface{}, param *GCASA
 			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
-	if param.AccountId != nil {
-		for _, chain := range param.AccountId.QueryGroup {
+	if param.AccountID != nil {
+		for _, chain := range param.AccountID.QueryGroup {
 			query = query.Where("account_id", chain.Operator, chain.Value)
 		}
-		if direction := param.AccountId.OrderByDirection; direction > 0 {
+		if direction := param.AccountID.OrderByDirection; direction > 0 {
 			query = query.OrderBy("account_id", direction)
-			query = param.AccountId.BuildCursorQuery(query)
+			query = param.AccountID.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {

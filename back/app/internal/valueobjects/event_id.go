@@ -25,7 +25,7 @@ func (v EventID) String() string {
 	return x.String()
 }
 
-// IsNil - EventIDを文字列に変換する
+// IsNil - EventIDの値がnilか判定する
 func (v EventID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

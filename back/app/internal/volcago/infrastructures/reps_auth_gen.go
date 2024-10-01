@@ -15,43 +15,43 @@ import (
 	model "github.com/topgate/gcim-temporary/back/app/internal/volcago"
 )
 
-//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/auth_gen.go
+//go:generate ../../../../../bin/mockgen -source $GOFILE -destination mocks/reps_auth_gen.go
 
-// AuthRepository - Repository of Auth
-type AuthRepository interface {
+// REPSAuthRepository - Repository of REPSAuth
+type REPSAuthRepository interface {
 	// Single
-	Get(ctx context.Context, id string, opts ...GetOption) (*model.Auth, error)
-	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Auth, error)
-	Insert(ctx context.Context, subject *model.Auth) (_ string, err error)
-	Update(ctx context.Context, subject *model.Auth) (err error)
-	StrictUpdate(ctx context.Context, id string, param *AuthUpdateParam, opts ...firestore.Precondition) error
-	Delete(ctx context.Context, subject *model.Auth, opts ...DeleteOption) (err error)
+	Get(ctx context.Context, id string, opts ...GetOption) (*model.REPSAuth, error)
+	GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error)
+	Insert(ctx context.Context, subject *model.REPSAuth) (_ string, err error)
+	Update(ctx context.Context, subject *model.REPSAuth) (err error)
+	StrictUpdate(ctx context.Context, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error
+	Delete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (err error)
 	DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error)
 	// Multiple
-	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Auth, error)
-	InsertMulti(ctx context.Context, subjects []*model.Auth) (_ []string, er error)
-	UpdateMulti(ctx context.Context, subjects []*model.Auth) (er error)
-	DeleteMulti(ctx context.Context, subjects []*model.Auth, opts ...DeleteOption) (er error)
+	GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.REPSAuth, error)
+	InsertMulti(ctx context.Context, subjects []*model.REPSAuth) (_ []string, er error)
+	UpdateMulti(ctx context.Context, subjects []*model.REPSAuth) (er error)
+	DeleteMulti(ctx context.Context, subjects []*model.REPSAuth, opts ...DeleteOption) (er error)
 	DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error)
 	// Single(Transaction)
-	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Auth, error)
-	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Auth, error)
-	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth) (_ string, err error)
-	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth) (err error)
-	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *AuthUpdateParam, opts ...firestore.Precondition) error
-	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth, opts ...DeleteOption) (err error)
+	GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.REPSAuth, error)
+	GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error)
+	InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (_ string, err error)
+	UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (err error)
+	StrictUpdateWithTx(tx *firestore.Transaction, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error
+	DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth, opts ...DeleteOption) (err error)
 	DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error)
 	// Multiple(Transaction)
-	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Auth, error)
-	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth) (_ []string, er error)
-	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth) (er error)
-	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth, opts ...DeleteOption) (er error)
+	GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.REPSAuth, error)
+	InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (_ []string, er error)
+	UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (er error)
+	DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth, opts ...DeleteOption) (er error)
 	DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error)
 	// Search
-	Search(ctx context.Context, param *AuthSearchParam, q *firestore.Query) ([]*model.Auth, error)
-	SearchWithTx(tx *firestore.Transaction, param *AuthSearchParam, q *firestore.Query) ([]*model.Auth, error)
-	SearchByParam(ctx context.Context, param *AuthSearchParam) ([]*model.Auth, *PagingResult, error)
-	SearchByParamWithTx(tx *firestore.Transaction, param *AuthSearchParam) ([]*model.Auth, *PagingResult, error)
+	Search(ctx context.Context, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error)
+	SearchWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error)
+	SearchByParam(ctx context.Context, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error)
+	SearchByParamWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error)
 	// misc
 	GetCollection() *firestore.CollectionRef
 	GetCollectionName() string
@@ -59,32 +59,32 @@ type AuthRepository interface {
 	RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error)
 }
 
-// AuthRepositoryMiddleware - middleware of AuthRepository
-type AuthRepositoryMiddleware interface {
-	BeforeInsert(ctx context.Context, subject *model.Auth) (bool, error)
-	BeforeUpdate(ctx context.Context, old, subject *model.Auth) (bool, error)
-	BeforeDelete(ctx context.Context, subject *model.Auth, opts ...DeleteOption) (bool, error)
+// REPSAuthRepositoryMiddleware - middleware of REPSAuthRepository
+type REPSAuthRepositoryMiddleware interface {
+	BeforeInsert(ctx context.Context, subject *model.REPSAuth) (bool, error)
+	BeforeUpdate(ctx context.Context, old, subject *model.REPSAuth) (bool, error)
+	BeforeDelete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (bool, error)
 	BeforeDeleteByID(ctx context.Context, ids []string, opts ...DeleteOption) (bool, error)
 }
 
-type authRepository struct {
+type repsauthRepository struct {
 	collectionName   string
 	firestoreClient  *firestore.Client
-	middleware       []AuthRepositoryMiddleware
+	middleware       []REPSAuthRepositoryMiddleware
 	uniqueRepository *uniqueRepository
 }
 
-// NewAuthRepository - constructor
-func NewAuthRepository(firestoreClient *firestore.Client, middleware ...AuthRepositoryMiddleware) AuthRepository {
-	return &authRepository{
-		collectionName:   "auth",
+// NewREPSAuthRepository - constructor
+func NewREPSAuthRepository(firestoreClient *firestore.Client, middleware ...REPSAuthRepositoryMiddleware) REPSAuthRepository {
+	return &repsauthRepository{
+		collectionName:   "reps_auth",
 		firestoreClient:  firestoreClient,
 		middleware:       middleware,
-		uniqueRepository: newUniqueRepository(firestoreClient, "auth"),
+		uniqueRepository: newUniqueRepository(firestoreClient, "reps_auth"),
 	}
 }
 
-func (repo *authRepository) setMeta(subject *model.Auth, isInsert bool) {
+func (repo *repsauthRepository) setMeta(subject *model.REPSAuth, isInsert bool) {
 	now := time.Now()
 
 	if isInsert {
@@ -94,12 +94,12 @@ func (repo *authRepository) setMeta(subject *model.Auth, isInsert bool) {
 	subject.Version++
 }
 
-func (repo *authRepository) setMetaWithStrictUpdate(param *AuthUpdateParam) {
+func (repo *repsauthRepository) setMetaWithStrictUpdate(param *REPSAuthUpdateParam) {
 	param.UpdatedAt = firestore.ServerTimestamp
 	param.Version = firestore.Increment(1)
 }
 
-func (repo *authRepository) beforeInsert(ctx context.Context, subject *model.Auth) error {
+func (repo *repsauthRepository) beforeInsert(ctx context.Context, subject *model.REPSAuth) error {
 	if subject.Version != 0 {
 		return xerrors.Errorf("insert data must be Version == 0 %+v: %w", subject, ErrVersionConflict)
 	}
@@ -126,7 +126,7 @@ func (repo *authRepository) beforeInsert(ctx context.Context, subject *model.Aut
 	return nil
 }
 
-func (repo *authRepository) beforeUpdate(ctx context.Context, old, subject *model.Auth) error {
+func (repo *repsauthRepository) beforeUpdate(ctx context.Context, old, subject *model.REPSAuth) error {
 	if ctx.Value(transactionInProgressKey{}) != nil && old == nil {
 		var err error
 		doc := repo.GetDocRef(subject.ID)
@@ -167,7 +167,7 @@ func (repo *authRepository) beforeUpdate(ctx context.Context, old, subject *mode
 	return nil
 }
 
-func (repo *authRepository) beforeDelete(ctx context.Context, subject *model.Auth, opts ...DeleteOption) error {
+func (repo *repsauthRepository) beforeDelete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) error {
 	repo.setMeta(subject, false)
 	repo.uniqueRepository.setMiddleware(ctx)
 	err := repo.uniqueRepository.DeleteUnique(ctx, subject)
@@ -189,29 +189,29 @@ func (repo *authRepository) beforeDelete(ctx context.Context, subject *model.Aut
 }
 
 // GetCollection - *firestore.CollectionRef getter
-func (repo *authRepository) GetCollection() *firestore.CollectionRef {
+func (repo *repsauthRepository) GetCollection() *firestore.CollectionRef {
 	return repo.firestoreClient.Collection(repo.collectionName)
 }
 
 // GetCollectionName - CollectionName getter
-func (repo *authRepository) GetCollectionName() string {
+func (repo *repsauthRepository) GetCollectionName() string {
 	return repo.collectionName
 }
 
 // GetDocRef - *firestore.DocumentRef getter
-func (repo *authRepository) GetDocRef(id string) *firestore.DocumentRef {
+func (repo *repsauthRepository) GetDocRef(id string) *firestore.DocumentRef {
 	return repo.GetCollection().Doc(id)
 }
 
 // RunInTransaction - (*firestore.Client).RunTransaction getter
-func (repo *authRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
+func (repo *repsauthRepository) RunInTransaction() func(ctx context.Context, f func(context.Context, *firestore.Transaction) error, opts ...firestore.TransactionOption) (err error) {
 	return repo.firestoreClient.RunTransaction
 }
 
-// AuthSearchParam - params for search
-type AuthSearchParam struct {
+// REPSAuthSearchParam - params for search
+type REPSAuthSearchParam struct {
 	ID           *QueryChainer
-	EventId      *QueryChainer
+	EventID      *QueryChainer
 	AccessToken  *QueryChainer
 	RefreshToken *QueryChainer
 	CreatedAt    *QueryChainer
@@ -227,9 +227,9 @@ type AuthSearchParam struct {
 	CursorLimit        int
 }
 
-// AuthUpdateParam - params for strict updates
-type AuthUpdateParam struct {
-	EventId      interface{}
+// REPSAuthUpdateParam - params for strict updates
+type REPSAuthUpdateParam struct {
+	EventID      interface{}
 	AccessToken  interface{}
 	RefreshToken interface{}
 	CreatedAt    interface{}
@@ -243,28 +243,28 @@ type AuthUpdateParam struct {
 
 // Search - search documents
 // The third argument is firestore.Query, basically you can pass nil
-func (repo *authRepository) Search(ctx context.Context, param *AuthSearchParam, q *firestore.Query) ([]*model.Auth, error) {
+func (repo *repsauthRepository) Search(ctx context.Context, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	return repo.search(ctx, param, q)
 }
 
 // SearchByParam - search documents by search param
-func (repo *authRepository) SearchByParam(ctx context.Context, param *AuthSearchParam) ([]*model.Auth, *PagingResult, error) {
+func (repo *repsauthRepository) SearchByParam(ctx context.Context, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	return repo.searchByParam(ctx, param)
 }
 
-// Get - get `Auth` by `Auth.ID`
-func (repo *authRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.Auth, error) {
+// Get - get `REPSAuth` by `REPSAuth.ID`
+func (repo *repsauthRepository) Get(ctx context.Context, id string, opts ...GetOption) (*model.REPSAuth, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(ctx, doc, opts...)
 }
 
-// GetWithDoc - get `Auth` by *firestore.DocumentRef
-func (repo *authRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.Auth, error) {
+// GetWithDoc - get `REPSAuth` by *firestore.DocumentRef
+func (repo *repsauthRepository) GetWithDoc(ctx context.Context, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	return repo.get(ctx, doc, opts...)
 }
 
-// Insert - insert of `Auth`
-func (repo *authRepository) Insert(ctx context.Context, subject *model.Auth) (_ string, err error) {
+// Insert - insert of `REPSAuth`
+func (repo *repsauthRepository) Insert(ctx context.Context, subject *model.REPSAuth) (_ string, err error) {
 	if err := repo.beforeInsert(ctx, subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -272,8 +272,8 @@ func (repo *authRepository) Insert(ctx context.Context, subject *model.Auth) (_ 
 	return repo.insert(ctx, subject)
 }
 
-// Update - update of `Auth`
-func (repo *authRepository) Update(ctx context.Context, subject *model.Auth) (err error) {
+// Update - update of `REPSAuth`
+func (repo *repsauthRepository) Update(ctx context.Context, subject *model.REPSAuth) (err error) {
 	doc := repo.GetDocRef(subject.ID)
 
 	old, err := repo.get(ctx, doc)
@@ -291,13 +291,13 @@ func (repo *authRepository) Update(ctx context.Context, subject *model.Auth) (er
 	return repo.update(ctx, subject)
 }
 
-// StrictUpdate - strict update of `Auth`
-func (repo *authRepository) StrictUpdate(ctx context.Context, id string, param *AuthUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdate - strict update of `REPSAuth`
+func (repo *repsauthRepository) StrictUpdate(ctx context.Context, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(ctx, id, param, opts...)
 }
 
-// Delete - delete of `Auth`
-func (repo *authRepository) Delete(ctx context.Context, subject *model.Auth, opts ...DeleteOption) (err error) {
+// Delete - delete of `REPSAuth`
+func (repo *repsauthRepository) Delete(ctx context.Context, subject *model.REPSAuth, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(ctx, subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -314,8 +314,8 @@ func (repo *authRepository) Delete(ctx context.Context, subject *model.Auth, opt
 	return repo.deleteByID(ctx, subject.ID)
 }
 
-// DeleteByID - delete `Auth` by `Auth.ID`
-func (repo *authRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
+// DeleteByID - delete `REPSAuth` by `REPSAuth.ID`
+func (repo *repsauthRepository) DeleteByID(ctx context.Context, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(ctx, id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -337,13 +337,13 @@ func (repo *authRepository) DeleteByID(ctx context.Context, id string, opts ...D
 	return repo.Delete(ctx, subject, opts...)
 }
 
-// GetMulti - get `Auth` in bulk by array of `Auth.ID`
-func (repo *authRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.Auth, error) {
+// GetMulti - get `REPSAuth` in bulk by array of `REPSAuth.ID`
+func (repo *repsauthRepository) GetMulti(ctx context.Context, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	return repo.getMulti(ctx, ids, opts...)
 }
 
-// InsertMulti - bulk insert of `Auth`
-func (repo *authRepository) InsertMulti(ctx context.Context, subjects []*model.Auth) (_ []string, er error) {
+// InsertMulti - bulk insert of `REPSAuth`
+func (repo *repsauthRepository) InsertMulti(ctx context.Context, subjects []*model.REPSAuth) (_ []string, er error) {
 
 	ids := make([]string, 0, len(subjects))
 	batches := make([]*firestore.WriteBatch, 0)
@@ -385,8 +385,8 @@ func (repo *authRepository) InsertMulti(ctx context.Context, subjects []*model.A
 	return ids, nil
 }
 
-// UpdateMulti - bulk update of `Auth`
-func (repo *authRepository) UpdateMulti(ctx context.Context, subjects []*model.Auth) (er error) {
+// UpdateMulti - bulk update of `REPSAuth`
+func (repo *repsauthRepository) UpdateMulti(ctx context.Context, subjects []*model.REPSAuth) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -402,7 +402,7 @@ func (repo *authRepository) UpdateMulti(ctx context.Context, subjects []*model.A
 			return xerrors.Errorf("error in Get method [%v]: %w", subject.ID, err)
 		}
 
-		old := new(model.Auth)
+		old := new(model.REPSAuth)
 		if err = snapShot.DataTo(&old); err != nil {
 			return xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -429,8 +429,8 @@ func (repo *authRepository) UpdateMulti(ctx context.Context, subjects []*model.A
 	return nil
 }
 
-// DeleteMulti - bulk delete of `Auth`
-func (repo *authRepository) DeleteMulti(ctx context.Context, subjects []*model.Auth, opts ...DeleteOption) (er error) {
+// DeleteMulti - bulk delete of `REPSAuth`
+func (repo *repsauthRepository) DeleteMulti(ctx context.Context, subjects []*model.REPSAuth, opts ...DeleteOption) (er error) {
 
 	batches := make([]*firestore.WriteBatch, 0)
 	batch := repo.firestoreClient.Batch()
@@ -474,9 +474,9 @@ func (repo *authRepository) DeleteMulti(ctx context.Context, subjects []*model.A
 	return nil
 }
 
-// DeleteMultiByIDs - delete `Auth` in bulk by array of `Auth.ID`
-func (repo *authRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
-	subjects := make([]*model.Auth, len(ids))
+// DeleteMultiByIDs - delete `REPSAuth` in bulk by array of `REPSAuth.ID`
+func (repo *repsauthRepository) DeleteMultiByIDs(ctx context.Context, ids []string, opts ...DeleteOption) (er error) {
+	subjects := make([]*model.REPSAuth, len(ids))
 
 	opt := GetOption{}
 	if len(opts) > 0 {
@@ -494,28 +494,28 @@ func (repo *authRepository) DeleteMultiByIDs(ctx context.Context, ids []string, 
 }
 
 // SearchWithTx - search documents in transaction
-func (repo *authRepository) SearchWithTx(tx *firestore.Transaction, param *AuthSearchParam, q *firestore.Query) ([]*model.Auth, error) {
+func (repo *repsauthRepository) SearchWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	return repo.search(tx, param, q)
 }
 
 // SearchByParamWithTx - search documents by search param in transaction
-func (repo *authRepository) SearchByParamWithTx(tx *firestore.Transaction, param *AuthSearchParam) ([]*model.Auth, *PagingResult, error) {
+func (repo *repsauthRepository) SearchByParamWithTx(tx *firestore.Transaction, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	return repo.searchByParam(tx, param)
 }
 
-// GetWithTx - get `Auth` by `Auth.ID` in transaction
-func (repo *authRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.Auth, error) {
+// GetWithTx - get `REPSAuth` by `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) GetWithTx(tx *firestore.Transaction, id string, opts ...GetOption) (*model.REPSAuth, error) {
 	doc := repo.GetDocRef(id)
 	return repo.get(tx, doc, opts...)
 }
 
-// GetWithDocWithTx - get `Auth` by *firestore.DocumentRef in transaction
-func (repo *authRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.Auth, error) {
+// GetWithDocWithTx - get `REPSAuth` by *firestore.DocumentRef in transaction
+func (repo *repsauthRepository) GetWithDocWithTx(tx *firestore.Transaction, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	return repo.get(tx, doc, opts...)
 }
 
-// InsertWithTx - insert of `Auth` in transaction
-func (repo *authRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth) (_ string, err error) {
+// InsertWithTx - insert of `REPSAuth` in transaction
+func (repo *repsauthRepository) InsertWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (_ string, err error) {
 	if err := repo.beforeInsert(context.WithValue(ctx, transactionInProgressKey{}, tx), subject); err != nil {
 		return "", xerrors.Errorf("before insert error: %w", err)
 	}
@@ -523,8 +523,8 @@ func (repo *authRepository) InsertWithTx(ctx context.Context, tx *firestore.Tran
 	return repo.insert(tx, subject)
 }
 
-// UpdateWithTx - update of `Auth` in transaction
-func (repo *authRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth) (err error) {
+// UpdateWithTx - update of `REPSAuth` in transaction
+func (repo *repsauthRepository) UpdateWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth) (err error) {
 	if err := repo.beforeUpdate(context.WithValue(ctx, transactionInProgressKey{}, tx), nil, subject); err != nil {
 		return xerrors.Errorf("before update error: %w", err)
 	}
@@ -532,13 +532,13 @@ func (repo *authRepository) UpdateWithTx(ctx context.Context, tx *firestore.Tran
 	return repo.update(tx, subject)
 }
 
-// StrictUpdateWithTx - strict update of `Auth` in transaction
-func (repo *authRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *AuthUpdateParam, opts ...firestore.Precondition) error {
+// StrictUpdateWithTx - strict update of `REPSAuth` in transaction
+func (repo *repsauthRepository) StrictUpdateWithTx(tx *firestore.Transaction, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	return repo.strictUpdate(tx, id, param, opts...)
 }
 
-// DeleteWithTx - delete of `Auth` in transaction
-func (repo *authRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.Auth, opts ...DeleteOption) (err error) {
+// DeleteWithTx - delete of `REPSAuth` in transaction
+func (repo *repsauthRepository) DeleteWithTx(ctx context.Context, tx *firestore.Transaction, subject *model.REPSAuth, opts ...DeleteOption) (err error) {
 	if err := repo.beforeDelete(context.WithValue(ctx, transactionInProgressKey{}, tx), subject, opts...); err != nil {
 		return xerrors.Errorf("before delete error: %w", err)
 	}
@@ -555,8 +555,8 @@ func (repo *authRepository) DeleteWithTx(ctx context.Context, tx *firestore.Tran
 	return repo.deleteByID(tx, subject.ID)
 }
 
-// DeleteByIDWithTx - delete `Auth` by `Auth.ID` in transaction
-func (repo *authRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
+// DeleteByIDWithTx - delete `REPSAuth` by `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.Transaction, id string, opts ...DeleteOption) (err error) {
 	subject, err := repo.Get(context.Background(), id)
 	if err != nil {
 		return xerrors.Errorf("error in Get method: %w", err)
@@ -578,13 +578,13 @@ func (repo *authRepository) DeleteByIDWithTx(ctx context.Context, tx *firestore.
 	return repo.deleteByID(tx, id)
 }
 
-// GetMultiWithTx - get `Auth` in bulk by array of `Auth.ID` in transaction
-func (repo *authRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.Auth, error) {
+// GetMultiWithTx - get `REPSAuth` in bulk by array of `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) GetMultiWithTx(tx *firestore.Transaction, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	return repo.getMulti(tx, ids, opts...)
 }
 
-// InsertMultiWithTx - bulk insert of `Auth` in transaction
-func (repo *authRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth) (_ []string, er error) {
+// InsertMultiWithTx - bulk insert of `REPSAuth` in transaction
+func (repo *repsauthRepository) InsertMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (_ []string, er error) {
 
 	for i := range subjects {
 		if _, err := tx.Get(new(firestore.DocumentRef)); err == nil {
@@ -609,8 +609,8 @@ func (repo *authRepository) InsertMultiWithTx(ctx context.Context, tx *firestore
 	return ids, nil
 }
 
-// UpdateMultiWithTx - bulk update of `Auth` in transaction
-func (repo *authRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth) (er error) {
+// UpdateMultiWithTx - bulk update of `REPSAuth` in transaction
+func (repo *repsauthRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth) (er error) {
 	ctx = context.WithValue(ctx, transactionInProgressKey{}, tx)
 
 	for i := range subjects {
@@ -628,8 +628,8 @@ func (repo *authRepository) UpdateMultiWithTx(ctx context.Context, tx *firestore
 	return nil
 }
 
-// DeleteMultiWithTx - bulk delete of `Auth` in transaction
-func (repo *authRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.Auth, opts ...DeleteOption) (er error) {
+// DeleteMultiWithTx - bulk delete of `REPSAuth` in transaction
+func (repo *repsauthRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore.Transaction, subjects []*model.REPSAuth, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	var isHardDeleteMode bool
@@ -673,8 +673,8 @@ func (repo *authRepository) DeleteMultiWithTx(ctx context.Context, tx *firestore
 	return nil
 }
 
-// DeleteMultiByIDWithTx - delete `Auth` in bulk by array of `Auth.ID` in transaction
-func (repo *authRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
+// DeleteMultiByIDWithTx - delete `REPSAuth` in bulk by array of `REPSAuth.ID` in transaction
+func (repo *repsauthRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *firestore.Transaction, ids []string, opts ...DeleteOption) (er error) {
 
 	t := time.Now()
 	for i := range ids {
@@ -712,7 +712,7 @@ func (repo *authRepository) DeleteMultiByIDsWithTx(ctx context.Context, tx *fire
 	return nil
 }
 
-func (repo *authRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.Auth, error) {
+func (repo *repsauthRepository) get(v interface{}, doc *firestore.DocumentRef, opts ...GetOption) (*model.REPSAuth, error) {
 	var (
 		snapShot *firestore.DocumentSnapshot
 		err      error
@@ -734,7 +734,7 @@ func (repo *authRepository) get(v interface{}, doc *firestore.DocumentRef, opts 
 		return nil, xerrors.Errorf("error in Get method: %w", err)
 	}
 
-	subject := new(model.Auth)
+	subject := new(model.REPSAuth)
 	if err := snapShot.DataTo(&subject); err != nil {
 		return nil, xerrors.Errorf("error in DataTo method: %w", err)
 	}
@@ -749,7 +749,7 @@ func (repo *authRepository) get(v interface{}, doc *firestore.DocumentRef, opts 
 	return subject, nil
 }
 
-func (repo *authRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.Auth, error) {
+func (repo *repsauthRepository) getMulti(v interface{}, ids []string, opts ...GetOption) ([]*model.REPSAuth, error) {
 	var (
 		snapShots []*firestore.DocumentSnapshot
 		err       error
@@ -775,7 +775,7 @@ func (repo *authRepository) getMulti(v interface{}, ids []string, opts ...GetOpt
 		return nil, xerrors.Errorf("error in GetAll method: %w", err)
 	}
 
-	subjects := make([]*model.Auth, 0, len(ids))
+	subjects := make([]*model.REPSAuth, 0, len(ids))
 	mErr := NewMultiErrors()
 	for i, snapShot := range snapShots {
 		if !snapShot.Exists() {
@@ -783,7 +783,7 @@ func (repo *authRepository) getMulti(v interface{}, ids []string, opts ...GetOpt
 			continue
 		}
 
-		subject := new(model.Auth)
+		subject := new(model.REPSAuth)
 		if err = snapShot.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
 		}
@@ -805,7 +805,7 @@ func (repo *authRepository) getMulti(v interface{}, ids []string, opts ...GetOpt
 	return subjects, mErr
 }
 
-func (repo *authRepository) insert(v interface{}, subject *model.Auth) (string, error) {
+func (repo *repsauthRepository) insert(v interface{}, subject *model.REPSAuth) (string, error) {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -832,7 +832,7 @@ func (repo *authRepository) insert(v interface{}, subject *model.Auth) (string, 
 	return dr.ID, nil
 }
 
-func (repo *authRepository) update(v interface{}, subject *model.Auth) error {
+func (repo *repsauthRepository) update(v interface{}, subject *model.REPSAuth) error {
 	var (
 		dr  = repo.GetDocRef(subject.ID)
 		err error
@@ -854,7 +854,7 @@ func (repo *authRepository) update(v interface{}, subject *model.Auth) error {
 	return nil
 }
 
-func (repo *authRepository) strictUpdate(v interface{}, id string, param *AuthUpdateParam, opts ...firestore.Precondition) error {
+func (repo *repsauthRepository) strictUpdate(v interface{}, id string, param *REPSAuthUpdateParam, opts ...firestore.Precondition) error {
 	var (
 		dr  = repo.GetDocRef(id)
 		err error
@@ -862,7 +862,7 @@ func (repo *authRepository) strictUpdate(v interface{}, id string, param *AuthUp
 
 	repo.setMetaWithStrictUpdate(param)
 
-	updates := updater(model.Auth{}, param)
+	updates := updater(model.REPSAuth{}, param)
 
 	switch x := v.(type) {
 	case *firestore.Transaction:
@@ -880,7 +880,7 @@ func (repo *authRepository) strictUpdate(v interface{}, id string, param *AuthUp
 	return nil
 }
 
-func (repo *authRepository) deleteByID(v interface{}, id string) error {
+func (repo *repsauthRepository) deleteByID(v interface{}, id string) error {
 	dr := repo.GetDocRef(id)
 	var err error
 
@@ -900,7 +900,7 @@ func (repo *authRepository) deleteByID(v interface{}, id string) error {
 	return nil
 }
 
-func (repo *authRepository) runQuery(v interface{}, query firestore.Query) ([]*model.Auth, error) {
+func (repo *repsauthRepository) runQuery(v interface{}, query firestore.Query) ([]*model.REPSAuth, error) {
 	var iter *firestore.DocumentIterator
 
 	switch x := v.(type) {
@@ -914,7 +914,7 @@ func (repo *authRepository) runQuery(v interface{}, query firestore.Query) ([]*m
 
 	defer iter.Stop()
 
-	subjects := make([]*model.Auth, 0)
+	subjects := make([]*model.REPSAuth, 0)
 
 	for {
 		doc, err := iter.Next()
@@ -925,7 +925,7 @@ func (repo *authRepository) runQuery(v interface{}, query firestore.Query) ([]*m
 			return nil, xerrors.Errorf("error in Next method: %w", err)
 		}
 
-		subject := new(model.Auth)
+		subject := new(model.REPSAuth)
 
 		if err = doc.DataTo(&subject); err != nil {
 			return nil, xerrors.Errorf("error in DataTo method: %w", err)
@@ -939,7 +939,7 @@ func (repo *authRepository) runQuery(v interface{}, query firestore.Query) ([]*m
 }
 
 // BUG(54m): there may be potential bugs
-func (repo *authRepository) searchByParam(v interface{}, param *AuthSearchParam) ([]*model.Auth, *PagingResult, error) {
+func (repo *repsauthRepository) searchByParam(v interface{}, param *REPSAuthSearchParam) ([]*model.REPSAuth, *PagingResult, error) {
 	query := func() firestore.Query {
 		return repo.GetCollection().Query
 	}()
@@ -965,13 +965,13 @@ func (repo *authRepository) searchByParam(v interface{}, param *AuthSearchParam)
 			query = param.ID.BuildCursorQuery(query)
 		}
 	}
-	if param.EventId != nil {
-		for _, chain := range param.EventId.QueryGroup {
+	if param.EventID != nil {
+		for _, chain := range param.EventID.QueryGroup {
 			query = query.Where("event_id", chain.Operator, chain.Value)
 		}
-		if direction := param.EventId.OrderByDirection; direction > 0 {
+		if direction := param.EventID.OrderByDirection; direction > 0 {
 			query = query.OrderBy("event_id", direction)
-			query = param.EventId.BuildCursorQuery(query)
+			query = param.EventID.BuildCursorQuery(query)
 		}
 	}
 	if param.AccessToken != nil {
@@ -1105,7 +1105,7 @@ func (repo *authRepository) searchByParam(v interface{}, param *AuthSearchParam)
 	return subjects, pagingResult, nil
 }
 
-func (repo *authRepository) search(v interface{}, param *AuthSearchParam, q *firestore.Query) ([]*model.Auth, error) {
+func (repo *repsauthRepository) search(v interface{}, param *REPSAuthSearchParam, q *firestore.Query) ([]*model.REPSAuth, error) {
 	if (param == nil && q == nil) || (param != nil && q != nil) {
 		return nil, xerrors.New("either one should be nil")
 	}

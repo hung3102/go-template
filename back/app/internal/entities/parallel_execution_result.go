@@ -4,22 +4,22 @@ import "github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 
 // ParallelExecutionResult - 並列実行結果
 type ParallelExecutionResult struct {
-	id           valueobjects.ParallelExecutionResultID // ID
-	eventID      valueobjects.EventID                   // イベントID
-	kind         string                                 // 処理種別
-	resultCode   int                                    // 実行結果
-	errorMessage *ParallelExecutionResultErrorMessage   // エラー情報
-	meta         *Meta                                  // メタ
+	id           valueobjects.ParallelExecutionResultID   // ID
+	eventID      valueobjects.EventID                     // イベントID
+	kind         valueobjects.ParallelExecutionResultKind // 処理種別
+	resultCode   int                                      // 実行結果
+	errorMessage *ParallelExecutionResultErrorMessage     // エラー情報
+	meta         *Meta                                    // メタ
 }
 
 // NewParallelExecutionResultParam - 並列実行結果作成パラメータ
 type NewParallelExecutionResultParam struct {
-	ID           valueobjects.ParallelExecutionResultID // ID
-	EventID      valueobjects.EventID                   // イベントID
-	Kind         string                                 // 処理種別
-	ResultCode   int                                    // 実行結果
-	ErrorMessage *ParallelExecutionResultErrorMessage   // エラー情報
-	Meta         *Meta                                  // メタ
+	ID           valueobjects.ParallelExecutionResultID   // ID
+	EventID      valueobjects.EventID                     // イベントID
+	Kind         valueobjects.ParallelExecutionResultKind // 処理種別
+	ResultCode   int                                      // 実行結果
+	ErrorMessage *ParallelExecutionResultErrorMessage     // エラー情報
+	Meta         *Meta                                    // メタ
 }
 
 // NewParallelExecutionResult - 並列実行結果作成
@@ -49,7 +49,7 @@ func (e *ParallelExecutionResult) EventID() valueobjects.EventID {
 }
 
 // Kind - Kind のゲッター
-func (e *ParallelExecutionResult) Kind() string {
+func (e *ParallelExecutionResult) Kind() valueobjects.ParallelExecutionResultKind {
 	return e.kind
 }
 

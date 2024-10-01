@@ -25,7 +25,7 @@ func (v EmailTransactionID) String() string {
 	return x.String()
 }
 
-// IsNil - EmailTransactionIDを文字列に変換する
+// IsNil - EmailTransactionIDの値がnilか判定する
 func (v EmailTransactionID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

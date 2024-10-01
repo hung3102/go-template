@@ -25,7 +25,7 @@ func (v PaymentNumID) String() string {
 	return x.String()
 }
 
-// IsNil - PaymentNumIDを文字列に変換する
+// IsNil - PaymentNumIDの値がnilか判定する
 func (v PaymentNumID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

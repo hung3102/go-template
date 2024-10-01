@@ -25,7 +25,7 @@ func (v GCASProportionCostID) String() string {
 	return x.String()
 }
 
-// IsNil - GCASProportionCostIDを文字列に変換する
+// IsNil - GCASProportionCostIDの値がnilか判定する
 func (v GCASProportionCostID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

@@ -25,7 +25,7 @@ func (v OrgCSPAccountCostID) String() string {
 	return x.String()
 }
 
-// IsNil - OrgCSPAccountCostIDを文字列に変換する
+// IsNil - OrgCSPAccountCostIDの値がnilか判定する
 func (v OrgCSPAccountCostID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

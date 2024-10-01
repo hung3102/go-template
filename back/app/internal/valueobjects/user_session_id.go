@@ -25,7 +25,7 @@ func (v UserSessionID) String() string {
 	return x.String()
 }
 
-// IsNil - UserSessionIDを文字列に変換する
+// IsNil - UserSessionIDの値がnilか判定する
 func (v UserSessionID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()

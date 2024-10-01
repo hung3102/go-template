@@ -25,7 +25,7 @@ func (v CreatorID) String() string {
 	return x.String()
 }
 
-// IsNil - CreatorIDを文字列に変換する
+// IsNil - CreatorIDの値がnilか判定する
 func (v CreatorID) IsNil() bool {
 	x := xid.ID(v)
 	return x.IsNil()
