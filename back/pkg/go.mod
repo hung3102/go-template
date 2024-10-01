@@ -3,6 +3,7 @@ module github.com/topgate/gcim-temporary/back/pkg
 go 1.23.1
 
 require (
+	cloud.google.com/go/pubsub v1.42.0
 	cloud.google.com/go/storage v1.43.0
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20200209025033-430dd4e66960
 	github.com/aws/aws-sdk-go-v2/service/sesv2 v1.33.2

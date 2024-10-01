@@ -17,10 +17,14 @@ type Config struct {
 	FromEmailAddress           string `config:"FROM_EMAIL_ADDRESS"`             // 送信元メールアドレス
 	FirestoreProjectOnEmulator string `config:"FIRESTORE_PROJECT_ON_EMULATOR"`  // on emulator
 	StorageEmulatorHost        string `config:"FIREBASE_STORAGE_EMULATOR_HOST"` // on emulator
+	PubsubEmulatorHost         string `config:"PUBSUB_EMULATOR_HOST"`           // Pubsubエミュレーターホスト
+	PubsubProjectID            string `config:"PUBSUB_PROJECT_ID"`              // PubsubプロジェクトID
 }
 
 var defaultConfig = Config{
 	FirestoreProjectOnEmulator: "test-project",
+	PubsubEmulatorHost:         "pubsub-emulator:8085",
+	PubsubProjectID:            "test-project",
 }
 
 // ReadConfig - read config from environment variables
