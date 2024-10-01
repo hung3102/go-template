@@ -13,7 +13,7 @@ type OrgCSPAccountCost struct {
 	accountID            string                            // アカウントID
 	cost                 int                               // 金額
 	billingUnitID        string                            // 支払い区分ID
-	paymentAgency        *OrgCSPAccountCostPaymentAgency   // 支払い代行者情報
+	paymentAgency        *PaymentAgency                    // 支払い代行者情報
 	meta                 *Meta                             // メタ
 }
 
@@ -28,7 +28,7 @@ type NewOrgCSPAccountCostParam struct {
 	AccountID            string                            // アカウントID
 	Cost                 int                               // 金額
 	BillingUnitID        string                            // 支払い区分ID
-	PaymentAgency        *OrgCSPAccountCostPaymentAgency   // 支払い代行者情報
+	PaymentAgency        *PaymentAgency                    // 支払い代行者情報
 	Meta                 *Meta                             // メタ
 }
 
@@ -99,7 +99,7 @@ func (e *OrgCSPAccountCost) BillingUnitID() string {
 }
 
 // PaymentAgency - PaymentAgency のゲッター
-func (e *OrgCSPAccountCost) PaymentAgency() *OrgCSPAccountCostPaymentAgency {
+func (e *OrgCSPAccountCost) PaymentAgency() *PaymentAgency {
 	return e.paymentAgency
 }
 
