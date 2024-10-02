@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/topgate/gcim-temporary/back/app/internal/entities"
-	"github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
+	"github.com/topgate/gcim-temporary/back/app/internal/repositories"
+	"github.com/topgate/gcim-temporary/back/app/internal/valueobjects"
 	"golang.org/x/xerrors"
 )
 
@@ -13,25 +14,33 @@ import (
 func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 	queryLimit := 1000
 	uniqueNamesMap := make(map[string]*Output)
-	var pagingResult *infrastructures.PagingResult
+	var pagingResult *repositories.PagingResult
 	var accountCosts []*entities.OrgCSPAccountCost
 	var err error
 
+	eventID, err := valueobjects.NewEventIDFromString(input.EventID)
+	if err != nil {
+		return nil, xerrors.Errorf("error in converting eventID: %w", err)
+	}
+
 	// Loop until pagingResult is nil
 	for {
-		searchParam := &infrastructures.OrgCSPAccountCostSearchParam{
-			EventID: &infrastructures.QueryChainer{
-				QueryGroup: []*infrastructures.Query{{
-					Operator: infrastructures.OpTypeEqual,
-					Value:    input.EventID,
-				},
-				},
-			},
-			CursorLimit: queryLimit,
+		searchParam := &repositories.OrgCSPAccountCostSearchParam{
+			EventID: eventID,
+			Limit:   queryLimit,
+			// TODOH: remove
+			// EventID: &infrastructures.QueryChainer{
+			// 	QueryGroup: []*infrastructures.Query{{
+			// 		Operator: infrastructures.OpTypeEqual,
+			// 		Value:    input.EventID,
+			// 	},
+			// 	},
+			// },
+			// CursorLimit: queryLimit,
 		}
 
 		if pagingResult != nil {
-			searchParam.CursorKey = pagingResult.NextCursorKey
+			searchParam.StartAtID = pagingResult.NextID
 		}
 
 		accountCosts, pagingResult, err = u.deps.ORGCSPAccountRepository.SearchByParam(ctx, searchParam)
