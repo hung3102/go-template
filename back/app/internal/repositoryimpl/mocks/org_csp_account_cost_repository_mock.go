@@ -14,7 +14,7 @@ import (
 	reflect "reflect"
 
 	entities "github.com/topgate/gcim-temporary/back/app/internal/entities"
-	infrastructures "github.com/topgate/gcim-temporary/back/app/internal/volcago/infrastructures"
+	repositories "github.com/topgate/gcim-temporary/back/app/internal/repositories"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,11 +42,11 @@ func (m *MockORGCSPAccountCostRepository) EXPECT() *MockORGCSPAccountCostReposit
 }
 
 // SearchByParam mocks base method.
-func (m *MockORGCSPAccountCostRepository) SearchByParam(ctx context.Context, param *infrastructures.OrgCSPAccountCostSearchParam) ([]*entities.OrgCSPAccountCost, *infrastructures.PagingResult, error) {
+func (m *MockORGCSPAccountCostRepository) SearchByParam(ctx context.Context, param *repositories.OrgCSPAccountCostSearchParam) ([]*entities.OrgCSPAccountCost, *repositories.OrgCSPAccountCostPagingResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchByParam", ctx, param)
 	ret0, _ := ret[0].([]*entities.OrgCSPAccountCost)
-	ret1, _ := ret[1].(*infrastructures.PagingResult)
+	ret1, _ := ret[1].(*repositories.OrgCSPAccountCostPagingResult)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }

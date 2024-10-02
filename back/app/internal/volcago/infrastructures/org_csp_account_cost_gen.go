@@ -214,18 +214,23 @@ type OrgCSPAccountCostSearchParam struct {
 	EventID              *QueryChainer
 	GCASProportionCostID *QueryChainer
 	GCASAccountCostID    *QueryChainer
-	Organization         *QueryChainer
+	OrganizationCode     *QueryChainer
+	OrganizationName     *QueryChainer
 	CSP                  *QueryChainer
 	AccountID            *QueryChainer
 	Cost                 *QueryChainer
 	BillingUnitID        *QueryChainer
-	CreatedAt            *QueryChainer
-	CreatedBy            *QueryChainer
-	UpdatedAt            *QueryChainer
-	UpdatedBy            *QueryChainer
-	DeletedAt            *QueryChainer
-	DeletedBy            *QueryChainer
-	Version              *QueryChainer
+	PaymentAgency        struct {
+		AgencyName      *QueryChainer
+		CorporateNumber *QueryChainer
+	}
+	CreatedAt *QueryChainer
+	CreatedBy *QueryChainer
+	UpdatedAt *QueryChainer
+	UpdatedBy *QueryChainer
+	DeletedAt *QueryChainer
+	DeletedBy *QueryChainer
+	Version   *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorKey          string
@@ -237,18 +242,23 @@ type OrgCSPAccountCostUpdateParam struct {
 	EventID              interface{}
 	GCASProportionCostID interface{}
 	GCASAccountCostID    interface{}
-	Organization         interface{}
+	OrganizationCode     interface{}
+	OrganizationName     interface{}
 	CSP                  interface{}
 	AccountID            interface{}
 	Cost                 interface{}
 	BillingUnitID        interface{}
-	CreatedAt            interface{}
-	CreatedBy            interface{}
-	UpdatedAt            interface{}
-	UpdatedBy            interface{}
-	DeletedAt            interface{}
-	DeletedBy            interface{}
-	Version              interface{}
+	PaymentAgency        struct {
+		AgencyName      interface{}
+		CorporateNumber interface{}
+	}
+	CreatedAt interface{}
+	CreatedBy interface{}
+	UpdatedAt interface{}
+	UpdatedBy interface{}
+	DeletedAt interface{}
+	DeletedBy interface{}
+	Version   interface{}
 }
 
 // Search - search documents
@@ -1002,13 +1012,22 @@ func (repo *orgCspaccountCostRepository) searchByParam(v interface{}, param *Org
 			query = param.GCASAccountCostID.BuildCursorQuery(query)
 		}
 	}
-	if param.Organization != nil {
-		for _, chain := range param.Organization.QueryGroup {
-			query = query.Where("organization", chain.Operator, chain.Value)
+	if param.OrganizationCode != nil {
+		for _, chain := range param.OrganizationCode.QueryGroup {
+			query = query.Where("organization_code", chain.Operator, chain.Value)
 		}
-		if direction := param.Organization.OrderByDirection; direction > 0 {
-			query = query.OrderBy("organization", direction)
-			query = param.Organization.BuildCursorQuery(query)
+		if direction := param.OrganizationCode.OrderByDirection; direction > 0 {
+			query = query.OrderBy("organization_code", direction)
+			query = param.OrganizationCode.BuildCursorQuery(query)
+		}
+	}
+	if param.OrganizationName != nil {
+		for _, chain := range param.OrganizationName.QueryGroup {
+			query = query.Where("organization_name", chain.Operator, chain.Value)
+		}
+		if direction := param.OrganizationName.OrderByDirection; direction > 0 {
+			query = query.OrderBy("organization_name", direction)
+			query = param.OrganizationName.BuildCursorQuery(query)
 		}
 	}
 	if param.CSP != nil {
@@ -1045,6 +1064,24 @@ func (repo *orgCspaccountCostRepository) searchByParam(v interface{}, param *Org
 		if direction := param.BillingUnitID.OrderByDirection; direction > 0 {
 			query = query.OrderBy("billing_unit_id", direction)
 			query = param.BillingUnitID.BuildCursorQuery(query)
+		}
+	}
+	if param.PaymentAgency.AgencyName != nil {
+		for _, chain := range param.PaymentAgency.AgencyName.QueryGroup {
+			query = query.Where("payment_agency.agency_name", chain.Operator, chain.Value)
+		}
+		if direction := param.PaymentAgency.AgencyName.OrderByDirection; direction > 0 {
+			query = query.OrderBy("payment_agency.agency_name", direction)
+			query = param.PaymentAgency.AgencyName.BuildCursorQuery(query)
+		}
+	}
+	if param.PaymentAgency.CorporateNumber != nil {
+		for _, chain := range param.PaymentAgency.CorporateNumber.QueryGroup {
+			query = query.Where("payment_agency.corporate_number", chain.Operator, chain.Value)
+		}
+		if direction := param.PaymentAgency.CorporateNumber.OrderByDirection; direction > 0 {
+			query = query.OrderBy("payment_agency.corporate_number", direction)
+			query = param.PaymentAgency.CorporateNumber.BuildCursorQuery(query)
 		}
 	}
 	if param.CreatedAt != nil {
