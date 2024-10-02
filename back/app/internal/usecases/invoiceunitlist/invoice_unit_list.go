@@ -14,7 +14,7 @@ import (
 func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 	queryLimit := 1000
 	uniqueNamesMap := make(map[string]*Output)
-	var pagingResult *repositories.PagingResult
+	var pagingResult *repositories.OrgCSPAccountCostPagingResult
 	var accountCosts []*entities.OrgCSPAccountCost
 	var err error
 
@@ -28,19 +28,10 @@ func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 		searchParam := &repositories.OrgCSPAccountCostSearchParam{
 			EventID: eventID,
 			Limit:   queryLimit,
-			// TODOH: remove
-			// EventID: &infrastructures.QueryChainer{
-			// 	QueryGroup: []*infrastructures.Query{{
-			// 		Operator: infrastructures.OpTypeEqual,
-			// 		Value:    input.EventID,
-			// 	},
-			// 	},
-			// },
-			// CursorLimit: queryLimit,
 		}
 
 		if pagingResult != nil {
-			searchParam.StartAtID = pagingResult.NextID
+			searchParam.StartAtID = &pagingResult.NextID
 		}
 
 		accountCosts, pagingResult, err = u.deps.ORGCSPAccountRepository.SearchByParam(ctx, searchParam)
@@ -49,14 +40,12 @@ func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 		}
 
 		for _, v := range accountCosts {
-			uniqKey := fmt.Sprintf("%s_%s", v.OrganizationCode(), v.CSP())
+			uniqKey := fmt.Sprintf("1_%s_%s", v.OrganizationCode(), v.CSP())
 
-			// TODOH: test PaymentAgency
 			paymentAgency := v.PaymentAgency()
 
 			if paymentAgency != nil {
-				// TODOH: test AgencyName()
-				uniqKey = fmt.Sprintf("%s_%s", paymentAgency.CorporateNumber(), v.CSP())
+				uniqKey = fmt.Sprintf("2_%s_%s", paymentAgency.CorporateNumber(), v.CSP())
 			}
 
 			if _, exists := uniqueNamesMap[uniqKey]; !exists {

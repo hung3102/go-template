@@ -12,11 +12,11 @@ import (
 type OrgCSPAccountCostSearchParam struct {
 	EventID   valueobjects.EventID // eventID
 	Limit     int                  // limit
-	StartAtID string               // start at id
+	StartAtID *string              // start at id
 }
 
-// PagingResult - paging result
-type PagingResult struct {
+// OrgCSPAccountCostPagingResult - paging result
+type OrgCSPAccountCostPagingResult struct {
 	NextID string
 	Length int
 }
@@ -24,5 +24,5 @@ type PagingResult struct {
 // ORGCSPAccountCostRepository - org_csp_account_cost repository
 type ORGCSPAccountCostRepository interface {
 	// SearchByParam - Search documents by param
-	SearchByParam(ctx context.Context, param *OrgCSPAccountCostSearchParam) ([]*entities.OrgCSPAccountCost, *PagingResult, error)
+	SearchByParam(ctx context.Context, param *OrgCSPAccountCostSearchParam) ([]*entities.OrgCSPAccountCost, *OrgCSPAccountCostPagingResult, error)
 }
