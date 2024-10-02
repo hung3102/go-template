@@ -14,7 +14,7 @@ type Usecase struct {
 
 // Dependencies - Dependencies
 type Dependencies struct {
-	ORGCSPAccountRepository repositories.ORGCSPAccountRepository
+	ORGCSPAccountRepository repositories.ORGCSPAccountCostRepository
 }
 
 // NewUsecase - Constructor of Usecase
