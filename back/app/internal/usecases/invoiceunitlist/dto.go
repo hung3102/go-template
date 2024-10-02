@@ -7,7 +7,9 @@ type Input struct {
 
 // Output - Output of usecase
 type Output struct {
-	IsPaymentAgent bool   // 支払代行
-	Subject        string // 団体か事業者
-	CSP            string // csp
+	OrganizationCode string  // 団体コード
+	OrganizationName string  // 団体名
+	CSP              string  // csp
+	AgencyName       *string // 事業者名 - 支払代行がある場合
+	CorporateNumber  *string // 法人番号 - 支払代行がある場合
 }

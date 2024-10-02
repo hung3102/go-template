@@ -8,7 +8,8 @@ type OrgCSPAccountCost struct {
 	eventID              valueobjects.EventID              // イベントID
 	gcasProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
 	gcasAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
-	organization         string                            // 団体名
+	organizationName     string                            // 団体名
+	organizationCode     string                            // 団体コード
 	csp                  string                            // CSP
 	accountID            string                            // アカウントID
 	cost                 int                               // 金額
@@ -23,7 +24,8 @@ type NewOrgCSPAccountCostParam struct {
 	EventID              valueobjects.EventID              // イベントID
 	GCASProportionCostID valueobjects.GCASProportionCostID // GCAS按分コストID
 	GCASAccountCostID    valueobjects.GCASAccountCostID    // GCASアカウントコストID
-	Organization         string                            // 団体名
+	OrganizationName     string                            // 団体名
+	OrganizationCode     string                            // 団体コード
 	CSP                  string                            // CSP
 	AccountID            string                            // アカウントID
 	Cost                 int                               // 金額
@@ -43,7 +45,8 @@ func NewOrgCSPAccountCost(param *NewOrgCSPAccountCostParam) *OrgCSPAccountCost {
 		eventID:              param.EventID,
 		gcasProportionCostID: param.GCASProportionCostID,
 		gcasAccountCostID:    param.GCASAccountCostID,
-		organization:         param.Organization,
+		organizationName:     param.OrganizationName,
+		organizationCode:     param.OrganizationCode,
 		csp:                  param.CSP,
 		accountID:            param.AccountID,
 		cost:                 param.Cost,
@@ -73,9 +76,14 @@ func (e *OrgCSPAccountCost) GCASAccountCostID() valueobjects.GCASAccountCostID {
 	return e.gcasAccountCostID
 }
 
-// Organization - Organization のゲッター
-func (e *OrgCSPAccountCost) Organization() string {
-	return e.organization
+// OrganizationCode - OrganizationCode のゲッター
+func (e *OrgCSPAccountCost) OrganizationCode() string {
+	return e.organizationCode
+}
+
+// OrganizationName - OrganizationName のゲッター
+func (e *OrgCSPAccountCost) OrganizationName() string {
+	return e.organizationName
 }
 
 // CSP - CSP のゲッター

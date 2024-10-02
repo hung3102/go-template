@@ -49,26 +49,28 @@ func (u *Usecase) List(ctx context.Context, input *Input) ([]*Output, error) {
 		}
 
 		for _, v := range accountCosts {
-			uniqKey := fmt.Sprintf("%s_%s", v.Organization(), v.CSP())
+			uniqKey := fmt.Sprintf("%s_%s", v.OrganizationCode(), v.CSP())
 
 			// TODOH: test PaymentAgency
 			paymentAgency := v.PaymentAgency()
 
 			if paymentAgency != nil {
 				// TODOH: test AgencyName()
-				uniqKey = fmt.Sprintf("%s_%s", paymentAgency.AgencyName(), v.CSP())
+				uniqKey = fmt.Sprintf("%s_%s", paymentAgency.CorporateNumber(), v.CSP())
 			}
 
 			if _, exists := uniqueNamesMap[uniqKey]; !exists {
 				output := &Output{
-					IsPaymentAgent: false,            // temp
-					Subject:        v.Organization(), // temp
-					CSP:            v.CSP(),
+					OrganizationCode: v.OrganizationCode(),
+					OrganizationName: v.OrganizationName(),
+					CSP:              v.CSP(),
 				}
 
 				if paymentAgency != nil {
-					output.Subject = paymentAgency.AgencyName() // TODOH: test AgencyName()
-					output.IsPaymentAgent = true
+					agencyName := paymentAgency.AgencyName()
+					corporateNumber := paymentAgency.CorporateNumber()
+					output.AgencyName = &agencyName
+					output.CorporateNumber = &corporateNumber
 				}
 
 				uniqueNamesMap[uniqKey] = output
