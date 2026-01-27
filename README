@@ -1,0 +1,18 @@
+# Go project template
+
+## Techniques
+- Gin
+- Graphql
+- Firestore
+
+## Start
+- Create `.env` file
+```
+cp .env.local .env
+```
+
+
+- Start
+```
+make dev
+```

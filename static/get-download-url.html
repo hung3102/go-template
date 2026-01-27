@@ -1,0 +1,33 @@
+<!--
+PDFダウンロード調査用のコード
+-->
+<html>
+<script>
+    async function onClickButton() {
+        const url = await getSignedUrl();
+        await download(url);
+    }
+    async function getSignedUrl() {
+        const path = document.getElementById("path")
+        const res = await fetch(
+            "/get-download-url?path="+path.value
+        );
+        const json = await res.json();
+        const url = await json.url;
+        return url;
+    }
+    async function download(url) {
+        console.log(url);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "downloadFile.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+</script>
+<bod>
+    <label for="path">ファイルパス:</label><input type="text" id="path" value="aaaaaa/bbbbbb/PDFファイル2.pdf" /><br />
+    <button onclick="onClickButton()">ダウンロード</button>
+</bod>
+</html>
